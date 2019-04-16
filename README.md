@@ -6,6 +6,10 @@
 
 
 ## Dodatkowe informacje:
+
+### Brnache i commity  
+task_kto  
+commity nazywają wprowadzoną funkcjonalność do brancha, w języku ang dla ujednolicenia
   
 ### Dokumentacja  
 Dokumentacja będzie znajdowała się na GoogleDrive [Folder](https://drive.google.com/drive/folders/1-TXw71-4jGPqNo9YOU30A2GcEAl4-KPu?ths=true)  
