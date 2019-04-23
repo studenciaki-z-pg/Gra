@@ -5,7 +5,7 @@
 [Git-Cheatsheet](https://www.git-tower.com/blog/git-cheat-sheet)  
 ## Tutoriale Unity:  
 https://unity3d.com/learn/tutorials/s/2d-roguelike-tutorial  
-https://gamedevacademy.org/how-to-create-an-rpg-game-in-unity-comprehensive-guide/
+https://gamedevacademy.org/how-to-create-an-rpg-game-in-unity-comprehensive-guide/  
 https://www.youtube.com/watch?v=bpB4BApnKhM
 
 
