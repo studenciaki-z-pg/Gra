@@ -7,6 +7,10 @@
 https://unity3d.com/learn/tutorials/s/2d-roguelike-tutorial  
 https://gamedevacademy.org/how-to-create-an-rpg-game-in-unity-comprehensive-guide/  
 https://www.youtube.com/watch?v=bpB4BApnKhM
+  
+### Pełne tutoriale do stworzenia świata civ-like
+https://catlikecoding.com/unity/tutorials/hex-map/  
+https://www.youtube.com/watch?v=j-rCuN7uMR8&list=PLbghT7MmckI7JHf0pdEQ8fbPb-LoDXEno&index=1
 
 
 ## Dodatkowe informacje:
