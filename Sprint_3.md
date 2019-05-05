@@ -5,8 +5,7 @@ Z grubsza to samo co w poprzednim
 ### Teren  
 #### 1,2 -> środa  
 #### 3,4 -> piątek  
-
-## Przedmioty  
+### Przedmioty  
 #### Własciwości terenu(9,10), jednostki -> niedziela  
 
 ## Chodzenie po mapie  
