@@ -6,13 +6,13 @@ Z grubsza to samo co w poprzednim
 #### 1,2 -> środa  
 #### 3,4 -> piątek  
 
-### Przedmioty  
+## Przedmioty  
 #### Własciwości terenu(9,10), jednostki -> niedziela  
 
 ## Chodzenie po mapie  
-### Dystans, pathfinding 15,16 -> niedziela  
-### poruszanie się 17,18 -> wtorek  
+#### Dystans, pathfinding 15,16 -> niedziela  
+#### poruszanie się 17,18 -> wtorek  
 
 ## Kamera  
-### Fog of war?  
-### Odkrywanie terenu?  
+#### Fog of war?  
+#### Odkrywanie terenu?  
