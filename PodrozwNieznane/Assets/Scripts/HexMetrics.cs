@@ -7,7 +7,7 @@ public static class HexMetrics
     public static Texture2D noiseSource;
     public const float cellPerturbStrength = 3f;
     public const float noiseScale = 0.003f;
-    public const float elevationPerturbStrength = 0.5f;
+    public const float elevationPerturbStrength = 1f;
 
     public const float outerRadius = 10f;
     public const float innerRadius = outerRadius * 0.866025404f; //(sqrt(3)/2)
@@ -15,8 +15,8 @@ public static class HexMetrics
     public const float solidFactor = 0.9f;
     public const float blendFactor = 1f - solidFactor;
 
-    public const float elevationStep = 5f;
-    public const int terracesPerSlope = 3;
+    public const float elevationStep = 3f;
+    public const int terracesPerSlope = 2;
     public const int terraceSteps = terracesPerSlope * 2 + 1;
 
     public const float horizontalTerraceStepSize = 1f / terraceSteps;
