@@ -53,9 +53,9 @@ public class HexCell : MonoBehaviour
             elevation = value;
             Vector3 position = transform.localPosition;
             //Adding noise to our elevation
-            position.y +=
-                (HexMetrics.SampleNoise(position).y * 2f - 1f) *
-                HexMetrics.elevationPerturbStrength;
+            position.y = value * HexMetrics.elevationStep *
+            (HexMetrics.SampleNoise(position).y * 2f) *
+            HexMetrics.elevationPerturbStrength;
             transform.localPosition = position;
 
             Vector3 uiPosition = uiRect.localPosition;
