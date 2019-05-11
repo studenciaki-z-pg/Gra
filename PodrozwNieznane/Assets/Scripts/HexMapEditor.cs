@@ -16,6 +16,8 @@ public class HexMapEditor : MonoBehaviour
 
     bool editMode;
 
+    HexCell previousCell, searchFromCell, searchToCell;
+
     void Awake()
     {
         SetColor(0);
@@ -42,9 +44,23 @@ public class HexMapEditor : MonoBehaviour
             {
                 EditCell(currentCell);
             }
-            else
+            else if (Input.GetKey(KeyCode.LeftShift) && searchToCell != currentCell)
             {
-                hexGrid.FindDistancesTo(currentCell);
+                if (searchFromCell)
+                {
+                    searchFromCell.DisableHighlight();
+                }
+                searchFromCell = currentCell;
+                searchFromCell.EnableHighlight(Color.blue);
+                if (searchToCell)
+                {
+                    hexGrid.FindPath(searchFromCell, searchToCell);
+                }
+            }
+            else if (searchFromCell && searchFromCell != currentCell)
+            {
+                searchToCell = currentCell;
+                hexGrid.FindPath(searchFromCell, searchToCell);
             }
         }
     }

@@ -201,7 +201,8 @@ public static class HexDirectionExtensions
 
 //miscellaneous:
 
-public struct HexHash
+
+public struct HexHash //like a noise texture but without texture:D
 {
 
     public float a, b, c, d, e;
