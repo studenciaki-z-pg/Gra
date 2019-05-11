@@ -111,7 +111,7 @@ public class HexGrid : MonoBehaviour
         Text label = Instantiate<Text>(cellLabelPrefab);
         //label.rectTransform.SetParent(gridCanvas.transform, false);
         label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
-        label.text = cell.coordinates.ToStringOnSeparateLines();
+        //label.text = cell.coordinates.ToStringOnSeparateLines();
         cell.uiRect = label.rectTransform;
         cell.Elevation = 0;
         AddCellToChunk(x, z, cell);
@@ -127,6 +127,73 @@ public class HexGrid : MonoBehaviour
         int localZ = z - chunkZ * HexMetrics.chunkSizeZ;
         chunk.AddCell(localX + localZ * HexMetrics.chunkSizeX, cell);
     }
+
+
+    //------------------------
+    //Dijkstra etc:
+
+    public void FindDistancesTo(HexCell cell)
+    {
+        StopAllCoroutines(); //Also, we should stop searching when another map is loaded
+                            //in a future "public void Load (BinaryReader reader,..."
+        StartCoroutine(Search(cell));
+    }
+
+    IEnumerator Search(HexCell cell)
+    {
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].Distance = int.MaxValue;
+        }
+        WaitForSeconds delay = new WaitForSeconds(1 / 60f);
+        List<HexCell> frontier = new List<HexCell>();
+        cell.Distance = 0;
+        frontier.Add(cell);
+        while (frontier.Count > 0)
+        {
+            yield return delay;
+            HexCell current = frontier[0];
+            frontier.RemoveAt(0);
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = current.GetNeighbor(d);
+                if (neighbor == null)
+                {
+                    continue;
+                }
+                HexEdgeType edgeType = current.GetEdgeType(neighbor);
+                if (/*neighbor.IsUnderwater ||*/ edgeType == HexEdgeType.Cliff)
+                {
+                    continue;
+                }
+
+                int distance = current.Distance;
+                if (/*current.HasRoadThroughEdge(d)*/ false)
+                {
+                    distance += 1;
+                }
+                else if (/*current.Walled != neighbor.Walled*/false)
+                {
+                    continue;
+                }
+                else
+                {
+                    distance += (edgeType == HexEdgeType.Flat ? 5 : 10);
+                    distance += neighbor.UrbanLevel + neighbor.FarmLevel + neighbor.PlantLevel;
+                    //using feature intensity level directly as weight in Dijkstra algorithm??? how not nice
+                }
+               if (neighbor.Distance == int.MaxValue) {
+					neighbor.Distance = distance;
+					frontier.Add(neighbor);
+				}
+				else if (distance < neighbor.Distance) {
+					neighbor.Distance = distance;
+				}
+                frontier.Sort((x, y) => x.Distance.CompareTo(y.Distance));
+            }
+        }
+    }
+
 
 
 

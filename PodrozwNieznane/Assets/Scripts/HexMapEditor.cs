@@ -14,6 +14,7 @@ public class HexMapEditor : MonoBehaviour
 
     int activeUrbanLevel, activeFarmLevel, activePlantLevel;
 
+    bool editMode;
 
     void Awake()
     {
@@ -36,9 +37,43 @@ public class HexMapEditor : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(inputRay, out hit))
         {
-            EditCell(hexGrid.GetCell(hit.point));
+            HexCell currentCell = hexGrid.GetCell(hit.point);
+            if (editMode)
+            {
+                EditCell(currentCell);
+            }
+            else
+            {
+                hexGrid.FindDistancesTo(currentCell);
+            }
         }
     }
+    /*void HandleInput() //what this function should look like (but it doesn't):
+    {
+        Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(inputRay, out hit))
+        {
+            HexCell currentCell = hexGrid.GetCell(hit.point);
+            if (previousCell && previousCell != currentCell)
+            {
+                ValidateDrag(currentCell);
+            }
+            else
+            {
+                isDrag = false;
+            }
+            if (editMode)
+            {
+                EditCells(currentCell);
+            }
+            previousCell = currentCell;
+        }
+        else
+        {
+            previousCell = null;
+        }
+    }*/
     void EditCell(HexCell cell)
     {
         cell.Color = activeColor;
@@ -69,6 +104,9 @@ public class HexMapEditor : MonoBehaviour
     {
         activePlantLevel = (int)level;
     }
-
+    public void SetEditMode(bool toggle)
+    {
+        editMode = toggle;
+    }
 
 }

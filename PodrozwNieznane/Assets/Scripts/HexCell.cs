@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HexCell : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class HexCell : MonoBehaviour
     [SerializeField]
     HexCell[] neighbors;
     int elevation = int.MinValue;
+   
 
     public HexCell GetNeighbor(HexDirection direction)
     {
@@ -85,8 +87,8 @@ public class HexCell : MonoBehaviour
 
 
 
-//Definig height of an elevation based on noise
-public Vector3 Position
+    //Definig height of an elevation based on noise
+    public Vector3 Position
     {
         get
         {
@@ -108,6 +110,32 @@ public Vector3 Position
         );
     }
 
+
+    //--------------------
+    //distance for pathfinding:
+
+    int distance;
+    public int Distance
+    {
+        get
+        {
+            return distance;
+        }
+        set
+        {
+            distance = value;
+            UpdateDistanceLabel();
+        }
+    }
+    void UpdateDistanceLabel()
+    {
+        Text label = uiRect.GetComponent<Text>();
+        label.text = distance == int.MaxValue ? "" : distance.ToString();
+    }
+
+
+    //--------------------
+    //Cubic features:
 
     int urbanLevel, farmLevel, plantLevel;
     public int UrbanLevel
