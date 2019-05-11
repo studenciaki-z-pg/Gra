@@ -106,6 +106,61 @@ public static class HexMetrics
         );
     }
 
+    /*
+     * Using a noise sample (4 colors texture with diffrent values 0-1)
+     */
+    public static Vector3 Perturb(Vector3 position)
+    {
+        Vector4 sample = HexMetrics.SampleNoise(position);
+        position.x += (sample.x * 2f - 1f) * HexMetrics.cellPerturbStrength;
+        //position.y += (sample.y * 2f - 1f) * HexMetrics.cellPerturbStrength;
+        position.z += (sample.z * 2f - 1f) * HexMetrics.cellPerturbStrength;
+        return position;
+    }
+
+
+
+    public const int hashGridSize = 256;
+    static HexHash[] hashGrid;
+    public const float hashGridScale = 0.25f;
+
+    public static void InitializeHashGrid(int seed)
+    {
+        hashGrid = new HexHash[hashGridSize * hashGridSize];
+        Random.State currentState = Random.state;
+        Random.InitState(seed);
+        for (int i = 0; i < hashGrid.Length; i++)
+        {
+            hashGrid[i] = HexHash.Create();
+        }
+        Random.state = currentState;
+    }
+    public static HexHash SampleHashGrid(Vector3 position)
+    {
+        int x = (int)(position.x * hashGridScale) % hashGridSize;
+        if (x < 0)
+        {
+            x += hashGridSize;
+        }
+        int z = (int)(position.z * hashGridScale) % hashGridSize;
+        if (z < 0)
+        {
+            z += hashGridSize;
+        }
+        return hashGrid[x + z * hashGridSize];
+    }
+
+    static float[][] featureThresholds = {
+        new float[] {0.0f, 0.0f, 0.4f},
+        new float[] {0.0f, 0.4f, 0.6f},
+        new float[] {0.4f, 0.6f, 0.8f}
+    };
+
+    public static float[] GetFeatureThresholds(int level)
+    {
+        return featureThresholds[level];
+    }
+
 
 }
 
@@ -140,4 +195,25 @@ public static class HexDirectionExtensions
     }
 
 
+}
+
+
+
+//miscellaneous:
+
+public struct HexHash
+{
+
+    public float a, b, c, d, e;
+
+    public static HexHash Create()
+    {
+        HexHash hash;
+        hash.a = Random.value * 0.999f;
+        hash.b = Random.value * 0.999f;
+        hash.c = Random.value * 0.999f;
+        hash.d = Random.value * 0.999f;
+        hash.e = Random.value * 0.999f;
+        return hash;
+    }
 }

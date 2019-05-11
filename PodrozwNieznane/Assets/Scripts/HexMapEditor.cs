@@ -12,6 +12,9 @@ public class HexMapEditor : MonoBehaviour
 
     int activeElevation;
 
+    int activeUrbanLevel, activeFarmLevel, activePlantLevel;
+
+
     void Awake()
     {
         SetColor(0);
@@ -40,6 +43,9 @@ public class HexMapEditor : MonoBehaviour
     {
         cell.Color = activeColor;
         cell.Elevation = activeElevation;
+        cell.UrbanLevel = activeUrbanLevel;
+        cell.FarmLevel = activeFarmLevel;
+        cell.PlantLevel = activePlantLevel;
     }
 
 
@@ -51,4 +57,18 @@ public class HexMapEditor : MonoBehaviour
     {
         activeElevation = (int)elevation;
     }
+    public void SetUrbanLevel(float level)
+    {
+        activeUrbanLevel = (int)level;
+    }
+    public void SetFarmLevel(float level)
+    {
+        activeFarmLevel = (int)level;
+    }
+    public void SetPlantLevel(float level)
+    {
+        activePlantLevel = (int)level;
+    }
+
+
 }
