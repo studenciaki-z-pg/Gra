@@ -32,6 +32,10 @@ public class HexGridChunk : MonoBehaviour
         Triangulate();
         enabled = false;
     }
+    public void ShowUI(bool visible)
+    {
+        gridCanvas.gameObject.SetActive(visible);
+    }
 
 
 

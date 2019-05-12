@@ -18,6 +18,9 @@ public class HexMapEditor : MonoBehaviour
 
     HexCell previousCell, searchFromCell, searchToCell;
 
+    int brushSize = 0;
+
+
     void Awake()
     {
         SetColor(0);
@@ -42,7 +45,7 @@ public class HexMapEditor : MonoBehaviour
             HexCell currentCell = hexGrid.GetCell(hit.point);
             if (editMode)
             {
-                EditCell(currentCell);
+                EditCells(currentCell);
             }
             else if (Input.GetKey(KeyCode.LeftShift) && searchToCell != currentCell)
             {
@@ -90,13 +93,36 @@ public class HexMapEditor : MonoBehaviour
             previousCell = null;
         }
     }*/
-    void EditCell(HexCell cell)
+    void EditCell(HexCell cell) //we have a copy of this function in HexCell, please keep it up to date (EditItself())
     {
-        cell.Color = activeColor;
-        cell.Elevation = activeElevation;
-        cell.UrbanLevel = activeUrbanLevel;
-        cell.FarmLevel = activeFarmLevel;
-        cell.PlantLevel = activePlantLevel;
+        if (cell)
+        {
+            cell.Color = activeColor;
+            cell.Elevation = activeElevation;
+            cell.UrbanLevel = activeUrbanLevel;
+            cell.FarmLevel = activeFarmLevel;
+            cell.PlantLevel = activePlantLevel;
+        }
+    }
+
+    void EditCells(HexCell center)
+    {
+        int centerX = center.coordinates.X;
+        int centerZ = center.coordinates.Z;
+        for (int r = 0, z = centerZ - brushSize; z <= centerZ; z++, r++)
+        {
+            for (int x = centerX - r; x <= centerX + brushSize; x++)
+            {
+                EditCell(hexGrid.GetCell(new HexCoordinates(x, z)));
+            }
+        }
+        for (int r = 0, z = centerZ + brushSize; z > centerZ; z--, r++)
+        {
+            for (int x = centerX - brushSize; x <= centerX + r; x++)
+            {
+                EditCell(hexGrid.GetCell(new HexCoordinates(x, z)));
+            }
+        }
     }
 
 
@@ -123,6 +149,10 @@ public class HexMapEditor : MonoBehaviour
     public void SetEditMode(bool toggle)
     {
         editMode = toggle;
+    }
+    public void SetBrushSize(float size)
+    {
+        brushSize = (int)size;
     }
 
 }

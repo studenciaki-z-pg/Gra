@@ -88,7 +88,6 @@ public class HexGrid : MonoBehaviour
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
         cell.Color = defaultColor;
-       // cell.color = colors[Random.Range(0, 4)];
 
         if (x > 0) {
             cell.SetNeighbor(HexDirection.W, cells[i - 1]);
@@ -115,6 +114,8 @@ public class HexGrid : MonoBehaviour
         cell.uiRect = label.rectTransform;
         cell.Elevation = 0;
         AddCellToChunk(x, z, cell);
+
+        cell.EditItself();           //          <----------         INITIAL SETUP HERE (docelowo pewnie gdzies indziej)
     }
 
     void AddCellToChunk(int x, int z, HexCell cell)
@@ -250,5 +251,18 @@ public class HexGrid : MonoBehaviour
         HexCell cell = cells[index];
         return cells[index];
     }
-
+    public HexCell GetCell(HexCoordinates coordinates)
+    {
+        int z = coordinates.Z;
+        if (z < 0 || z >= cellCountZ)
+        {
+            return null;
+        }
+        int x = coordinates.X + z / 2;
+        if (x < 0 || x >= cellCountX)
+        {
+            return null;
+        }
+        return cells[x + z * cellCountX];
+    }
 }
