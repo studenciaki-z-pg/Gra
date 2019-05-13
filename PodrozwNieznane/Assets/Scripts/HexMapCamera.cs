@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class HexMapCamera : MonoBehaviour
 {
+    float rotationAngle;
+    public float rotationSpeed;
     public HexGrid grid;
     public float moveSpeed;
     public float swivelMinZoom, swivelMaxZoom;
@@ -26,6 +28,25 @@ public class HexMapCamera : MonoBehaviour
         {
             AdjustPosition(xDelta, zDelta);
         }
+
+        float rotationDelta = Input.GetAxis("Rotation");
+        if (rotationDelta != 0f)
+        {
+            AdjustRotation(rotationDelta);
+        }
+    }
+    void AdjustRotation(float delta)
+    {
+        rotationAngle += delta * rotationSpeed * Time.deltaTime;
+        if (rotationAngle < 0f)
+        {
+            rotationAngle += 360f;
+        }
+        else if (rotationAngle >= 360f)
+        {
+            rotationAngle -= 360f;
+        }
+        transform.localRotation = Quaternion.Euler(0f, rotationAngle, 0f);
     }
     Vector3 ClampPosition(Vector3 position) //ograniczenia
     {
@@ -43,6 +64,9 @@ public class HexMapCamera : MonoBehaviour
     }
     void AdjustPosition(float xDelta, float zDelta) //zmiana pozycji
     {
+        Vector3 direction =
+            transform.localRotation *
+            new Vector3(xDelta, 0f, zDelta).normalized;
         float distance = moveSpeed * Time.deltaTime;
         Vector3 position = transform.localPosition;
         position += new Vector3(xDelta, 0f, zDelta) * distance;
