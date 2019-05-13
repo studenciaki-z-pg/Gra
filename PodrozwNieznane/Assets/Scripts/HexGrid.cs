@@ -22,12 +22,15 @@ public class HexGrid : MonoBehaviour
     public HexGridChunk chunkPrefab;
     HexGridChunk[] chunks;
 
+    public int seed;
+
 
     void Awake()
     {
         HexMetrics.noiseSource = noiseSource;
+        HexMetrics.InitializeHashGrid(seed);
 
-       cellCountX = chunkCountX * HexMetrics.chunkSizeX;
+        cellCountX = chunkCountX * HexMetrics.chunkSizeX;
 		cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
 
         CreateChunks();
@@ -62,7 +65,11 @@ public class HexGrid : MonoBehaviour
 
     void OnEnable()
     {
-        HexMetrics.noiseSource = noiseSource;
+        if (!HexMetrics.noiseSource)
+        {
+            HexMetrics.noiseSource = noiseSource;
+            HexMetrics.InitializeHashGrid(seed);
+        }
     }
 
     //After hex edit we need to refresh pyramids around
@@ -81,7 +88,6 @@ public class HexGrid : MonoBehaviour
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
         cell.Color = defaultColor;
-       // cell.color = colors[Random.Range(0, 4)];
 
         if (x > 0) {
             cell.SetNeighbor(HexDirection.W, cells[i - 1]);
@@ -104,10 +110,12 @@ public class HexGrid : MonoBehaviour
         Text label = Instantiate<Text>(cellLabelPrefab);
         //label.rectTransform.SetParent(gridCanvas.transform, false);
         label.rectTransform.anchoredPosition = new Vector2(position.x, position.z);
-        label.text = cell.coordinates.ToStringOnSeparateLines();
+        //label.text = cell.coordinates.ToStringOnSeparateLines();
         cell.uiRect = label.rectTransform;
         cell.Elevation = 0;
         AddCellToChunk(x, z, cell);
+
+        cell.EditItself();           //          <----------         INITIAL SETUP HERE (docelowo pewnie gdzies indziej)
     }
 
     void AddCellToChunk(int x, int z, HexCell cell)
@@ -120,6 +128,102 @@ public class HexGrid : MonoBehaviour
         int localZ = z - chunkZ * HexMetrics.chunkSizeZ;
         chunk.AddCell(localX + localZ * HexMetrics.chunkSizeX, cell);
     }
+
+
+    //------------------------
+    //Dijkstra etc:
+
+    HexCellPriorityQueue searchFrontier;
+
+    public void FindPath(HexCell fromCell, HexCell toCell)
+    {
+        StopAllCoroutines(); //Also, we should stop searching when another map is loaded
+                            //in a future "public void Load (BinaryReader reader,..."
+        StartCoroutine(Search(fromCell, toCell));
+    }
+
+    IEnumerator Search(HexCell fromCell, HexCell toCell)
+    {
+        if (searchFrontier == null)
+        {
+            searchFrontier = new HexCellPriorityQueue();
+        }
+        else
+        {
+            searchFrontier.Clear();
+        }
+
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].Distance = int.MaxValue;
+            cells[i].DisableHighlight();
+        }
+        fromCell.EnableHighlight(Color.blue);
+        toCell.EnableHighlight(Color.red);
+
+        WaitForSeconds delay = new WaitForSeconds(1 / 60f);
+        fromCell.Distance = 0;
+        searchFrontier.Enqueue(fromCell);
+        while (searchFrontier.Count > 0)
+        {
+            yield return delay;
+            HexCell current = searchFrontier.Dequeue();
+
+            if (current == toCell) //end of search, coming back & highlighting the path
+            {
+                current = current.PathFrom;
+                while (current != fromCell)
+                {
+                    current.EnableHighlight(Color.white);
+                    current = current.PathFrom;
+                }
+                break;
+            }
+
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = current.GetNeighbor(d);
+                if (neighbor == null)
+                {
+                    continue;
+                }
+                HexEdgeType edgeType = current.GetEdgeType(neighbor);
+                if (/*neighbor.IsUnderwater ||*/ edgeType == HexEdgeType.Cliff)
+                {
+                    continue;
+                }
+
+                int distance = current.Distance;
+                if (/*current.HasRoadThroughEdge(d)*/ false)
+                {
+                    distance += 1;
+                }
+                else if (/*current.Walled != neighbor.Walled*/false)
+                {
+                    continue;
+                }
+                else
+                {
+                    distance += (edgeType == HexEdgeType.Flat ? 5 : 10);
+                    distance += neighbor.UrbanLevel + neighbor.FarmLevel + neighbor.PlantLevel;
+                    //using feature intensity level directly as weight in Dijkstra algorithm??? how not nice
+                }
+               if (neighbor.Distance == int.MaxValue) {
+					neighbor.Distance = distance;
+                    neighbor.PathFrom = current;
+                    neighbor.SearchHeuristic = neighbor.coordinates.DistanceTo(toCell.coordinates);
+                    searchFrontier.Enqueue(neighbor);
+                }
+				else if (distance < neighbor.Distance) {
+                    int oldPriority = neighbor.SearchPriority;
+                    neighbor.Distance = distance;
+                    neighbor.PathFrom = current;
+                    searchFrontier.Change(neighbor, oldPriority);
+                }
+            }
+        }
+    }
+
 
 
 
@@ -147,5 +251,18 @@ public class HexGrid : MonoBehaviour
         HexCell cell = cells[index];
         return cells[index];
     }
-
+    public HexCell GetCell(HexCoordinates coordinates)
+    {
+        int z = coordinates.Z;
+        if (z < 0 || z >= cellCountZ)
+        {
+            return null;
+        }
+        int x = coordinates.X + z / 2;
+        if (x < 0 || x >= cellCountX)
+        {
+            return null;
+        }
+        return cells[x + z * cellCountX];
+    }
 }

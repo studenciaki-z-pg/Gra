@@ -2,32 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapGenerator : MonoBehaviour
+public class MapGenerator
 {
-    /*
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }*/
 
 
-    public int width;
-    public int height;
+    public int width = 30;
+    public int height = 30;
 
-    public string seed;
-    public bool useRandomSeed;
+    public string seed = "42";
+    public bool useRandomSeed = false;
 
     [Range(0, 100)]
-    public int randomFillPercent;
+    public int randomFillPercent = 45;
 
-    int[,] map;
+    public int[,] map;
 
     void Start()
     {
@@ -43,7 +31,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    void GenerateMap()
+    public void GenerateMap()
     {
         map = new int[width, height];
         RandomFillMap();

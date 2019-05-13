@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HexCell : MonoBehaviour
 {
@@ -10,6 +11,17 @@ public class HexCell : MonoBehaviour
     [SerializeField]
     HexCell[] neighbors;
     int elevation = int.MinValue;
+
+
+    public HexCell PathFrom { get; set; }
+    public int SearchHeuristic { get; set; }
+    public int SearchPriority
+    {
+        get { return distance + SearchHeuristic; }
+    }
+    public HexCell NextWithSamePriority { get; set; }
+
+
 
     public HexCell GetNeighbor(HexDirection direction)
     {
@@ -36,6 +48,10 @@ public class HexCell : MonoBehaviour
                 }
             }
         }
+    }
+    void RefreshSelfOnly()
+    {
+        chunk.Refresh();
     }
 
     public int Elevation
@@ -81,8 +97,8 @@ public class HexCell : MonoBehaviour
 
 
 
-//Definig height of an elevation based on noise
-public Vector3 Position
+    //Definig height of an elevation based on noise
+    public Vector3 Position
     {
         get
         {
@@ -103,5 +119,130 @@ public Vector3 Position
             elevation, otherCell.elevation
         );
     }
+
+
+    //--------------------
+    //distance for pathfinding:
+
+    int distance;
+    public int Distance
+    {
+        get
+        {
+            return distance;
+        }
+        set
+        {
+            distance = value;
+            UpdateDistanceLabel();
+        }
+    }
+    void UpdateDistanceLabel()
+    {
+        Text label = uiRect.GetComponent<Text>();
+        label.text = distance == int.MaxValue ? "" : distance.ToString();
+    }
+
+
+    public void DisableHighlight () {
+		Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+		highlight.enabled = false;
+	}
+    public void EnableHighlight(Color color)
+    {
+        Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+        highlight.color = color;
+        highlight.enabled = true;
+    }
+
+
+    //--------------------
+    //cuboid features:
+
+    int urbanLevel, farmLevel, plantLevel;
+    public int UrbanLevel
+    {
+        get
+        {
+            return urbanLevel;
+        }
+        set
+        {
+            if (urbanLevel != value)
+            {
+                urbanLevel = value;
+                RefreshSelfOnly();
+            }
+        }
+    }
+    public int FarmLevel
+    {
+        get
+        {
+            return farmLevel;
+        }
+        set
+        {
+            if (farmLevel != value)
+            {
+                farmLevel = value;
+                RefreshSelfOnly();
+            }
+        }
+    }
+    public int PlantLevel
+    {
+        get
+        {
+            return plantLevel;
+        }
+        set
+        {
+            if (plantLevel != value)
+            {
+                plantLevel = value;
+                RefreshSelfOnly();
+            }
+        }
+    }
+    //end
+    //-------------------
+
+    public void EditItself() //a copy of HexMapEditor.EditCell(HexCell cell), a very crude randomization
+    {
+        if (this)
+        {
+            //this.Color = HexMapEditor.colors[Random.Range(0, 4)]; //unaccessible:(
+            Color[] coles = { new Color(0.26f, 0.87f, 0.20f), new Color(0.62f, 0.23f, 0.05f),
+                new Color(0.16f, 0.45f, 0.86f), new Color(0.88f, 0.94f, 0.91f) };
+
+            this.Color = coles[Random.Range(0, 4)];//int (int [inclusive], int [exlusive]) (max returned value = 3)
+            this.Elevation = Random.Range(1, 4); //(0, 7); 
+            this.UrbanLevel = (int)UnevenRandom(0f, 3.99f); 
+            this.FarmLevel = (int)UnevenRandom(0f, 3.99f);
+            this.PlantLevel = (int)UnevenRandom(0f, 3.99f); //float (float [inclusive], float [inclusive])
+
+        }
+    }
+    float UnevenRandom(float from, float to)
+    {
+        float intermediate = (to + from) / 2;
+
+        float temp = Random.Range(0f, 1f);
+        if (temp < 0.75f)
+        {
+            return 0f;
+        }
+        if (temp<0.875f)//lower half of interval has 1x the chance of being chosen.
+        {
+            return Random.Range(from, intermediate);
+        }
+        else
+        {
+            return Random.Range(intermediate, to);
+        }
+    }
+
+
 }
 
