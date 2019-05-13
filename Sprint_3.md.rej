@@ -1,0 +1,11 @@
+diff a/Sprint_3.md b/Sprint_3.md	(rejected hunks)
+@@ -5,8 +5,7 @@
+ ### Teren  
+ #### 1,2 -> środa  
+ #### 3,4 -> piątek  
+-
+-## Przedmioty  
++### Przedmioty  
+ #### Własciwości terenu(9,10), jednostki -> niedziela  
+ 
+ ## Chodzenie po mapie  

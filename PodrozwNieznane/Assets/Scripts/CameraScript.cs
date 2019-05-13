@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
-    float speed = 2.0f;
+    float speed = 20.0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -33,16 +33,16 @@ public class CameraScript : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.Equals) || Input.GetKey(KeyCode.KeypadPlus))
         {
-            if (getSpeed() < 20.0f)
+            if (getSpeed() < 200.0f)
             {
-                changeSpeed(getSpeed() + 1);
+                changeSpeed(getSpeed() + 10);
             }
         }
-        if(Input.GetKey(KeyCode.Minus) || Input.GetKey(KeyCode.KeypadMinus))
+        if (Input.GetKey(KeyCode.Minus) || Input.GetKey(KeyCode.KeypadMinus))
         {
-            if (getSpeed() > 1.0f)
+            if (getSpeed() > 10.0f)
             {
-                changeSpeed(getSpeed() - 1);
+                changeSpeed(getSpeed() - 10);
             }
         }
     }
