@@ -55,6 +55,9 @@ public class HexMap : MonoBehaviour
                hexObject.GetComponent<HexBeh>().y = row;
             }
         }
+        //GetComponent<Renderer>().enabled = !GetComponent<Renderer>().enabled;
+        //gameObject.SetActive(true);
+        //gameObject.SetActive(gameObject.activeSelf);
         //gameObject.isStatic = false;
         //StaticBatchingUtility.Combine(this.gameObject);
     }
