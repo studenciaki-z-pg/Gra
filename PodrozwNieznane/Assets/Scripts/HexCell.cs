@@ -13,6 +13,7 @@ public class HexCell : MonoBehaviour
     int elevation = int.MinValue;
 
 
+    public int SearchPhase { get; set;}
     public HexCell PathFrom { get; set; }
     public int SearchHeuristic { get; set; }
     public int SearchPriority
@@ -134,13 +135,19 @@ public class HexCell : MonoBehaviour
         set
         {
             distance = value;
-            UpdateDistanceLabel();
+            //UpdateDistanceLabel();
+
         }
     }
-    void UpdateDistanceLabel()
+    /*void UpdateDistanceLabel()
     {
         Text label = uiRect.GetComponent<Text>();
         label.text = distance == int.MaxValue ? "" : distance.ToString();
+    }*/
+    public void SetLabel (string text)
+    {
+        UnityEngine.UI.Text label = uiRect.GetComponent<Text>();
+        label.text = text;
     }
 
 
