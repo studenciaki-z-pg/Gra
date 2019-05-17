@@ -12,4 +12,7 @@
 #### Obsługa tury  
 #### Obsługa widoku  
 ## Generator mapy  
+#### Rozkład kolorów  
+#### Rozkład elewacji  
+#### Rozmieszczenie obiektów  
 ## Okienka
