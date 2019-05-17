@@ -38,6 +38,7 @@ public class HexMapEditor : MonoBehaviour
 
     void HandleInput()
     {
+        var speed = 24; //We do not have Units with diffrent movement at the moment
         Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(inputRay, out hit))
@@ -49,21 +50,29 @@ public class HexMapEditor : MonoBehaviour
             }
             else if (Input.GetKey(KeyCode.LeftShift) && searchToCell != currentCell)
             {
-                if (searchFromCell)
+                if(searchFromCell != currentCell)
                 {
-                    searchFromCell.DisableHighlight();
+                    if (searchFromCell)
+                    {
+                        searchFromCell.DisableHighlight();
+                    }
+                    searchFromCell = currentCell;
+                    searchFromCell.EnableHighlight(Color.blue);
+                    if (searchToCell)
+                    {
+                        hexGrid.FindPath(searchFromCell, searchToCell, speed);
+                    }
                 }
-                searchFromCell = currentCell;
-                searchFromCell.EnableHighlight(Color.blue);
-                if (searchToCell)
-                {
-                    hexGrid.FindPath(searchFromCell, searchToCell);
-                }
+                
             }
             else if (searchFromCell && searchFromCell != currentCell)
             {
-                searchToCell = currentCell;
-                hexGrid.FindPath(searchFromCell, searchToCell);
+                if (searchFromCell != currentCell)
+                {
+                    searchToCell = currentCell;
+                    hexGrid.FindPath(searchFromCell, searchToCell, speed);
+                }
+                
             }
         }
     }

@@ -1,9 +1,0 @@
-diff a/PodrozwNieznane/Assets/Scripts/HexCell.cs b/PodrozwNieznane/Assets/Scripts/HexCell.cs	(rejected hunks)
-@@ -207,6 +207,7 @@
-             this.UrbanLevel = (int)UnevenRandom(0f, 3.99f); 
-             this.FarmLevel = (int)UnevenRandom(0f, 3.99f);
-             this.PlantLevel = (int)UnevenRandom(0f, 3.99f); //float (float [inclusive], float [inclusive])
-+
-         }
-     }
-     float UnevenRandom(float from, float to)
