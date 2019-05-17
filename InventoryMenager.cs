@@ -4,11 +4,22 @@ public class InventoryMennager : MonoBehaviour
 {
     [SerializeField] Inventory inventory;
     [SerializeField] EquimentPanel equipmentPanel;
+    [SerializeField] InventoryMennager inventoryMennager;
 
     private void Awake()
     {
         inventory.OnItemRightClickedEvent += EquipFromInventory;
         equipmentPanel.OnItemRightClickedEvent += UnequipFromEquipment;
+    }
+
+    public void setVisible()
+    {
+        inventoryMennager.setVisible();
+    }
+
+    public void setUnVisible()
+    {
+        inventoryMennager.setUnVisible();
     }
 
     private void EquipFromInventory(Item item)

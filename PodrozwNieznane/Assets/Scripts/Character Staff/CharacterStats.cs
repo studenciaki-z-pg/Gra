@@ -66,7 +66,7 @@ public class CharacterStats
         bool didRemoved = false;
         for (int i = statModifiers.Count -1; i >= 0; i--)
         {
-            if (statModifiers[i] == source)
+            if (statModifiers[i].Source == source)
             {
                 statModifiers.RemoveAt(i);
                 isActual = false;
