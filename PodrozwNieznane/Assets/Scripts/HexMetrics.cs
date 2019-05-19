@@ -24,6 +24,8 @@ public static class HexMetrics
 
     public const int chunkSizeX = 5, chunkSizeZ = 5;
 
+    public static Color[] colors;
+
     // flat top orientation:
     /*public static Vector3[] corners = {
         new Vector3(0.5f * outerRadius, 0f, innerRadius),

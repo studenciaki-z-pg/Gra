@@ -12,6 +12,8 @@ public class HexCell : MonoBehaviour
     HexCell[] neighbors;
     int elevation = int.MinValue;
 
+    int terrainTypeIndex;
+
 
     public int SearchPhase { get; set;}
     public HexCell PathFrom { get; set; }
@@ -81,20 +83,29 @@ public class HexCell : MonoBehaviour
             Refresh();
         }
     }
+
     public Color Color { 
         get {
-			return color;
-		}
-        set {
-			if (color == value) {
-				return;
-			}
-			color = value;
-			Refresh();
-		}
+            return HexMetrics.colors[terrainTypeIndex];
+        }
 	}
 
-	Color color;
+    public int TerrainTypeIndex
+    {
+        get
+        {
+            return terrainTypeIndex;
+        }
+        set
+        {
+            if (terrainTypeIndex != value)
+            {
+                terrainTypeIndex = value;
+                Refresh();
+            }
+        }
+    }
+
 
 
 
@@ -219,11 +230,7 @@ public class HexCell : MonoBehaviour
     {
         if (this)
         {
-            //this.Color = HexMapEditor.colors[Random.Range(0, 4)]; //unaccessible:(
-            Color[] coles = { new Color(0.26f, 0.87f, 0.20f), new Color(0.62f, 0.23f, 0.05f),
-                new Color(0.16f, 0.45f, 0.86f), new Color(0.88f, 0.94f, 0.91f) };
-
-            this.Color = coles[Random.Range(0, 4)];//int (int [inclusive], int [exlusive]) (max returned value = 3)
+            this.TerrainTypeIndex = Random.Range(0, 4);//int (int [inclusive], int [exlusive]) (max returned value = 3)
             this.Elevation = Random.Range(1, 4); //(0, 7); 
             this.UrbanLevel = (int)UnevenRandom(0f, 3.99f); 
             this.FarmLevel = (int)UnevenRandom(0f, 3.99f);

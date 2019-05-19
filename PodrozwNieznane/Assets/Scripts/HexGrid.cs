@@ -19,18 +19,40 @@ public class HexGrid : MonoBehaviour
     public int chunkCountX = 4, chunkCountZ = 3;
     public HexCell cellPrefab;
     public Text cellLabelPrefab;
-    public Color defaultColor = Color.white;
+    //public Color defaultColor = Color.white;
     public Texture2D noiseSource;
     public HexGridChunk chunkPrefab;
     public int seed;
 
+    public Color[] colors;
 
+    private void Update()
+    {
+        colors = new Color[5]; //thanks to this assignment the public array cannot be changed in the Editor
+        colors[0] = new Color(0.26f, 0.87f, 0.20f);
+        colors[1] = new Color(0.62f, 0.23f, 0.05f);
+        colors[2] = new Color(0.16f, 0.45f, 0.86f);
+        colors[3] = new Color(0.88f, 0.94f, 0.91f);
+        colors[4] = new Color(1f, 0.89f, 0.42f);
+    }
 
     void Awake()
     {
         HexMetrics.noiseSource = noiseSource;
         HexMetrics.InitializeHashGrid(seed);
+        HexMetrics.colors = colors;
+        CreateMap();
+    }
 
+    public void CreateMap()
+    {
+        if (chunks != null)
+        {
+            for (int i = 0; i < chunks.Length; i++)
+            {
+                Destroy(chunks[i].gameObject);
+            }
+        }
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
 		cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
 
@@ -70,6 +92,7 @@ public class HexGrid : MonoBehaviour
         {
             HexMetrics.noiseSource = noiseSource;
             HexMetrics.InitializeHashGrid(seed);
+            HexMetrics.colors = colors;
         }
     }
 
@@ -88,7 +111,7 @@ public class HexGrid : MonoBehaviour
         //cell.transform.SetParent(transform, false);
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
-        cell.Color = defaultColor;
+        //cell.Color = defaultColor;
 
         if (x > 0) {
             cell.SetNeighbor(HexDirection.W, cells[i - 1]);

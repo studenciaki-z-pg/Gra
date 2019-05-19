@@ -4,11 +4,12 @@ using UnityEngine.EventSystems;
 public class HexMapEditor : MonoBehaviour
 {
 
-    public Color[] colors;
+    //public Color[] colors;
 
     public HexGrid hexGrid;
 
-    private Color activeColor;
+    //private Color activeColor;
+    int activeTerrainTypeIndex;
 
     int activeElevation;
 
@@ -23,7 +24,7 @@ public class HexMapEditor : MonoBehaviour
 
     void Awake()
     {
-        SetColor(0);
+        //SetColor(0);
     }
 
     void Update()
@@ -106,7 +107,11 @@ public class HexMapEditor : MonoBehaviour
     {
         if (cell)
         {
-            cell.Color = activeColor;
+            //cell.Color = activeColor;
+            if (activeTerrainTypeIndex >= 0)
+            {
+                cell.TerrainTypeIndex = activeTerrainTypeIndex;
+            }
             cell.Elevation = activeElevation;
             cell.UrbanLevel = activeUrbanLevel;
             cell.FarmLevel = activeFarmLevel;
@@ -135,9 +140,13 @@ public class HexMapEditor : MonoBehaviour
     }
 
 
-    public void SetColor(int index)
+    //public void SetColor(int index)
+    //{
+    //    activeColor = colors[index];
+    //}
+    public void SetTerrainTypeIndex(int index)
     {
-        activeColor = colors[index];
+        activeTerrainTypeIndex = index;
     }
     public void SetElevation(float elevation)
     {
