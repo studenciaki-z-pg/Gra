@@ -15,6 +15,7 @@ public class HexGrid : MonoBehaviour
     HexCell[] cells;
     HexGridChunk[] chunks;
     HexCell currentPathFrom, currentPathTo;
+    List<HexUnit> units = new List<HexUnit>();
 
     public int chunkCountX = 4, chunkCountZ = 3;
     public HexCell cellPrefab;
@@ -23,13 +24,15 @@ public class HexGrid : MonoBehaviour
     public Texture2D noiseSource;
     public HexGridChunk chunkPrefab;
     public int seed;
-
+    
+    public HexUnit unitPrefab;
 
 
     void Awake()
     {
         HexMetrics.noiseSource = noiseSource;
         HexMetrics.InitializeHashGrid(seed);
+        HexUnit.unitPrefab = unitPrefab;
 
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
 		cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
@@ -37,6 +40,42 @@ public class HexGrid : MonoBehaviour
         CreateChunks();
 		CreateCells();
     }
+
+    void OnEnable()
+    {
+        if (!HexMetrics.noiseSource)
+        {
+            HexMetrics.noiseSource = noiseSource;
+            HexMetrics.InitializeHashGrid(seed);
+            HexUnit.unitPrefab = unitPrefab;
+        }
+    }
+
+    public List<HexCell> GetPath()
+    {
+        if (!currentPathExists)
+        {
+            return null;
+        }
+        List<HexCell> path = ListPool<HexCell>.Get();
+        for (HexCell c = currentPathTo; c != currentPathFrom; c = c.PathFrom)
+        {
+            path.Add(c);
+        }
+        path.Add(currentPathFrom);
+        path.Reverse();
+        return path;
+    }
+
+
+
+
+
+
+
+
+
+
     void CreateChunks()
     {
         chunks = new HexGridChunk[chunkCountX * chunkCountZ];
@@ -64,14 +103,7 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    void OnEnable()
-    {
-        if (!HexMetrics.noiseSource)
-        {
-            HexMetrics.noiseSource = noiseSource;
-            HexMetrics.InitializeHashGrid(seed);
-        }
-    }
+    
 
     //After hex edit we need to refresh pyramids around
 
@@ -154,7 +186,7 @@ public class HexGrid : MonoBehaviour
             HexCell current = currentPathTo;
             while ( current != currentPathFrom)
             {
-                current.SetLabel((current.Distance / speed).ToString());
+                current.SetLabel(((current.Distance - 1) / speed).ToString());
                 current.EnableHighlight(Color.white);
                 current = current.PathFrom;
             }
@@ -164,7 +196,7 @@ public class HexGrid : MonoBehaviour
     }
 
     //cleaning visualisation of a path
-    void ClearPath()
+    public void ClearPath()
     {
         if (currentPathExists)
         {
@@ -219,7 +251,7 @@ public class HexGrid : MonoBehaviour
                 return true;
             }
 
-            int currentTurn = current.Distance / speed;
+            int currentTurn = (current.Distance - 1) / speed;
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
                 HexCell neighbor = current.GetNeighbor(d);
@@ -228,7 +260,8 @@ public class HexGrid : MonoBehaviour
                     continue;
                 }
                 HexEdgeType edgeType = current.GetEdgeType(neighbor);
-                if (/*neighbor.IsUnderwater ||*/ edgeType == HexEdgeType.Cliff)
+                //Obstacles in pathfinding, all units are the same faction, so we avoid all of them, later we can add Unit.faction to determine
+                if (/*neighbor.IsUnderwater ||*/ edgeType == HexEdgeType.Cliff || neighbor.Unit)
                 {
                     continue;
                 }
@@ -251,7 +284,7 @@ public class HexGrid : MonoBehaviour
 
                 }
                 int distance = current.Distance + moveCost;
-                int turn = distance / speed;
+                int turn = (distance - 1) / speed;
                 if (turn > currentTurn)
                 {
                     distance = turn * speed + moveCost;
@@ -294,6 +327,7 @@ public class HexGrid : MonoBehaviour
         hexMesh.Triangulate(cells);
     }*/
 
+
     public HexCell GetCell(Vector3 position)
     {
         position = transform.InverseTransformPoint(position);
@@ -304,6 +338,17 @@ public class HexGrid : MonoBehaviour
         HexCell cell = cells[index];
         return cells[index];
     }
+
+    public HexCell GetCell(Ray ray)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            return GetCell(hit.point);
+        }
+        return null;
+    }
+
     public HexCell GetCell(HexCoordinates coordinates)
     {
         int z = coordinates.Z;
@@ -318,4 +363,38 @@ public class HexGrid : MonoBehaviour
         }
         return cells[x + z * cellCountX];
     }
+    // ------------------- UNITS------------------------//
+
+    public void AddUnit(HexUnit unit, HexCell location, float orientation)
+    {
+        units.Add(unit);
+        unit.transform.SetParent(transform, false);
+        unit.Location = location;
+        unit.Orientation = orientation;
+    }
+
+    public void RemoveUnit(HexUnit unit)
+    {
+        units.Remove(unit);
+        unit.Die();
+    }
+
+    public void ShowUI(bool visible)
+    {
+        for (int i = 0; i < chunks.Length; i++)
+        {
+            chunks[i].ShowUI(visible);
+        }
+    }
+
+    public bool HasPath
+    {
+        get
+        {
+            return currentPathExists;
+        }
+    }
+
+
 }
+
