@@ -1,8 +1,8 @@
 # Podróż-w-nieznane
 ### Repozytorium projektu inżynierskiego
 ## Linki:  
-[Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
-[Markdown-Cheatsheet#2](https://guides.github.com/features/mastering-markdown/)
+[Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)  
+[Markdown-Cheatsheet#2](https://guides.github.com/features/mastering-markdown/)  
 [Git-Cheatsheet](https://www.git-tower.com/blog/git-cheat-sheet)  
 ## Tutoriale Unity:  
 https://unity3d.com/learn/tutorials/s/2d-roguelike-tutorial  
