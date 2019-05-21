@@ -9472,9 +9472,9 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: d10e27e825771024c8b902c283369360, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c1fd24f605d85724b910c43e5ad2ec05, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -9502,7 +9502,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 1459417251}
-  _item: {fileID: 11400000, guid: a74fc08253fe0d0459c01b83018349a6, type: 2}
+  _item: {fileID: 11400000, guid: 9ce34e28271229f4f9ed27852e5f64d8, type: 2}
 --- !u!1 &1463223880
 GameObject:
   m_ObjectHideFlags: 0
@@ -10629,7 +10629,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 21300000, guid: 48893b4e23d7f3e47afb9326259c6606, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -11431,13 +11431,13 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 21300000, guid: df897670b00a5fe4287bcfb140269d14, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
-  m_UseSpriteMesh: 0
+  m_UseSpriteMesh: 1
 --- !u!222 &1717782013
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11828,7 +11828,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 21300000, guid: d10e27e825771024c8b902c283369360, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -13499,7 +13499,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   items:
   - {fileID: 11400000, guid: bdf7cf0312a8b4b4690ab6d606a458df, type: 2}
-  - {fileID: 11400000, guid: a74fc08253fe0d0459c01b83018349a6, type: 2}
+  - {fileID: 11400000, guid: 9ce34e28271229f4f9ed27852e5f64d8, type: 2}
   - {fileID: 11400000, guid: a74fc08253fe0d0459c01b83018349a6, type: 2}
   - {fileID: 11400000, guid: 083e14e5d538fcf4daa460e6a003afee, type: 2}
   itemsParent: {fileID: 19890655}
