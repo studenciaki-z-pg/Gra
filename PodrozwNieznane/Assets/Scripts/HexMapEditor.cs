@@ -8,74 +8,92 @@ public class HexMapEditor : MonoBehaviour
 
     public HexGrid hexGrid;
 
+    //public HexUnit unitPrefab;
+
     private Color activeColor;
 
     int activeElevation;
 
     int activeUrbanLevel, activeFarmLevel, activePlantLevel;
 
-    bool editMode;
+   // bool editMode;
 
-    HexCell previousCell, searchFromCell, searchToCell;
+    HexCell previousCell;
 
     int brushSize = 0;
+
+    HexCell location;
 
 
     void Awake()
     {
         SetColor(0);
+        SetEditMode(false);
     }
 
     void Update()
     {
-        if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            HandleInput();
+            if (Input.GetMouseButton(0))
+            {
+                HandleInput();
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    DestroyUnit();
+                }
+                else
+                {
+                    CreateUnit();
+                }
+                return;
+            }
         }
+        previousCell = null;
     }
-
-
 
     void HandleInput()
     {
         var speed = 24; //We do not have Units with diffrent movement at the moment
-        Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(inputRay, out hit))
+        HexCell currentCell = GetCellUnderCursor();
+        if (currentCell)
         {
-            HexCell currentCell = hexGrid.GetCell(hit.point);
-            if (editMode)
-            {
-                EditCells(currentCell);
-            }
-            else if (Input.GetKey(KeyCode.LeftShift) && searchToCell != currentCell)
-            {
-                if(searchFromCell != currentCell)
-                {
-                    if (searchFromCell)
-                    {
-                        searchFromCell.DisableHighlight();
-                    }
-                    searchFromCell = currentCell;
-                    searchFromCell.EnableHighlight(Color.blue);
-                    if (searchToCell)
-                    {
-                        hexGrid.FindPath(searchFromCell, searchToCell, speed);
-                    }
-                }
-                
-            }
-            else if (searchFromCell && searchFromCell != currentCell)
-            {
-                if (searchFromCell != currentCell)
-                {
-                    searchToCell = currentCell;
-                    hexGrid.FindPath(searchFromCell, searchToCell, speed);
-                }
-                
-            }
+
+            EditCells(currentCell);
+            previousCell = currentCell;
+        }
+        else
+        {
+            previousCell = null;
+        
         }
     }
+
+    HexCell GetCellUnderCursor()
+    {
+        return
+            hexGrid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
+    }
+    void CreateUnit()
+    {
+        HexCell cell = GetCellUnderCursor();
+        if (cell && !cell.Unit)
+        {
+            hexGrid.AddUnit(
+                Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f)
+            );
+        }
+    }
+    void DestroyUnit () {
+		HexCell cell = GetCellUnderCursor();
+		if (cell && cell.Unit) {
+			hexGrid.RemoveUnit(cell.Unit);
+		}
+	}
     /*void HandleInput() //what this function should look like (but it doesn't):
     {
         Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -157,7 +175,8 @@ public class HexMapEditor : MonoBehaviour
     }
     public void SetEditMode(bool toggle)
     {
-        editMode = toggle;
+        enabled = toggle;
+        //grid.ShowUI(!toggle);
     }
     public void SetBrushSize(float size)
     {

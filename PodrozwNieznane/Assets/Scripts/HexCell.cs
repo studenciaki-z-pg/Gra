@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class HexCell : MonoBehaviour
 {
+
     public HexCoordinates coordinates;
     public RectTransform uiRect;
     public HexGridChunk chunk;
@@ -12,7 +13,7 @@ public class HexCell : MonoBehaviour
     HexCell[] neighbors;
     int elevation = int.MinValue;
 
-
+    public HexUnit Unit { get; set; }
     public int SearchPhase { get; set;}
     public HexCell PathFrom { get; set; }
     public int SearchHeuristic { get; set; }
@@ -48,11 +49,19 @@ public class HexCell : MonoBehaviour
                     neighbor.chunk.Refresh();
                 }
             }
+            if (Unit)
+            {
+                Unit.ValidateLocation();
+            }
         }
     }
     void RefreshSelfOnly()
     {
         chunk.Refresh();
+        if (Unit)
+        {
+            Unit.ValidateLocation();
+        }
     }
 
     public int Elevation
