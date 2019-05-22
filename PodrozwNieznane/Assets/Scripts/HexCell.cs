@@ -223,7 +223,36 @@ public class HexCell : MonoBehaviour
             }
         }
     }
-    //end
+    //end of cuboid features
+    //-------------------
+
+    //water:
+    public int WaterLevel
+    {
+        get
+        {
+            return waterLevel;
+        }
+        set
+        {
+            if (waterLevel == value)
+            {
+                return;
+            }
+            waterLevel = value;
+            Refresh();
+        }
+    }
+    int waterLevel = 0;
+
+    public bool IsUnderwater
+    {
+        get
+        {
+            return waterLevel > elevation;
+        }
+    }
+    //end of water
     //-------------------
 
     public void EditItself() //a copy of HexMapEditor.EditCell(HexCell cell), a very crude randomization

@@ -15,7 +15,7 @@ public class HexMapEditor : MonoBehaviour
 
     int activeUrbanLevel, activeFarmLevel, activePlantLevel;
 
-    bool editMode;
+    bool editMode = false;
 
     HexCell previousCell, searchFromCell, searchToCell;
 
@@ -25,6 +25,9 @@ public class HexMapEditor : MonoBehaviour
     void Awake()
     {
         //SetColor(0);
+        //terrainMaterial.DisableKeyword("GRID_ON");
+        Shader.EnableKeyword("HEX_MAP_EDIT_MODE");
+        SetEditMode(true);
     }
 
     void Update()
@@ -103,7 +106,7 @@ public class HexMapEditor : MonoBehaviour
             previousCell = null;
         }
     }*/
-    void EditCell(HexCell cell) //we have a copy of this function in HexCell, please keep it up to date (EditItself())
+    void EditCell(HexCell cell)
     {
         if (cell)
         {

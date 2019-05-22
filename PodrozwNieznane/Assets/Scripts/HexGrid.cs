@@ -7,14 +7,16 @@ using UnityEngine.UI;
 
 public class HexGrid : MonoBehaviour
 {
-    int cellCountX;
-    int cellCountZ;
+    public int cellCountX;
+    public int cellCountZ;
     int searchFrontierPhase;
     bool currentPathExists;
 
     HexCell[] cells;
     HexGridChunk[] chunks;
     HexCell currentPathFrom, currentPathTo;
+
+    public HexMapGenerator mapGenerator;
 
     public int chunkCountX = 4, chunkCountZ = 3;
     public HexCell cellPrefab;
@@ -25,15 +27,19 @@ public class HexGrid : MonoBehaviour
     public int seed;
 
     public Color[] colors;
+    
 
     private void Update()
     {
-        colors = new Color[5]; //thanks to this assignment the public array cannot be changed in the Editor
-        colors[0] = new Color(0.26f, 0.87f, 0.20f);
-        colors[1] = new Color(0.62f, 0.23f, 0.05f);
-        colors[2] = new Color(0.16f, 0.45f, 0.86f);
+        colors = new Color[5]; //how to make a public field uneditable:
+        colors[0] = new Color(0.16f, 0.45f, 0.86f);
+        colors[1] = new Color(0.26f, 0.87f, 0.20f);
+        colors[2] = new Color(0.62f, 0.23f, 0.05f);
         colors[3] = new Color(0.88f, 0.94f, 0.91f);
         colors[4] = new Color(1f, 0.89f, 0.42f);
+
+        cellCountX = chunkCountX * HexMetrics.chunkSizeX;
+        cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
     }
 
     void Awake()
@@ -41,10 +47,20 @@ public class HexGrid : MonoBehaviour
         HexMetrics.noiseSource = noiseSource;
         HexMetrics.InitializeHashGrid(seed);
         HexMetrics.colors = colors;
+        //mapGenerator.ApplyAttributes(HexMapGenerator.defaultAttributes);
+        mapGenerator.ApplyAttributes(HexMapGenerator.islanderAttributes);
         CreateMap();
     }
 
     public void CreateMap()
+    {
+        cellCountX = chunkCountX * HexMetrics.chunkSizeX;
+        cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
+        mapGenerator.GenerateMap(cellCountX, cellCountZ);
+        //CreateMap(chunkCountX, chunkCountZ);
+    }
+
+    public void CreateMap(int chunkCountX, int chunkCountZ)
     {
         if (chunks != null)
         {
@@ -53,9 +69,6 @@ public class HexGrid : MonoBehaviour
                 Destroy(chunks[i].gameObject);
             }
         }
-        cellCountX = chunkCountX * HexMetrics.chunkSizeX;
-		cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
-
         CreateChunks();
 		CreateCells();
     }
@@ -138,8 +151,6 @@ public class HexGrid : MonoBehaviour
         cell.uiRect = label.rectTransform;
         cell.Elevation = 0;
         AddCellToChunk(x, z, cell);
-
-        cell.EditItself();           //          <----------         INITIAL SETUP HERE (docelowo pewnie gdzies indziej)
     }
 
     void AddCellToChunk(int x, int z, HexCell cell)
@@ -340,5 +351,13 @@ public class HexGrid : MonoBehaviour
             return null;
         }
         return cells[x + z * cellCountX];
+    }
+    public HexCell GetCell(int xOffset, int zOffset)
+    {
+        return cells[xOffset + zOffset * cellCountX];
+    }
+    public HexCell GetCell(int cellIndex)
+    {
+        return cells[cellIndex];
     }
 }
