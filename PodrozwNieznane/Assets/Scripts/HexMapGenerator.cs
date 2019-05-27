@@ -11,6 +11,7 @@ public class HexMapGenerator : MonoBehaviour
     HexCellPriorityQueue searchFrontier;
     int searchFrontierPhase;
     int xMin, xMax, zMin, zMax;
+    int erosionTriggerThreshold = 2;
 
     [Range(0f, 0.5f)]
     public float jitterProbability = 0.25f;
@@ -45,6 +46,11 @@ public class HexMapGenerator : MonoBehaviour
     [Range(0, 10)]
     public int mapBorderZ = 2;
 
+    [Range(0, 100)]
+    public int erosionPercentage = 50;
+
+    int[] plantLevels;
+
 
     public void GenerateMap(int x, int z)
     {
@@ -72,11 +78,14 @@ public class HexMapGenerator : MonoBehaviour
             grid.GetCell(i).WaterLevel = waterLevel;
         }
         CreateLand();
+        ErodeLand();
         SetTerrainType();
+        SetPlants();
         for (int i = 0; i < cellCount; i++)
         {
             grid.GetCell(i).SearchPhase = 0;
         }
+
         Random.state = originalRandomState;
 
         //AddMountainBorder(x, z);
@@ -85,7 +94,7 @@ public class HexMapGenerator : MonoBehaviour
     void CreateLand()
     {
         int landBudget = Mathf.RoundToInt(cellCount * landPercentage * 0.01f);
-        while (landBudget > 0)
+        for (int guard = 0; landBudget > 0 && guard < 10000; guard++)
         {
             int chunkSize = Random.Range(chunkSizeMin, chunkSizeMax + 1);
             if (Random.value < sinkProbability)
@@ -97,6 +106,96 @@ public class HexMapGenerator : MonoBehaviour
                 landBudget = RaiseTerrain(chunkSize, landBudget);
             }
         }
+        if (landBudget > 0)
+        {
+            Debug.LogWarning("Failed to use up " + landBudget + " land budget.");
+        }
+    }
+
+    void ErodeLand()
+    {
+        List<HexCell> erodibleCells = ListPool<HexCell>.Get();
+        for (int i = 0; i < cellCount; i++)
+        {
+            HexCell cell = grid.GetCell(i);
+            if (IsErodible(cell))
+            {
+                erodibleCells.Add(cell);
+            }
+        }
+        int targetErodibleCount = (int)(erodibleCells.Count * (100 - erosionPercentage) * 0.01f);
+        while (erodibleCells.Count > targetErodibleCount)
+        {
+            int index = Random.Range(0, erodibleCells.Count);
+            HexCell cell = erodibleCells[index];
+            HexCell targetCell = GetErosionTarget(cell);
+
+            cell.Elevation -= 1;
+            targetCell.Elevation += 1;
+
+            if (!IsErodible(cell))
+            {
+                erodibleCells[index] = erodibleCells[erodibleCells.Count - 1];  //removing element from list
+                erodibleCells.RemoveAt(erodibleCells.Count - 1);                //
+            }
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = cell.GetNeighbor(d);
+                if (
+                    neighbor && neighbor.Elevation == cell.Elevation + erosionTriggerThreshold &&
+                    !erodibleCells.Contains(neighbor)
+                )
+                {
+                    erodibleCells.Add(neighbor);
+                }
+            }
+            if (IsErodible(targetCell) && !erodibleCells.Contains(targetCell))
+            {
+                erodibleCells.Add(targetCell);
+            }
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = targetCell.GetNeighbor(d);
+                if (
+                    neighbor && neighbor != cell && !IsErodible(neighbor) &&
+                    erodibleCells.Contains(neighbor)
+                )
+                {
+                    erodibleCells.Remove(neighbor);
+                }
+            }
+        }
+
+        ListPool<HexCell>.Add(erodibleCells);
+    }
+    bool IsErodible(HexCell cell)
+    {
+        int erodibleElevation = cell.Elevation - erosionTriggerThreshold;
+        for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+        {
+            HexCell neighbor = cell.GetNeighbor(d);
+            if (neighbor && neighbor.Elevation <= erodibleElevation)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    HexCell GetErosionTarget(HexCell cell)
+    {
+        List<HexCell> candidates = ListPool<HexCell>.Get();
+        int erodibleElevation = cell.Elevation - 2;
+        for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+        {
+            HexCell neighbor = cell.GetNeighbor(d);
+            if (neighbor && neighbor.Elevation <= erodibleElevation)
+            {
+                candidates.Add(neighbor);
+            }
+        }
+        HexCell target = candidates[Random.Range(0, candidates.Count)];
+        ListPool<HexCell>.Add(candidates);
+        return target;
     }
 
     int RaiseTerrain(int chunkSize, int budget)
@@ -189,21 +288,76 @@ public class HexMapGenerator : MonoBehaviour
 
     void SetTerrainType()
     {
+        //higher elevation -> next color
         for (int i = 0; i < cellCount; i++)
         {
             HexCell cell = grid.GetCell(i);
             {
+                int newTerrainTypeIndex = Mathf.Abs(cell.Elevation - cell.WaterLevel) + 1;
                 if (!cell.IsUnderwater)
                 {
-                    int newTerrainTypeIndex = cell.Elevation - cell.WaterLevel +1;
+                    // case cell.Elevation == cell.WaterLevel is here
                     if (HexMetrics.colors.Length > newTerrainTypeIndex)
                         cell.TerrainTypeIndex = newTerrainTypeIndex;
                     else
                         cell.TerrainTypeIndex = HexMetrics.colors.Length - 1;
                 }
+                else //underwater
+                {
+                    cell.TerrainTypeIndex = 0;
+                }
             }
         }
     }
+
+    void SetPlants()
+    {
+        ApplyMoistureDrivenFeatures(plantLevels);
+    }
+
+    void ApplyMoistureDrivenFeatures(params int[] plantLevel)
+    {
+        List<ClimateData> climate = (new HexMapClimate()).CreateClimate(cellCount, grid, elevationMaximum);
+        for (int i = 0; i < cellCount; i++)
+        {
+            HexCell cell = grid.GetCell(i);
+            float moisture = climate[i].moisture;
+            if (!cell.IsUnderwater)
+            {
+                if (moisture < 0.05f)
+                {
+                    //cell.TerrainTypeIndex = 4;
+                    cell.PlantLevel = plantLevel[0] % 4;
+                }
+                else if (moisture < 0.12f)
+                {
+                    //cell.TerrainTypeIndex = 3;
+                    cell.PlantLevel = plantLevel[1] % 4;
+                }
+                else if (moisture < 0.28f)
+                {
+                    //cell.TerrainTypeIndex = 2;
+                    cell.PlantLevel = plantLevel[2] % 4;
+                }
+                else if (moisture < 0.85f)
+                {
+                    //cell.TerrainTypeIndex = 1;
+                    cell.PlantLevel = plantLevel[3] % 4;
+                }
+                else
+                {
+                    //cell.TerrainTypeIndex = 1;
+                    cell.PlantLevel = plantLevel[4] % 4;
+                }
+            }
+            else
+            {
+                //cell.TerrainTypeIndex = 0;
+                cell.PlantLevel = plantLevel[5] % 4;
+            }
+        }
+    }
+    
 
     HexCell GetRandomCell()
     {
@@ -241,7 +395,8 @@ public class HexMapGenerator : MonoBehaviour
     //We actually get to choose them in HexGrid.Awake()
 
     public static MapAttributes defaultAttributes = MapAttributes.Default();
-    public static MapAttributes islanderAttributes = new MapAttributes(0f, 0f, 0f, 20, 20, 50, 1, -2, 8, 4, 4);
+    public static MapAttributes islanderAttributes = 
+        new MapAttributes(0f, 0f, 0f, 20, 20, 50, 1, -2, 8, 0, 0, 0, new int[6] { 0, 0, 0, 0, 0, 3 });
 
 
     public void ApplyAttributes(MapAttributes mapAttributes)
@@ -257,6 +412,8 @@ public class HexMapGenerator : MonoBehaviour
         elevationMaximum = mapAttributes.elevationMaximum;
         mapBorderX = mapAttributes.mapBorderX;
         mapBorderZ = mapAttributes.mapBorderZ;
+        erosionPercentage = mapAttributes.erosionPercentage;
+        plantLevels = mapAttributes.plantLevel;
     }
 
 }
@@ -266,7 +423,8 @@ public struct MapAttributes
 {
     public float jitterProbability, highRiseProbability, sinkProbability;
     public int chunkSizeMin, chunkSizeMax, landPercentage, waterLevel,
-        elevationMinimum, elevationMaximum, mapBorderX, mapBorderZ;
+        elevationMinimum, elevationMaximum, mapBorderX, mapBorderZ, erosionPercentage;
+    public int[] plantLevel;
 
     public static MapAttributes Default()
     {
@@ -276,16 +434,18 @@ public struct MapAttributes
         ma.sinkProbability = 0.2f;
         ma.chunkSizeMin = 20;
         ma.chunkSizeMax = 30;
-        ma.landPercentage = 50;
+        ma.landPercentage = 60;
         ma.waterLevel = 1;
         ma.elevationMinimum = -2;
-        ma.elevationMaximum = 8;
+        ma.elevationMaximum = 6;
         ma.mapBorderX = 2;
         ma.mapBorderZ = 2;
+        ma.erosionPercentage = 50;
+        ma.plantLevel = new int[6] { 0, 0, 1, 2, 3, 0 };
         return ma;
     }
 
-    public MapAttributes (float a, float b, float c, int d, int e, int f, int g, int h, int i, int j, int k)
+    public MapAttributes (float a, float b, float c, int d, int e, int f, int g, int h, int i, int j, int k, int l, int[] m)
     {
         jitterProbability = a;
         highRiseProbability = b;
@@ -298,5 +458,9 @@ public struct MapAttributes
         elevationMaximum = i;
         mapBorderX = j;
         mapBorderZ = k;
+        erosionPercentage = l;
+        plantLevel = m;
     }
 }
+
+

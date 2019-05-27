@@ -15,7 +15,7 @@ public static class HexMetrics
     public const float solidFactor = 0.8f;
     public const float blendFactor = 1f - solidFactor;
 
-    public const float elevationStep = 2f;
+    public const float elevationStep = 1f;
     public const int terracesPerSlope = 3;
     public const int terraceSteps = terracesPerSlope * 2 + 1;
 
@@ -152,10 +152,15 @@ public static class HexMetrics
         return hashGrid[x + z * hashGridSize];
     }
 
-    static float[][] featureThresholds = {
+    /*static float[][] featureThresholds = {
         new float[] {0.0f, 0.0f, 0.4f},
         new float[] {0.0f, 0.4f, 0.6f},
         new float[] {0.4f, 0.6f, 0.8f}
+    };*/
+    static float[][] featureThresholds = {
+        new float[] {0.0f, 0.0f, 0.2f},
+        new float[] {0.0f, 0.2f, 0.3f},
+        new float[] {0.2f, 0.3f, 0.4f}
     };
 
     public static float[] GetFeatureThresholds(int level)

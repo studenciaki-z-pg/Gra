@@ -47,8 +47,8 @@ public class HexGrid : MonoBehaviour
         HexMetrics.noiseSource = noiseSource;
         HexMetrics.InitializeHashGrid(seed);
         HexMetrics.colors = colors;
-        //mapGenerator.ApplyAttributes(HexMapGenerator.defaultAttributes);
-        mapGenerator.ApplyAttributes(HexMapGenerator.islanderAttributes);
+        mapGenerator.ApplyAttributes(HexMapGenerator.defaultAttributes);
+        //mapGenerator.ApplyAttributes(HexMapGenerator.islanderAttributes);
         CreateMap();
     }
 
@@ -124,6 +124,7 @@ public class HexGrid : MonoBehaviour
         //cell.transform.SetParent(transform, false);
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
+        cell.Index = i;
         //cell.Color = defaultColor;
 
         if (x > 0) {
