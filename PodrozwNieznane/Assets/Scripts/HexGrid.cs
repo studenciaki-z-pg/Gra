@@ -31,12 +31,15 @@ public class HexGrid : MonoBehaviour
 
     private void Update()
     {
-        colors = new Color[5]; //how to make a public field uneditable:
-        colors[0] = new Color(0.16f, 0.45f, 0.86f);
-        colors[1] = new Color(0.26f, 0.87f, 0.20f);
-        colors[2] = new Color(0.62f, 0.23f, 0.05f);
-        colors[3] = new Color(0.88f, 0.94f, 0.91f);
-        colors[4] = new Color(1f, 0.89f, 0.42f);
+        //----------------color palette selection----------------------
+        colors = new Color[5];
+        //colors[0] = new Color(0.16f, 0.45f, 0.86f);//blue
+        colors[0] = new Color(0f, 0.44f, 0.19f);//dark green
+        colors[1] = new Color(0.26f, 0.87f, 0.20f);//light green
+        colors[2] = new Color(0.62f, 0.23f, 0.05f);//brown
+        colors[3] = new Color(0.88f, 0.94f, 0.91f);//white
+        colors[4] = new Color(1f, 0.89f, 0.42f);//yellowy
+        //----------should be somewhere else in the future--------------
 
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
         cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
@@ -46,9 +49,8 @@ public class HexGrid : MonoBehaviour
     {
         HexMetrics.noiseSource = noiseSource;
         HexMetrics.InitializeHashGrid(seed);
-        HexMetrics.colors = colors;
-        mapGenerator.ApplyAttributes(HexMapGenerator.defaultAttributes);
-        //mapGenerator.ApplyAttributes(HexMapGenerator.islanderAttributes);
+        HexMetrics.colors = colors;//-----------------------------
+        mapGenerator.SetLandscape(0);
         CreateMap();
     }
 

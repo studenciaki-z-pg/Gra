@@ -391,13 +391,29 @@ public class HexMapGenerator : MonoBehaviour
 
     }
 
-    //****************Attributes management
-    //We actually get to choose them in HexGrid.Awake()
+    
+    
+    //****************Attributes management******************
+
+    //This might be a seperate file in the future, and include color variations
+    //The default attribute set is set in HexGrid.Awake()
 
     public static MapAttributes defaultAttributes = MapAttributes.Default();
-    public static MapAttributes islanderAttributes = 
+    public static MapAttributes swampyAttributes = 
         new MapAttributes(0f, 0f, 0f, 20, 20, 50, 1, -2, 8, 0, 0, 0, new int[6] { 0, 0, 0, 0, 0, 3 });
 
+    public void SetLandscape(int choice)
+    {
+        switch (choice)
+        {
+            case 0:
+                ApplyAttributes(defaultAttributes); break;
+            case 1:
+                ApplyAttributes(swampyAttributes); break;
+            default:
+                break;
+        }
+    }
 
     public void ApplyAttributes(MapAttributes mapAttributes)
     {
