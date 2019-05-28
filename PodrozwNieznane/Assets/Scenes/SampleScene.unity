@@ -6473,7 +6473,6 @@ MonoBehaviour:
     type: 3}
   cellLabelPrefab: {fileID: 4139043807271847114, guid: ce0515e6a052a424592ce6b7f03bdc45,
     type: 3}
-  defaultColor: {r: 1, g: 1, b: 1, a: 1}
   noiseSource: {fileID: 2800000, guid: 1e4ff1b661e61234da6d1d8ab9693928, type: 3}
   chunkPrefab: {fileID: 7712812828881617810, guid: d714efa44f902504f8f3058bfb8fd233,
     type: 3}
@@ -7368,11 +7367,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80709fb24b1602340a346e4201b0979d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colors:
-  - {r: 0.26271668, g: 0.8773585, b: 0.2027857, a: 0}
-  - {r: 0.6226415, g: 0.23608445, b: 0.055802763, a: 0}
-  - {r: 0.15966538, g: 0.45032305, b: 0.8679245, a: 0}
-  - {r: 0.88554645, g: 0.9433962, b: 0.91759783, a: 0}
   hexGrid: {fileID: 610912095}
 --- !u!114 &708815596
 MonoBehaviour:
@@ -10256,8 +10250,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useCollider: 1
-  useColors: 1
+  useCellData: 0
   useUVCoordinates: 0
+  useUV2Coordinates: 0
 --- !u!23 &1044064012
 MeshRenderer:
   m_ObjectHideFlags: 0

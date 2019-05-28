@@ -12,19 +12,21 @@ public class HexCell : MonoBehaviour
     [SerializeField]
     HexCell[] neighbors;
     int elevation = int.MinValue;
+    int terrainTypeIndex = 0;
+    int visibility;
 
     public HexUnit Unit { get; set; }
     public int SearchPhase { get; set;}
     public HexCell PathFrom { get; set; }
     public int SearchHeuristic { get; set; }
+    public HexCell NextWithSamePriority { get; set; }
+    public HexCellShaderData ShaderData { get; set; }
+    public int Index { get; set; }
+
     public int SearchPriority
     {
         get { return distance + SearchHeuristic; }
     }
-    public HexCell NextWithSamePriority { get; set; }
-
-
-
     public HexCell GetNeighbor(HexDirection direction)
     {
         return neighbors[(int)direction];
@@ -90,22 +92,6 @@ public class HexCell : MonoBehaviour
             Refresh();
         }
     }
-    public Color Color { 
-        get {
-			return color;
-		}
-        set {
-			if (color == value) {
-				return;
-			}
-			color = value;
-			Refresh();
-		}
-	}
-
-	Color color;
-
-
 
     //Definig height of an elevation based on noise
     public Vector3 Position
@@ -229,10 +215,9 @@ public class HexCell : MonoBehaviour
         if (this)
         {
             //this.Color = HexMapEditor.colors[Random.Range(0, 4)]; //unaccessible:(
-            Color[] coles = { new Color(0.26f, 0.87f, 0.20f), new Color(0.62f, 0.23f, 0.05f),
-                new Color(0.16f, 0.45f, 0.86f), new Color(0.88f, 0.94f, 0.91f) };
+            
 
-            this.Color = coles[Random.Range(0, 4)];//int (int [inclusive], int [exlusive]) (max returned value = 3)
+            this.TerrainTypeIndex = Random.Range(0, 4);//int (int [inclusive], int [exlusive]) (max returned value = 3)
             this.Elevation = Random.Range(1, 4); //(0, 7); 
             this.UrbanLevel = (int)UnevenRandom(0f, 3.99f); 
             this.FarmLevel = (int)UnevenRandom(0f, 3.99f);
@@ -259,6 +244,46 @@ public class HexCell : MonoBehaviour
         }
     }
 
+    public int TerrainTypeIndex
+    {
+        get
+        {
+            return terrainTypeIndex;
+        }
+        set
+        {
+            if (terrainTypeIndex != value)
+            {
+                terrainTypeIndex = value;
+                ShaderData.RefreshTerrain(this);
+            }
+        }
+    }
 
+    //-------------FOG----------------//
+
+    public bool IsVisible
+    {
+        get
+        {
+            return visibility > 0;
+        }
+    }
+    public void IncreaseVisibility()
+    {
+        visibility += 1;
+        if (visibility == 1)
+        {
+            ShaderData.RefreshVisibility(this);
+        }
+    }
+    public void DecreaseVisibility()
+    {
+        visibility -= 1;
+        if (visibility == 0)
+        {
+            ShaderData.RefreshVisibility(this);
+        }
+    }
 }
 
