@@ -1,22 +1,28 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-
 public class Character : MonoBehaviour
 {
     public int HP = 0;
-    public CharacterStats Strength = new CharacterStats(1);
-    public CharacterStats Intelligence = new CharacterStats(1);
-    public CharacterStats Agility = new CharacterStats(1);
-    public CharacterStats Vitality = new CharacterStats(1);
-    public CharacterStats Dexterity = new CharacterStats(1);
-    public CharacterStats Luck = new CharacterStats(1);
+
+    public CharacterStats Strength = new CharacterStats(10);
+    public CharacterStats Intelligence = new CharacterStats(10);
+    public CharacterStats Agility = new CharacterStats(10);
+    public CharacterStats Vitality = new CharacterStats(10);
+    public CharacterStats Dexterity = new CharacterStats(10);
+    public CharacterStats Luck = new CharacterStats(10);
 
     [SerializeField] Inventory inventory;
     [SerializeField] EquimentPanel equipmentPanel;
     [SerializeField] StatPanel[] statPanel;
+    [SerializeField] Button[] statButtons;
+
+    [SerializeField] Sprite activeSprite;
+    [SerializeField] Sprite inactiveSprite;
 
     private int Player = -1;
-
+    private int PlayerLevel = 1;
+    private int AvailableSkillPoints = 5;
+    private int AssignedSkillPoints = 0;
 
     private void OnValidate()
     {
@@ -25,7 +31,30 @@ public class Character : MonoBehaviour
             statPanel[i].SetStats(Strength, Intelligence, Agility, Vitality, Dexterity, Luck);
             statPanel[i].UpdateStatValues();
         }
+        if(AvailableSkillPoints < 1)
+            foreach(Button b in statButtons)
+            {
+                b.enabled = false;
+                b.image.sprite = inactiveSprite;
+            }
+        else
+            foreach (Button b in statButtons)
+            {
+                b.image.sprite = activeSprite;
+                b.enabled = true;
+            }
         gameObject.SetActive(false);
+    }
+
+    public void LevelUp()
+    {
+        PlayerLevel++;
+        AvailableSkillPoints += 5;
+        foreach (Button b in statButtons)
+        {
+            b.image.sprite = activeSprite;
+            b.enabled = true;
+        }
     }
 
     private void Awake()
@@ -112,4 +141,109 @@ public class Character : MonoBehaviour
             inventory.AddItem(item);
         }
     }
+    public void AddStrengthPoint()
+    {
+        if (AvailableSkillPoints > 0)
+        {
+            AvailableSkillPoints--;
+            AssignedSkillPoints++;
+            Strength.BaseValue++;
+            for (int i = 0; i < statPanel.Length; i++)
+            {
+                statPanel[i].UpdateStatValues();
+            }
+            if(AvailableSkillPoints == 0)
+                foreach (Button b in statButtons)
+                {
+                    b.image.sprite = inactiveSprite;
+                    b.enabled = false;
+                }
+        }
+    }
+    public void AddIntelligencePoint()
+    {
+        if (AvailableSkillPoints > 0)
+        {
+            AvailableSkillPoints--;
+            AssignedSkillPoints++;
+            Intelligence.BaseValue++;
+            for (int i = 0; i < statPanel.Length; i++)
+                statPanel[i].UpdateStatValues();
+            if (AvailableSkillPoints == 0)
+                foreach (Button b in statButtons)
+                {
+                    b.image.sprite = inactiveSprite;
+                    b.enabled = false;
+                }
+        }
+    }
+    public void AddAgilityPoint()
+    {
+        if (AvailableSkillPoints > 0)
+        {
+            AvailableSkillPoints--;
+            AssignedSkillPoints++;
+            Agility.BaseValue++;
+            for (int i = 0; i < statPanel.Length; i++)
+                statPanel[i].UpdateStatValues();
+            if (AvailableSkillPoints == 0)
+                foreach (Button b in statButtons)
+                {
+                    b.image.sprite = inactiveSprite;
+                    b.enabled = false;
+                }
+        }
+    }
+    public void AddVitalityPoint()
+    {
+        if (AvailableSkillPoints > 0)
+        {
+            AvailableSkillPoints--;
+            AssignedSkillPoints++;
+            Vitality.BaseValue++;
+            for (int i = 0; i < statPanel.Length; i++)
+                statPanel[i].UpdateStatValues();
+            if (AvailableSkillPoints == 0)
+                foreach (Button b in statButtons)
+                {
+                    b.image.sprite = inactiveSprite;
+                    b.enabled = false;
+                }
+        }
+    }
+    public void AddDexterityPoint()
+    {
+        if (AvailableSkillPoints > 0)
+        {
+            AvailableSkillPoints--;
+            AssignedSkillPoints++;
+            Dexterity.BaseValue++;
+            for (int i = 0; i < statPanel.Length; i++)
+                statPanel[i].UpdateStatValues();
+            if (AvailableSkillPoints == 0)
+                foreach (Button b in statButtons)
+                {
+                    b.image.sprite = inactiveSprite;
+                    b.enabled = false;
+                }
+        }
+    }
+    public void AddLuckPoint()
+    {
+        if (AvailableSkillPoints > 0)
+        {
+            AvailableSkillPoints--;
+            AssignedSkillPoints++;
+            Luck.BaseValue++;
+            for (int i = 0; i < statPanel.Length; i++)
+                statPanel[i].UpdateStatValues();
+            if (AvailableSkillPoints == 0)
+                foreach (Button b in statButtons)
+                {
+                    b.image.sprite = inactiveSprite;
+                    b.enabled = false;
+                }
+        }
+    }
+
 }

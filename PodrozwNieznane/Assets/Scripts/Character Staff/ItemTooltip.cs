@@ -43,7 +43,7 @@ public class ItemTooltip : MonoBehaviour
         if(value != 0)
         {
             if (stringBuilder.Length > 0)
-                stringBuilder.Append("/n");
+                stringBuilder.AppendLine();
             if (value > 0)
                 stringBuilder.Append("+");
             stringBuilder.Append(value);
