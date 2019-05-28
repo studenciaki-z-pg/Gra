@@ -289,6 +289,8 @@ public class HexMapGenerator : MonoBehaviour
     void SetTerrainType()
     {
         //higher elevation -> next color
+
+        int colorArrayLengthLimit = 3;
         for (int i = 0; i < cellCount; i++)
         {
             HexCell cell = grid.GetCell(i);
@@ -297,10 +299,10 @@ public class HexMapGenerator : MonoBehaviour
                 if (!cell.IsUnderwater)
                 {
                     // case cell.Elevation == cell.WaterLevel is here
-                    if (HexMetrics.colors.Length > newTerrainTypeIndex)
+                    if (colorArrayLengthLimit > newTerrainTypeIndex)
                         cell.TerrainTypeIndex = newTerrainTypeIndex;
                     else
-                        cell.TerrainTypeIndex = HexMetrics.colors.Length - 1;
+                        cell.TerrainTypeIndex = colorArrayLengthLimit - 1;
                 }
                 else //underwater
                 {

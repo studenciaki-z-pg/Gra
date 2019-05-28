@@ -63,7 +63,7 @@ public class HexGrid : MonoBehaviour
         HexUnit.unitPrefab = unitPrefab;
 
         cellShaderData = gameObject.AddComponent<HexCellShaderData>();
-        HexMetrics.colors = colors;//maybe not needed any more
+        //HexMetrics.colors = colors;//maybe not needed any more
 
         mapGenerator.SetLandscape(0);
         CreateMap();
