@@ -2891,7 +2891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 500012673}
   nameText: {fileID: 1654158529}
   valueText: {fileID: 229988204}
 --- !u!1 &229988202
@@ -4389,7 +4389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 500012673}
   nameText: {fileID: 1415101966}
   valueText: {fileID: 515703539}
 --- !u!1 &333306869
@@ -5092,7 +5092,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 500012673}
   nameText: {fileID: 158345653}
   valueText: {fileID: 957712038}
 --- !u!1 &383895681
@@ -6809,7 +6809,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 500012673}
   nameText: {fileID: 666482282}
   valueText: {fileID: 58338727}
 --- !u!1 &534489323
@@ -9822,9 +9822,16 @@ MonoBehaviour:
   statPanel:
   - {fileID: 995801888}
   - {fileID: 1447832997}
-  statButtons: []
-  activeSprite: {fileID: 0}
-  inactiveSprite: {fileID: 0}
+  statButtons:
+  - {fileID: 1000372070}
+  - {fileID: 2090675884}
+  - {fileID: 231026169}
+  - {fileID: 1862989831}
+  - {fileID: 495314434}
+  - {fileID: 690774570}
+  - {fileID: 196236520}
+  activeSprite: {fileID: 21300000, guid: 4892ce2ce2c53a840914b43ee83a7678, type: 3}
+  inactiveSprite: {fileID: 21300000, guid: a7a0d1054d5b2024b831ad1e800100ba, type: 3}
 --- !u!1 &861943041
 GameObject:
   m_ObjectHideFlags: 0
@@ -11581,7 +11588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 500012673}
   nameText: {fileID: 1328415872}
   valueText: {fileID: 414461905}
 --- !u!1 &1009055830
@@ -11636,7 +11643,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 500012673}
   nameText: {fileID: 1050828991}
   valueText: {fileID: 2059898265}
 --- !u!1 &1024631013
@@ -12052,7 +12059,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 500012673}
   nameText: {fileID: 1153963358}
   valueText: {fileID: 1348960258}
 --- !u!1 &1073242330
@@ -12107,7 +12114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 500012673}
   nameText: {fileID: 1200163675}
   valueText: {fileID: 499628566}
 --- !u!1 &1075320407
@@ -15067,7 +15074,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 500012673}
   nameText: {fileID: 1302652218}
   valueText: {fileID: 1325835804}
 --- !u!1 &1348960256
@@ -18044,7 +18051,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 500012673}
   nameText: {fileID: 580988837}
   valueText: {fileID: 174558537}
 --- !u!1 &1558254446
@@ -18453,7 +18460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 500012673}
   nameText: {fileID: 988748166}
   valueText: {fileID: 1476769484}
 --- !u!1 &1623286776
@@ -20553,7 +20560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 500012673}
   nameText: {fileID: 1092772557}
   valueText: {fileID: 1221846932}
 --- !u!1 &1778165555
