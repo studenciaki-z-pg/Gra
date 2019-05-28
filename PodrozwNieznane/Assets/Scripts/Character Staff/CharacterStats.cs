@@ -17,7 +17,9 @@ public class CharacterStats
             }
             return _value;
         }
-        }
+    }
+
+
 
     private bool isActual = false;
     private float _value;
