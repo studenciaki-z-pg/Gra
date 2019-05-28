@@ -5,27 +5,30 @@ using UnityEngine.UI;
 
 public class HexCell : MonoBehaviour
 {
+
     public HexCoordinates coordinates;
     public RectTransform uiRect;
     public HexGridChunk chunk;
     [SerializeField]
     HexCell[] neighbors;
     int elevation = int.MinValue;
+    int terrainTypeIndex = 0;
+    int visibility;
 
-    int terrainTypeIndex;
 
-    public int Index { get; set; }
+    public HexUnit Unit { get; set; }
+
     public int SearchPhase { get; set;}
     public HexCell PathFrom { get; set; }
     public int SearchHeuristic { get; set; }
+    public HexCell NextWithSamePriority { get; set; }
+    public HexCellShaderData ShaderData { get; set; }
+    public int Index { get; set; }
+
     public int SearchPriority
     {
         get { return distance + SearchHeuristic; }
     }
-    public HexCell NextWithSamePriority { get; set; }
-
-
-
     public HexCell GetNeighbor(HexDirection direction)
     {
         return neighbors[(int)direction];
@@ -50,11 +53,19 @@ public class HexCell : MonoBehaviour
                     neighbor.chunk.Refresh();
                 }
             }
+            if (Unit)
+            {
+                Unit.ValidateLocation();
+            }
         }
     }
     void RefreshSelfOnly()
     {
         chunk.Refresh();
+        if (Unit)
+        {
+            Unit.ValidateLocation();
+        }
     }
 
     public int Elevation
@@ -83,6 +94,7 @@ public class HexCell : MonoBehaviour
             Refresh();
         }
     }
+
     public int ViewElevation
     {
         get
@@ -90,31 +102,6 @@ public class HexCell : MonoBehaviour
             return elevation >= waterLevel ? elevation : waterLevel;
         }
     }
-
-    public Color Color { 
-        get {
-            return HexMetrics.colors[terrainTypeIndex];
-        }
-	}
-
-    public int TerrainTypeIndex
-    {
-        get
-        {
-            return terrainTypeIndex;
-        }
-        set
-        {
-            if (terrainTypeIndex != value)
-            {
-                terrainTypeIndex = value;
-                Refresh();
-            }
-        }
-    }
-
-
-
 
     //Definig height of an elevation based on noise
     public Vector3 Position
@@ -233,6 +220,9 @@ public class HexCell : MonoBehaviour
     //end of cuboid features
     //-------------------
 
+
+
+
     //water:
     public int WaterLevel
     {
@@ -262,5 +252,81 @@ public class HexCell : MonoBehaviour
     //end of water
     //-------------------
 
-}
 
+
+public void EditItself() //a copy of HexMapEditor.EditCell(HexCell cell), a very crude randomization
+    {
+        if (this)
+        {
+            //this.Color = HexMapEditor.colors[Random.Range(0, 4)]; //unaccessible:(
+            
+
+            this.TerrainTypeIndex = Random.Range(0, 4);//int (int [inclusive], int [exlusive]) (max returned value = 3)
+            this.Elevation = Random.Range(1, 4); //(0, 7); 
+            this.UrbanLevel = (int)UnevenRandom(0f, 3.99f); 
+            this.FarmLevel = (int)UnevenRandom(0f, 3.99f);
+            this.PlantLevel = (int)UnevenRandom(0f, 3.99f); //float (float [inclusive], float [inclusive])
+
+        }
+    }
+    float UnevenRandom(float from, float to)
+    {
+        float intermediate = (to + from) / 2;
+
+        float temp = Random.Range(0f, 1f);
+        if (temp < 0.75f)
+        {
+            return 0f;
+        }
+        if (temp<0.875f)//lower half of interval has 1x the chance of being chosen.
+        {
+            return Random.Range(from, intermediate);
+        }
+        else
+        {
+            return Random.Range(intermediate, to);
+        }
+    }
+
+    public int TerrainTypeIndex
+    {
+        get
+        {
+            return terrainTypeIndex;
+        }
+        set
+        {
+            if (terrainTypeIndex != value)
+            {
+                terrainTypeIndex = value;
+                ShaderData.RefreshTerrain(this);
+            }
+        }
+    }
+
+    //-------------FOG----------------//
+
+    public bool IsVisible
+    {
+        get
+        {
+            return visibility > 0;
+        }
+    }
+    public void IncreaseVisibility()
+    {
+        visibility += 1;
+        if (visibility == 1)
+        {
+            ShaderData.RefreshVisibility(this);
+        }
+    }
+    public void DecreaseVisibility()
+    {
+        visibility -= 1;
+        if (visibility == 0)
+        {
+            ShaderData.RefreshVisibility(this);
+        }
+    }
+}

@@ -4,82 +4,88 @@ using UnityEngine.EventSystems;
 public class HexMapEditor : MonoBehaviour
 {
 
-    //public Color[] colors;
-
     public HexGrid hexGrid;
-
-    //private Color activeColor;
-    int activeTerrainTypeIndex;
 
     int activeElevation;
 
     int activeUrbanLevel, activeFarmLevel, activePlantLevel;
+    int activeTerrainTypeIndex;
 
-    bool editMode = false;
+    HexCell previousCell;
 
-    HexCell previousCell, searchFromCell, searchToCell;
 
     int brushSize = 0;
+    HexCell location;
 
 
     void Awake()
     {
-        //SetColor(0);
-        //terrainMaterial.DisableKeyword("GRID_ON");
-        Shader.EnableKeyword("HEX_MAP_EDIT_MODE");
-        SetEditMode(true);
+        SetEditMode(false);
     }
 
     void Update()
     {
-        if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            HandleInput();
+            if (Input.GetMouseButton(0))
+            {
+                HandleInput();
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    DestroyUnit();
+                }
+                else
+                {
+                    CreateUnit();
+                }
+                return;
+            }
         }
+        previousCell = null;
     }
-
-
 
     void HandleInput()
     {
         var speed = 24; //We do not have Units with diffrent movement at the moment
-        Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(inputRay, out hit))
+        HexCell currentCell = GetCellUnderCursor();
+        if (currentCell)
         {
-            HexCell currentCell = hexGrid.GetCell(hit.point);
-            if (editMode)
-            {
-                EditCells(currentCell);
-            }
-            else if (Input.GetKey(KeyCode.LeftShift) && searchToCell != currentCell)
-            {
-                if(searchFromCell != currentCell)
-                {
-                    if (searchFromCell)
-                    {
-                        searchFromCell.DisableHighlight();
-                    }
-                    searchFromCell = currentCell;
-                    searchFromCell.EnableHighlight(Color.blue);
-                    if (searchToCell)
-                    {
-                        hexGrid.FindPath(searchFromCell, searchToCell, speed);
-                    }
-                }
-                
-            }
-            else if (searchFromCell && searchFromCell != currentCell)
-            {
-                if (searchFromCell != currentCell)
-                {
-                    searchToCell = currentCell;
-                    hexGrid.FindPath(searchFromCell, searchToCell, speed);
-                }
-                
-            }
+
+            EditCells(currentCell);
+            previousCell = currentCell;
+        }
+        else
+        {
+            previousCell = null;
+        
         }
     }
+
+    HexCell GetCellUnderCursor()
+    {
+        return
+            hexGrid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
+    }
+    void CreateUnit()
+    {
+        HexCell cell = GetCellUnderCursor();
+        if (cell && !cell.Unit)
+        {
+            hexGrid.AddUnit(
+                Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f)
+            );
+        }
+    }
+    void DestroyUnit () {
+		HexCell cell = GetCellUnderCursor();
+		if (cell && cell.Unit) {
+			hexGrid.RemoveUnit(cell.Unit);
+		}
+	}
     /*void HandleInput() //what this function should look like (but it doesn't):
     {
         Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -110,7 +116,6 @@ public class HexMapEditor : MonoBehaviour
     {
         if (cell)
         {
-            //cell.Color = activeColor;
             if (activeTerrainTypeIndex >= 0)
             {
                 cell.TerrainTypeIndex = activeTerrainTypeIndex;
@@ -142,15 +147,6 @@ public class HexMapEditor : MonoBehaviour
         }
     }
 
-
-    //public void SetColor(int index)
-    //{
-    //    activeColor = colors[index];
-    //}
-    public void SetTerrainTypeIndex(int index)
-    {
-        activeTerrainTypeIndex = index;
-    }
     public void SetElevation(float elevation)
     {
         activeElevation = (int)elevation;
@@ -169,11 +165,17 @@ public class HexMapEditor : MonoBehaviour
     }
     public void SetEditMode(bool toggle)
     {
-        editMode = toggle;
+        enabled = toggle;
+        //grid.ShowUI(!toggle);
     }
     public void SetBrushSize(float size)
     {
         brushSize = (int)size;
+    }
+
+    public void SetTerrainTypeIndex(int index)
+    {
+        activeTerrainTypeIndex = index;
     }
 
 }
