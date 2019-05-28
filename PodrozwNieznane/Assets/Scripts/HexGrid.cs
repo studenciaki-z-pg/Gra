@@ -31,26 +31,6 @@ public class HexGrid : MonoBehaviour
     public HexGridChunk chunkPrefab;
     public int seed;
 
-    public Color[] colors;
-    
-
-    private void Update()
-    {
-        //----------------color palette selection----------------------
-        colors = new Color[5];
-        //colors[0] = new Color(0.16f, 0.45f, 0.86f);//blue
-        colors[0] = new Color(0f, 0.44f, 0.19f);//dark green
-        colors[1] = new Color(0.26f, 0.87f, 0.20f);//light green
-        colors[2] = new Color(0.62f, 0.23f, 0.05f);//brown
-        colors[3] = new Color(0.88f, 0.94f, 0.91f);//white
-        colors[4] = new Color(1f, 0.89f, 0.42f);//yellowy
-        //----------should be somewhere else in the future--------------
-
-
-        cellCountX = chunkCountX * HexMetrics.chunkSizeX;
-        cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
-    }
-
     public HexUnit unitPrefab;
 
 
@@ -59,12 +39,8 @@ public class HexGrid : MonoBehaviour
     {
         HexMetrics.noiseSource = noiseSource;
         HexMetrics.InitializeHashGrid(seed);
-
         HexUnit.unitPrefab = unitPrefab;
-
         cellShaderData = gameObject.AddComponent<HexCellShaderData>();
-        //HexMetrics.colors = colors;//maybe not needed any more
-
         mapGenerator.SetLandscape(0);
         CreateMap();
     }
@@ -72,16 +48,17 @@ public class HexGrid : MonoBehaviour
 
     public void CreateMap() //called every time by "refresh" button
     {
-        cellShaderData.Initialize(cellCountX, cellCountZ);//can it be called only once or should more often?
-
+        
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
         cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
+
         mapGenerator.GenerateMap(cellCountX, cellCountZ);
         //CreateMap(chunkCountX, chunkCountZ); //this function is called from inside mapGenerator.GenerateMap()
     }
 
     public void CreateMap(int chunkCountX, int chunkCountZ)
     {
+
         if (chunks != null)
         {
             for (int i = 0; i < chunks.Length; i++)
@@ -89,6 +66,8 @@ public class HexGrid : MonoBehaviour
                 Destroy(chunks[i].gameObject);
             }
         }
+
+        cellShaderData.Initialize(cellCountX, cellCountZ);
         CreateChunks();
         CreateCells();
     }
@@ -169,7 +148,6 @@ public class HexGrid : MonoBehaviour
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
         cell.Index = i;
 
-        //cell.Color = defaultColor;
         cell.ShaderData = cellShaderData;
 
 

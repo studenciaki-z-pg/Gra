@@ -290,12 +290,12 @@ public class HexMapGenerator : MonoBehaviour
     {
         //higher elevation -> next color
 
-        int colorArrayLengthLimit = 3;
+        int colorArrayLengthLimit = 4;
         for (int i = 0; i < cellCount; i++)
         {
             HexCell cell = grid.GetCell(i);
             {
-                int newTerrainTypeIndex = Mathf.Abs(cell.Elevation - cell.WaterLevel) + 1;
+                int newTerrainTypeIndex = (Mathf.Abs(cell.Elevation - cell.WaterLevel) + 1);
                 if (!cell.IsUnderwater)
                 {
                     // case cell.Elevation == cell.WaterLevel is here
