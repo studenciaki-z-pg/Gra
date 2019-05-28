@@ -8,8 +8,8 @@ using UnityEngine.UI;
 
 public class HexGrid : MonoBehaviour
 {
-    int cellCountX;
-    int cellCountZ;
+    public int cellCountX;
+    public int cellCountZ;
     int searchFrontierPhase;
     bool currentPathExists;
 
@@ -20,36 +20,75 @@ public class HexGrid : MonoBehaviour
     HexCellShaderData cellShaderData;
 
 
+    public HexMapGenerator mapGenerator;
+
     public int chunkCountX = 4, chunkCountZ = 3;
     public HexCell cellPrefab;
     public Text cellLabelPrefab;
+    //public Color defaultColor = Color.white;
+
     public Texture2D noiseSource;
     public HexGridChunk chunkPrefab;
     public int seed;
 
+    public Color[] colors;
+    
+
+    private void Update()
+    {
+        //----------------color palette selection----------------------
+        colors = new Color[5];
+        //colors[0] = new Color(0.16f, 0.45f, 0.86f);//blue
+        colors[0] = new Color(0f, 0.44f, 0.19f);//dark green
+        colors[1] = new Color(0.26f, 0.87f, 0.20f);//light green
+        colors[2] = new Color(0.62f, 0.23f, 0.05f);//brown
+        colors[3] = new Color(0.88f, 0.94f, 0.91f);//white
+        colors[4] = new Color(1f, 0.89f, 0.42f);//yellowy
+        //----------should be somewhere else in the future--------------
+
+
+        cellCountX = chunkCountX * HexMetrics.chunkSizeX;
+        cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
+    }
 
     public HexUnit unitPrefab;
+
 
 
     void Awake()
     {
         HexMetrics.noiseSource = noiseSource;
         HexMetrics.InitializeHashGrid(seed);
-        HexUnit.unitPrefab = unitPrefab;
-        cellShaderData = gameObject.AddComponent<HexCellShaderData>();
 
-        CreateMap(cellCountX,cellCountZ);
+        HexUnit.unitPrefab = unitPrefab;
+
+        cellShaderData = gameObject.AddComponent<HexCellShaderData>();
+        //HexMetrics.colors = colors;//maybe not needed any more
+
+        mapGenerator.SetLandscape(0);
+        CreateMap();
     }
 
-    private void CreateMap(int x, int z)
+
+    public void CreateMap() //called every time by "refresh" button
     {
-        cellCountX = x;
-        cellCountZ = z;
+        cellShaderData.Initialize(cellCountX, cellCountZ);//can it be called only once or should more often?
+
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
         cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
+        mapGenerator.GenerateMap(cellCountX, cellCountZ);
+        //CreateMap(chunkCountX, chunkCountZ); //this function is called from inside mapGenerator.GenerateMap()
+    }
 
-        cellShaderData.Initialize(cellCountX, cellCountZ);
-
+    public void CreateMap(int chunkCountX, int chunkCountZ)
+    {
+        if (chunks != null)
+        {
+            for (int i = 0; i < chunks.Length; i++)
+            {
+                Destroy(chunks[i].gameObject);
+            }
+        }
         CreateChunks();
         CreateCells();
     }
@@ -83,12 +122,6 @@ public class HexGrid : MonoBehaviour
 
 
 
-
-
-
-
-
-
     void CreateChunks()
     {
         chunks = new HexGridChunk[chunkCountX * chunkCountZ];
@@ -116,7 +149,8 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    
+
+
 
     //After hex edit we need to refresh pyramids around
 
@@ -134,6 +168,8 @@ public class HexGrid : MonoBehaviour
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
         cell.Index = i;
+
+        //cell.Color = defaultColor;
         cell.ShaderData = cellShaderData;
 
 
@@ -162,8 +198,6 @@ public class HexGrid : MonoBehaviour
         cell.uiRect = label.rectTransform;
         cell.Elevation = 0;
         AddCellToChunk(x, z, cell);
-
-        cell.EditItself();           //          <----------         INITIAL SETUP HERE (docelowo pewnie gdzies indziej)
     }
 
     void AddCellToChunk(int x, int z, HexCell cell)
@@ -378,6 +412,16 @@ public class HexGrid : MonoBehaviour
         }
         return cells[x + z * cellCountX];
     }
+
+    public HexCell GetCell(int xOffset, int zOffset)
+    {
+        return cells[xOffset + zOffset * cellCountX];
+    }
+    public HexCell GetCell(int cellIndex)
+    {
+        return cells[cellIndex];
+    }
+
     // ------------------- UNITS------------------------//
 
     public void AddUnit(HexUnit unit, HexCell location, float orientation)
@@ -488,6 +532,6 @@ public class HexGrid : MonoBehaviour
         }
         return visibleCells;
     }
- 
+
 }
 

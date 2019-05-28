@@ -15,7 +15,9 @@ public class HexCell : MonoBehaviour
     int terrainTypeIndex = 0;
     int visibility;
 
+
     public HexUnit Unit { get; set; }
+
     public int SearchPhase { get; set;}
     public HexCell PathFrom { get; set; }
     public int SearchHeuristic { get; set; }
@@ -90,6 +92,14 @@ public class HexCell : MonoBehaviour
             uiPosition.z = -position.y;
             uiRect.localPosition = uiPosition;
             Refresh();
+        }
+    }
+
+    public int ViewElevation
+    {
+        get
+        {
+            return elevation >= waterLevel ? elevation : waterLevel;
         }
     }
 
@@ -207,10 +217,44 @@ public class HexCell : MonoBehaviour
             }
         }
     }
-    //end
+    //end of cuboid features
     //-------------------
 
-    public void EditItself() //a copy of HexMapEditor.EditCell(HexCell cell), a very crude randomization
+
+
+
+    //water:
+    public int WaterLevel
+    {
+        get
+        {
+            return waterLevel;
+        }
+        set
+        {
+            if (waterLevel == value)
+            {
+                return;
+            }
+            waterLevel = value;
+            Refresh();
+        }
+    }
+    int waterLevel = 0;
+
+    public bool IsUnderwater
+    {
+        get
+        {
+            return waterLevel > elevation;
+        }
+    }
+    //end of water
+    //-------------------
+
+
+
+public void EditItself() //a copy of HexMapEditor.EditCell(HexCell cell), a very crude randomization
     {
         if (this)
         {
@@ -286,4 +330,3 @@ public class HexCell : MonoBehaviour
         }
     }
 }
-

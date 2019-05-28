@@ -4,9 +4,7 @@ using UnityEngine.EventSystems;
 public class HexMapEditor : MonoBehaviour
 {
 
-
     public HexGrid hexGrid;
-
 
     int activeElevation;
 
@@ -15,8 +13,8 @@ public class HexMapEditor : MonoBehaviour
 
     HexCell previousCell;
 
-    int brushSize = 0;
 
+    int brushSize = 0;
     HexCell location;
 
 
@@ -114,7 +112,7 @@ public class HexMapEditor : MonoBehaviour
             previousCell = null;
         }
     }*/
-    void EditCell(HexCell cell) //we have a copy of this function in HexCell, please keep it up to date (EditItself())
+    void EditCell(HexCell cell)
     {
         if (cell)
         {
