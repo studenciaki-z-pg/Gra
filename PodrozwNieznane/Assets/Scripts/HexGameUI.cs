@@ -40,7 +40,7 @@ public class HexGameUI : MonoBehaviour
             // avoiding unpassable terrains/ other units
             if(currentCell && selectedUnit.IsValidDestination(currentCell))
             {
-                grid.FindPath(selectedUnit.Location, currentCell, 24);
+                grid.FindPath(selectedUnit.Location, currentCell, selectedUnit);
             }
             else
             {

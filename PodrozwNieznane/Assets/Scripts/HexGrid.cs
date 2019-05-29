@@ -41,6 +41,7 @@ public class HexGrid : MonoBehaviour
         HexMetrics.InitializeHashGrid(seed);
         HexUnit.unitPrefab = unitPrefab;
         cellShaderData = gameObject.AddComponent<HexCellShaderData>();
+        cellShaderData.Grid = this;
         mapGenerator.SetLandscape(0);
         CreateMap();
     }
@@ -79,6 +80,7 @@ public class HexGrid : MonoBehaviour
             HexMetrics.noiseSource = noiseSource;
             HexMetrics.InitializeHashGrid(seed);
             HexUnit.unitPrefab = unitPrefab;
+            ResetVisibility();
         }
     }
 
@@ -149,6 +151,9 @@ public class HexGrid : MonoBehaviour
         cell.Index = i;
 
         cell.ShaderData = cellShaderData;
+        cell.Explorable =
+            x > 0 && z > 0 && x < cellCountX - 1 && z < cellCountZ - 1;
+
 
 
         if (x > 0) {
@@ -195,14 +200,14 @@ public class HexGrid : MonoBehaviour
 
     HexCellPriorityQueue searchFrontier;
 
-    public void FindPath(HexCell fromCell, HexCell toCell, int speed)
+    public void FindPath(HexCell fromCell, HexCell toCell, HexUnit unit)
     {
         //saving the path
         ClearPath();
         currentPathFrom = fromCell;
         currentPathTo = toCell;
-        currentPathExists = Search(fromCell, toCell, speed); //checking if path exist
-        ShowPath(speed);
+        currentPathExists = Search(fromCell, toCell, unit); //checking if path exist
+        ShowPath(unit.Speed);
     }
 
     //Using saved path we can visualize it
@@ -250,9 +255,9 @@ public class HexGrid : MonoBehaviour
         ClearPath();
     }
 
-    bool Search(HexCell fromCell, HexCell toCell, int speed)
+    bool Search(HexCell fromCell, HexCell toCell, HexUnit unit)
     {
-
+        int speed = unit.Speed;
         searchFrontierPhase += 2;
 
         if (searchFrontier == null)
@@ -286,30 +291,16 @@ public class HexGrid : MonoBehaviour
                 {
                     continue;
                 }
-                HexEdgeType edgeType = current.GetEdgeType(neighbor);
-                //Obstacles in pathfinding, all units are the same faction, so we avoid all of them, later we can add Unit.faction to determine
-                if (/*neighbor.IsUnderwater ||*/ edgeType == HexEdgeType.Cliff || neighbor.Unit)
+                if (!unit.IsValidDestination(neighbor))
+                {
+                    continue;
+                }
+                int moveCost = unit.GetMoveCost(current, neighbor, d);
+                if (moveCost < 0)
                 {
                     continue;
                 }
 
-                //int distance = current.Distance;
-                int moveCost = 5;
-                if (/*current.HasRoadThroughEdge(d)*/ false)
-                {
-                    moveCost = 1;
-                }
-                else if (/*current.Walled != neighbor.Walled*/false)
-                {
-                    continue;
-                }
-                else
-                {
-                    moveCost += (edgeType == HexEdgeType.Flat ? 5 : 10);
-                    moveCost += neighbor.UrbanLevel + neighbor.FarmLevel + neighbor.PlantLevel;
-                    //using feature intensity level directly as weight in Dijkstra algorithm??? how not nice
-
-                }
                 int distance = current.Distance + moveCost;
                 int turn = (distance - 1) / speed;
                 if (turn > currentTurn)
@@ -433,6 +424,10 @@ public class HexGrid : MonoBehaviour
         }
     }
 
+
+    //------------UNITS END-----------------//
+
+
     //----------FOG--------------//
     public void IncreaseVisibility(HexCell fromCell, int range)
     {
@@ -456,6 +451,7 @@ public class HexGrid : MonoBehaviour
 
     List<HexCell> GetVisibleCells(HexCell fromCell, int range)
     {
+        HexCoordinates fromCoordinates = fromCell.coordinates;
         List<HexCell> visibleCells = ListPool<HexCell>.Get();
 
         searchFrontierPhase += 2;
@@ -469,6 +465,7 @@ public class HexGrid : MonoBehaviour
             searchFrontier.Clear();
         }
 
+        range += fromCell.ViewElevation;
         fromCell.SearchPhase = searchFrontierPhase;
         fromCell.Distance = 0;
         searchFrontier.Enqueue(fromCell);
@@ -482,13 +479,16 @@ public class HexGrid : MonoBehaviour
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
                 HexCell neighbor = current.GetNeighbor(d);
-                if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase)
+                if (neighbor == null ||
+                    neighbor.SearchPhase > searchFrontierPhase ||
+                    !neighbor.Explorable)
                 {
                     continue;
                 }
                 
                 int distance = current.Distance + 1;
-                if (distance > range)
+                if (distance + neighbor.ViewElevation  > range ||
+                    distance > fromCoordinates.DistanceTo(neighbor.coordinates))
                 {
                     continue;
                 }
@@ -510,6 +510,23 @@ public class HexGrid : MonoBehaviour
         }
         return visibleCells;
     }
+
+    public void ResetVisibility()
+    {
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].ResetVisibility();
+        }
+        for (int i = 0; i < units.Count; i++)
+        {
+            HexUnit unit = units[i];
+            IncreaseVisibility(unit.Location, unit.VisionRange);
+        }
+
+    
+}
+
+    //------------------FOG END --------------//
 
 }
 

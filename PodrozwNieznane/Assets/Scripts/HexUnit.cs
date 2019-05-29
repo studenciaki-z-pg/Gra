@@ -8,13 +8,28 @@ public class HexUnit : MonoBehaviour
     float orientation;
     List<HexCell> pathToTravel;
 
-
     const float travelSpeed = 4f;
     const float rotationSpeed = 180f;
     const int visionRange = 3;
 
     public HexGrid Grid { get; set; }
     public static HexUnit unitPrefab;
+
+    public int Speed
+    {
+        get
+        {
+            return 24;
+        }
+    }
+
+    public int VisionRange
+    {
+        get
+        {
+            return 3;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -174,7 +189,7 @@ public class HexUnit : MonoBehaviour
     //We can use this for water cells (obstacles) later
     public bool IsValidDestination(HexCell cell)
     {
-        return /*!cell.IsUnderwater &&*/ !cell.Unit;
+        return /*!cell.IsUnderwater &&*/ cell.IsExplored && !cell.Unit;
     }
 
     public void Travel(List<HexCell> path)
@@ -189,7 +204,21 @@ public class HexUnit : MonoBehaviour
 
     }
 
-    
+    public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direction)
+    {
+        HexEdgeType edgeType = fromCell.GetEdgeType(toCell);
+        if (edgeType == HexEdgeType.Cliff)
+        {
+            return -1;
+        }
+        int moveCost;
+        moveCost = edgeType == HexEdgeType.Flat ? 5 : 10;
+        moveCost +=
+            toCell.UrbanLevel + toCell.FarmLevel + toCell.PlantLevel;
+
+        return moveCost;
+    }
+
 
 }
 

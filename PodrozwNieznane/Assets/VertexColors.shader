@@ -5,7 +5,8 @@
         _Color ("Color", Color) = (1,1,1,1)
         _MainTex ("Terrain Texture Array", 2DArray) = "white" {}
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
-        _Metallic ("Metallic", Range(0,1)) = 0.0
+		_Specular("Specular", Color) = (0.2, 0.2, 0.2)
+		_BackgroundColor("Background Color", Color) = (0,0,0)
     }
     SubShader
     {
@@ -14,7 +15,7 @@
 
         CGPROGRAM
         // Physically based Standard lighting model, and enable shadows on all light types
-		#pragma surface surf Standard fullforwardshadows vertex:vert
+		#pragma surface surf StandardSpecular fullforwardshadows vertex:vert
 
         // Use shader model 3.0 target, to get nicer looking lighting
         #pragma target 3.5
@@ -27,7 +28,7 @@
 			float3 worldPos;
 			float4 color : COLOR;
 			float3 terrain;
-			float3 visibility;
+			float4 visibility;
         };
 
 		void vert(inout appdata_full v, out Input data) {
@@ -44,12 +45,15 @@
 			data.visibility.y = cell1.x;
 			data.visibility.z = cell2.x;
 
-			data.visibility = lerp(0.3, 1, data.visibility);
+			data.visibility.xyz = lerp(0.25, 1, data.visibility.xyz);
+			data.visibility.w =
+				cell0.y * v.color.x + cell1.y * v.color.y + cell2.y * v.color.z;
 		}
 
         half _Glossiness;
-        half _Metallic;
+		fixed3 _Specular;
         fixed4 _Color;
+		half3 _BackgroundColor;
 
         // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
         // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
@@ -64,20 +68,24 @@
 			return c * (IN.color[index] * IN.visibility[index]);
 		}
 
-        void surf (Input IN, inout SurfaceOutputStandard o)
+        void surf (Input IN, inout SurfaceOutputStandardSpecular o)
         {
 
 
-            // Albedo comes from a texture tinted by color
+
             fixed4 c =
 				GetTerrainColor(IN, 0) +
 				GetTerrainColor(IN, 1) +
 				GetTerrainColor(IN, 2);
-            //o.Albedo = c.rgb;
-			o.Albedo = c.rgb * _Color;
-            // Metallic and smoothness come from slider variables
-            o.Metallic = _Metallic;
+
+			float explored = IN.visibility.w;
+
+			o.Albedo = c.rgb * _Color * explored;
+
+			o.Specular = _Specular * explored;
             o.Smoothness = _Glossiness;
+			o.Occlusion = explored;
+			o.Emission = _BackgroundColor * (1 - explored);
             o.Alpha = c.a;
         }
         ENDCG
