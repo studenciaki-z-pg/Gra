@@ -9,21 +9,46 @@ public class HexCell : MonoBehaviour
     public HexCoordinates coordinates;
     public RectTransform uiRect;
     public HexGridChunk chunk;
+
     [SerializeField]
     HexCell[] neighbors;
+
     int elevation = int.MinValue;
     int terrainTypeIndex = 0;
     int visibility;
+    bool explored;
 
 
+
+    public bool Explorable { get; set; }
     public HexUnit Unit { get; set; }
-
     public int SearchPhase { get; set;}
     public HexCell PathFrom { get; set; }
     public int SearchHeuristic { get; set; }
     public HexCell NextWithSamePriority { get; set; }
     public HexCellShaderData ShaderData { get; set; }
     public int Index { get; set; }
+
+
+    public bool IsExplored
+    {
+        get
+        {
+            return explored && Explorable;
+        }
+        private set
+        {
+            explored = value;
+        }
+    }
+
+    public int ViewElevation
+    {
+        get
+        {
+            return elevation >= waterLevel ? elevation : waterLevel;
+        }
+    }
 
     public int SearchPriority
     {
@@ -80,7 +105,12 @@ public class HexCell : MonoBehaviour
             {
                 return;
             }
+            int originalViewElevation = ViewElevation;
             elevation = value;
+            if (ViewElevation != originalViewElevation)
+            {
+                ShaderData.ViewElevationChanged();
+            }
             Vector3 position = transform.localPosition;
             //Adding noise to our elevation
             position.y = value * HexMetrics.elevationStep *
@@ -92,14 +122,6 @@ public class HexCell : MonoBehaviour
             uiPosition.z = -position.y;
             uiRect.localPosition = uiPosition;
             Refresh();
-        }
-    }
-
-    public int ViewElevation
-    {
-        get
-        {
-            return elevation >= waterLevel ? elevation : waterLevel;
         }
     }
 
@@ -310,7 +332,7 @@ public void EditItself() //a copy of HexMapEditor.EditCell(HexCell cell), a very
     {
         get
         {
-            return visibility > 0;
+            return visibility > 0 && Explorable;
         }
     }
     public void IncreaseVisibility()
@@ -318,6 +340,7 @@ public void EditItself() //a copy of HexMapEditor.EditCell(HexCell cell), a very
         visibility += 1;
         if (visibility == 1)
         {
+            IsExplored = true;
             ShaderData.RefreshVisibility(this);
         }
     }
@@ -329,4 +352,15 @@ public void EditItself() //a copy of HexMapEditor.EditCell(HexCell cell), a very
             ShaderData.RefreshVisibility(this);
         }
     }
+
+    public void ResetVisibility()
+    {
+        if (visibility > 0)
+        {
+            visibility = 0;
+            ShaderData.RefreshVisibility(this);
+        }
+    }
+
+    //----------------FOG END-----------------------//
 }
