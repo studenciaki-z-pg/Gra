@@ -19,7 +19,7 @@ public class HexCell : MonoBehaviour
     bool explored;
 
 
-
+    public int ItemType { get; set; }
     public bool Explorable { get; set; }
     public HexUnit Unit { get; set; }
     public int SearchPhase { get; set;}
@@ -193,7 +193,7 @@ public class HexCell : MonoBehaviour
     //--------------------
     //cuboid features:
 
-    int urbanLevel, farmLevel, plantLevel;
+    int urbanLevel, itemLevel, plantLevel;
     public int UrbanLevel
     {
         get
@@ -209,17 +209,17 @@ public class HexCell : MonoBehaviour
             }
         }
     }
-    public int FarmLevel
+    public int ItemLevel
     {
         get
         {
-            return farmLevel;
+            return itemLevel;
         }
         set
         {
-            if (farmLevel != value)
+            if (itemLevel != value)
             {
-                farmLevel = value;
+                itemLevel = value;
                 RefreshSelfOnly();
             }
         }

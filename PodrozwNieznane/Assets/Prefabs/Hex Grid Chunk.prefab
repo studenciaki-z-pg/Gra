@@ -274,14 +274,10 @@ MonoBehaviour:
     - {fileID: 2377094277492345404, guid: c0582498f4ccc51478e941290f7c6ae0, type: 3}
   - prefabs:
     - {fileID: 2377094277492345404, guid: 91e21b226fdcd524abc30dd0adde68b5, type: 3}
-  farmCollections:
+  itemCollections:
   - prefabs:
-    - {fileID: 2377094277492345404, guid: d97069633924a4a478916df7bddabb70, type: 3}
     - {fileID: 2377094277492345404, guid: da808d975a8aa7340b4ffddb069e84f7, type: 3}
-  - prefabs:
-    - {fileID: 2377094277492345404, guid: 2af44755ae8d7e24aa84b77ace44fd61, type: 3}
     - {fileID: 2377094277492345404, guid: d97069633924a4a478916df7bddabb70, type: 3}
-  - prefabs:
     - {fileID: 2377094277492345404, guid: 2af44755ae8d7e24aa84b77ace44fd61, type: 3}
   plantCollections:
   - prefabs:

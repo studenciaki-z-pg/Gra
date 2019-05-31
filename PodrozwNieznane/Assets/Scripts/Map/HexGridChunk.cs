@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class HexGridChunk : MonoBehaviour
 {
     HexCell[] cells;
+    HexGrid grid; //this grid is here only because "AddFeatures" adds elements to "List<int> HexGrid.items"
 
     public HexMesh terrain;
     Canvas gridCanvas;
@@ -29,6 +30,7 @@ public class HexGridChunk : MonoBehaviour
     }
     private void LateUpdate()
     {
+        grid = transform.parent.gameObject.GetComponent<HexGrid>();
         Triangulate();
         enabled = false;
     }
@@ -65,7 +67,7 @@ public class HexGridChunk : MonoBehaviour
         }
         //if (!cell.IsUnderwater && !cell.HasRiver && !cell.HasRoads)
         {
-            features.AddFeature(cell, cell.Position);
+            features.AddFeatures(cell, cell.Position, grid);
         }
     }
 
@@ -84,21 +86,6 @@ public class HexGridChunk : MonoBehaviour
         {
             TriangulateConnection(direction, cell, e);
         }
-
-        /*if (cell.HasRiver)
-        {
-			//…
-		}
-        else
-        {
-            TriangulateWithoutRiver(direction, cell, center, e);
-            */
-            //if (!cell.IsUnderwater && !cell.HasRoadThroughEdge(direction))
-            {
-                features.AddFeature(cell, (center + e.v1 + e.v5) * (1f / 3f));
-            }
-        /*}*/
-
     }
 
 

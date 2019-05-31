@@ -122,7 +122,7 @@ public class HexMapEditor : MonoBehaviour
             }
             cell.Elevation = activeElevation;
             cell.UrbanLevel = activeUrbanLevel;
-            cell.FarmLevel = activeFarmLevel;
+            cell.ItemLevel = activeFarmLevel;
             cell.PlantLevel = activePlantLevel;
         }
     }

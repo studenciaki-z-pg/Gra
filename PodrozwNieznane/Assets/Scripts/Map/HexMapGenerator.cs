@@ -80,7 +80,7 @@ public class HexMapGenerator : MonoBehaviour
         CreateLand();
         ErodeLand();
         SetTerrainType();
-        SetPlants();
+        SetPostGenerationFeatures();
         for (int i = 0; i < cellCount; i++)
         {
             grid.GetCell(i).SearchPhase = 0;
@@ -312,12 +312,24 @@ public class HexMapGenerator : MonoBehaviour
         }
     }
 
-    void SetPlants()
+    void SetPostGenerationFeatures()
     {
         ApplyMoistureDrivenFeatures(plantLevels);
+
+        int itemsAmount = 10;
+        for (int i = 0; i < itemsAmount; i++)
+        {
+            HexCell cell;
+            do
+            {
+                cell = grid.GetRandomCell();
+            }
+            while (!cell.Explorable);
+            cell.ItemLevel = 1;
+        }
     }
 
-    void ApplyMoistureDrivenFeatures(params int[] plantLevel)
+    void ApplyMoistureDrivenFeatures(int[] plantLevel)
     {
         List<ClimateData> climate = (new HexMapClimate()).CreateClimate(cellCount, grid, elevationMaximum);
         for (int i = 0; i < cellCount; i++)
