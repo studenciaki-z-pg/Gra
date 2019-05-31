@@ -16,6 +16,7 @@ public class HexGrid : MonoBehaviour
     HexGridChunk[] chunks;
     HexCell currentPathFrom, currentPathTo;
     List<HexUnit> units = new List<HexUnit>();
+    List<int> items = new List<int>();
     HexCellShaderData cellShaderData;
 
 
@@ -49,6 +50,7 @@ public class HexGrid : MonoBehaviour
     public void CreateMap() //called every time by "refresh" button
     {
         RemoveAllUnits();
+        items.Clear(); //not really useful, just a placeholder
 
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
         cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
@@ -56,9 +58,17 @@ public class HexGrid : MonoBehaviour
         mapGenerator.GenerateMap(cellCountX, cellCountZ);
         //CreateMap(chunkCountX, chunkCountZ); //this function is called from inside mapGenerator.GenerateMap()
 
+        //Place players:
         for (int i = 0; i < 2; i++)
         {
-            AddUnit(Instantiate(HexUnit.unitPrefab), GetCell(Random.Range(0, cells.Length)), Random.Range(0f, 360f));
+            HexCell homeCell;
+            do
+            {
+                homeCell = GetRandomCell();
+            }
+            while (!homeCell.Explorable);
+            homeCell.ItemLevel = 0;
+            AddUnit(Instantiate(HexUnit.unitPrefab), homeCell, Random.Range(0f, 360f));
         }
     }
 
@@ -158,7 +168,7 @@ public class HexGrid : MonoBehaviour
         cell.ShaderData = cellShaderData;
         cell.Explorable =
             x > 0 && z > 0 && x < cellCountX - 1 && z < cellCountZ - 1;
-
+        cell.ItemType = 0;
 
 
         if (x > 0) {
@@ -394,6 +404,15 @@ public class HexGrid : MonoBehaviour
     public HexCell GetCell(int cellIndex)
     {
         return cells[cellIndex];
+    }
+    public HexCell GetRandomCell()
+    {
+        return cells[Random.Range(0, cells.Length)];
+    }
+
+    public void AddItem(int item)
+    {
+        items.Add(item);
     }
 
     // ------------------- UNITS------------------------//
