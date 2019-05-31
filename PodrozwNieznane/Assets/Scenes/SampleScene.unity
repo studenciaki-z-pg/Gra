@@ -7717,7 +7717,6 @@ Transform:
   m_Children:
   - {fileID: 181378740}
   - {fileID: 1044064010}
-  - {fileID: 1641323693}
   - {fileID: 926277085}
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -10207,7 +10206,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 610912096}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &932330991
 GameObject:
@@ -18701,64 +18700,6 @@ MonoBehaviour:
   image: {fileID: 1640372397}
   itemTooltip: {fileID: 266818794}
   _item: {fileID: 11400000, guid: 083e14e5d538fcf4daa460e6a003afee, type: 2}
---- !u!1 &1641323692
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1641323693}
-  - component: {fileID: 1641323694}
-  m_Layer: 0
-  m_Name: Map Generator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1641323693
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1641323692}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 610912096}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1641323694
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1641323692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 968f87864c6722b429c10c11aad42f49, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grid: {fileID: 0}
-  useFixedSeed: 0
-  seed: 0
-  jitterProbability: 0.25
-  chunkSizeMin: 30
-  chunkSizeMax: 100
-  landPercentage: 50
-  waterLevel: 1
-  highRiseProbability: 0.25
-  sinkProbability: 0.2
-  elevationMinimum: -2
-  elevationMaximum: 8
-  mapBorderX: 2
-  mapBorderZ: 2
-  erosionPercentage: 50
 --- !u!1 &1646425998
 GameObject:
   m_ObjectHideFlags: 0

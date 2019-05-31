@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -49,12 +48,18 @@ public class HexGrid : MonoBehaviour
 
     public void CreateMap() //called every time by "refresh" button
     {
-        
+        RemoveAllUnits();
+
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
         cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
 
         mapGenerator.GenerateMap(cellCountX, cellCountZ);
         //CreateMap(chunkCountX, chunkCountZ); //this function is called from inside mapGenerator.GenerateMap()
+
+        for (int i = 0; i < 2; i++)
+        {
+            AddUnit(Instantiate(HexUnit.unitPrefab), GetCell(Random.Range(0, cells.Length)), Random.Range(0f, 360f));
+        }
     }
 
     public void CreateMap(int chunkCountX, int chunkCountZ)
@@ -406,6 +411,14 @@ public class HexGrid : MonoBehaviour
     {
         units.Remove(unit);
         unit.Die();
+    }
+    void RemoveAllUnits()
+    {
+        foreach(HexUnit hexUnit in units)
+        {
+            hexUnit.Die();
+        }
+        units.Clear();
     }
 
     public void ShowUI(bool visible)

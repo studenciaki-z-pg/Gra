@@ -275,41 +275,6 @@ public class HexCell : MonoBehaviour
     //-------------------
 
 
-
-public void EditItself() //a copy of HexMapEditor.EditCell(HexCell cell), a very crude randomization
-    {
-        if (this)
-        {
-            //this.Color = HexMapEditor.colors[Random.Range(0, 4)]; //unaccessible:(
-            
-
-            this.TerrainTypeIndex = Random.Range(0, 4);//int (int [inclusive], int [exlusive]) (max returned value = 3)
-            this.Elevation = Random.Range(1, 4); //(0, 7); 
-            this.UrbanLevel = (int)UnevenRandom(0f, 3.99f); 
-            this.FarmLevel = (int)UnevenRandom(0f, 3.99f);
-            this.PlantLevel = (int)UnevenRandom(0f, 3.99f); //float (float [inclusive], float [inclusive])
-
-        }
-    }
-    float UnevenRandom(float from, float to)
-    {
-        float intermediate = (to + from) / 2;
-
-        float temp = Random.Range(0f, 1f);
-        if (temp < 0.75f)
-        {
-            return 0f;
-        }
-        if (temp<0.875f)//lower half of interval has 1x the chance of being chosen.
-        {
-            return Random.Range(from, intermediate);
-        }
-        else
-        {
-            return Random.Range(intermediate, to);
-        }
-    }
-
     public int TerrainTypeIndex
     {
         get
