@@ -3,7 +3,8 @@
     Properties
     {
         _Color ("Color", Color) = (1,1,1,1)
-        _MainTex ("Terrain Texture Array", 2DArray) = "white" {}
+        //_MainTex ("Terrain Texture Array", 2DArray) = "white" {}
+		_MainTex("Noisy Texture Array", 2DArray) = "white" {}
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Specular("Specular", Color) = (0.2, 0.2, 0.2)
 		_BackgroundColor("Background Color", Color) = (0,0,0)
@@ -19,6 +20,7 @@
 
         // Use shader model 3.0 target, to get nicer looking lighting
         #pragma target 3.5
+		#pragma multi_compile _ HEX_MAP_EDIT_MODE
 		#include "Textures/HexCellData.cginc"
 
 	   UNITY_DECLARE_TEX2DARRAY(_MainTex);

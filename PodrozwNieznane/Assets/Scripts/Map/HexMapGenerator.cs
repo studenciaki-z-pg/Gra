@@ -34,7 +34,7 @@ public class HexMapGenerator : MonoBehaviour
     [Range(0f, 0.4f)]
     public float sinkProbability = 0.2f;
 
-    [Range(-4, 0)]
+    [Range(-4, 5)]
     public int elevationMinimum = -2;
 
     [Range(6, 10)]
@@ -89,6 +89,12 @@ public class HexMapGenerator : MonoBehaviour
         Random.state = originalRandomState;
 
         //AddMountainBorder(x, z);
+        for (int i = 0; i < grid.cellCountX * grid.cellCountZ; i++)
+        {
+            HexCell hexCell = grid.GetCell(i);
+            hexCell.IncreaseVisibility();
+            //grid.AddUnit(Instantiate(HexUnit.unitPrefab), hexCell, Random.Range(0f, 360f));
+        }
     }
 
     void CreateLand()
@@ -290,7 +296,7 @@ public class HexMapGenerator : MonoBehaviour
     {
         //higher elevation -> next color
 
-        int colorArrayLengthLimit = 4;
+        int colorArrayLengthLimit = 6;
         for (int i = 0; i < cellCount; i++)
         {
             HexCell cell = grid.GetCell(i);
