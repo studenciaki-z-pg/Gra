@@ -189,7 +189,7 @@ public class HexUnit : MonoBehaviour
     //We can use this for water cells (obstacles) later
     public bool IsValidDestination(HexCell cell)
     {
-        return /*!cell.IsUnderwater &&*/ cell.IsExplored && !cell.Unit;
+        return /*!cell.IsUnderwater &&*/ cell.Walkable && cell.IsExplored && !cell.Unit;
     }
 
     public void Travel(List<HexCell> path)

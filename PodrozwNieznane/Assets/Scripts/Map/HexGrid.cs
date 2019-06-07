@@ -66,7 +66,7 @@ public class HexGrid : MonoBehaviour
             {
                 homeCell = GetRandomCell();
             }
-            while (!homeCell.Explorable);
+            while (!(homeCell.Explorable && homeCell.Walkable));
             homeCell.ItemLevel = 0;
             AddUnit(Instantiate(HexUnit.unitPrefab), homeCell, Random.Range(0f, 360f));
         }

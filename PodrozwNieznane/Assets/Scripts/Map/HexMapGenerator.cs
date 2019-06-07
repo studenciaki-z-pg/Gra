@@ -11,7 +11,7 @@ public class HexMapGenerator : MonoBehaviour
     HexCellPriorityQueue searchFrontier;
     int searchFrontierPhase;
     int xMin, xMax, zMin, zMax;
-    int erosionTriggerThreshold = 2;
+    readonly int erosionTriggerThreshold = 2;
 
     [Range(0f, 0.5f)]
     public float jitterProbability = 0.25f;
@@ -50,7 +50,8 @@ public class HexMapGenerator : MonoBehaviour
     public int erosionPercentage = 50;
 
     int[] plantLevels;
-
+    int textureOffset = 0, textureLimit = 1;
+    int uncrossableElevation = int.MaxValue; //maybe use a list of elevations in the future
 
     public void GenerateMap(int x, int z)
     {
@@ -296,7 +297,6 @@ public class HexMapGenerator : MonoBehaviour
     {
         //higher elevation -> next color
 
-        int colorArrayLengthLimit = 6;
         for (int i = 0; i < cellCount; i++)
         {
             HexCell cell = grid.GetCell(i);
@@ -305,16 +305,18 @@ public class HexMapGenerator : MonoBehaviour
                 if (!cell.IsUnderwater)
                 {
                     // case cell.Elevation == cell.WaterLevel is here
-                    if (colorArrayLengthLimit > newTerrainTypeIndex)
-                        cell.TerrainTypeIndex = newTerrainTypeIndex;
+                    if (textureLimit > newTerrainTypeIndex)
+                        cell.TerrainTypeIndex = textureOffset + newTerrainTypeIndex;
                     else
-                        cell.TerrainTypeIndex = colorArrayLengthLimit - 1;
+                        cell.TerrainTypeIndex = textureOffset + textureLimit - 1;
                 }
                 else //underwater
                 {
-                    cell.TerrainTypeIndex = 0;
+                    cell.TerrainTypeIndex = textureOffset + 0;
                 }
             }
+            cell.Walkable = (cell.Elevation == uncrossableElevation ? false : true);
+
         }
     }
 
@@ -330,7 +332,7 @@ public class HexMapGenerator : MonoBehaviour
             {
                 cell = grid.GetRandomCell();
             }
-            while (!cell.Explorable);
+            while (!(cell.Explorable && cell.Walkable));
             cell.ItemLevel = 1;
         }
     }
@@ -411,25 +413,22 @@ public class HexMapGenerator : MonoBehaviour
 
     }
 
-    
-    
+
+
     //****************Attributes management******************
-
-    //This might be a seperate file in the future, and include color variations
-    //The default attribute set is set in HexGrid.Awake()
-
-    public static MapAttributes defaultAttributes = MapAttributes.Default();
-    public static MapAttributes swampyAttributes = 
-        new MapAttributes(0f, 0f, 0f, 20, 20, 50, 1, -2, 8, 0, 0, 0, new int[6] { 0, 0, 0, 0, 0, 3 });
 
     public void SetLandscape(int choice)
     {
         switch (choice)
         {
             case 0:
-                ApplyAttributes(defaultAttributes); break;
+                ApplyAttributes(MapAttributes.Default()); break;
             case 1:
-                ApplyAttributes(swampyAttributes); break;
+                ApplyAttributes(MapAttributes.GetSwampy()); break;
+            case 2:
+                ApplyAttributes(MapAttributes.GetIsland()); break;
+            case 3:
+                ApplyAttributes(MapAttributes.GetMountain()); break;
             default:
                 break;
         }
@@ -450,53 +449,10 @@ public class HexMapGenerator : MonoBehaviour
         mapBorderZ = mapAttributes.mapBorderZ;
         erosionPercentage = mapAttributes.erosionPercentage;
         plantLevels = mapAttributes.plantLevel;
+        textureOffset = mapAttributes.textureOffset;
+        textureLimit = mapAttributes.textureLimit;
+        uncrossableElevation = mapAttributes.uncrossableElevation;
     }
 
 }
-
-
-public struct MapAttributes
-{
-    public float jitterProbability, highRiseProbability, sinkProbability;
-    public int chunkSizeMin, chunkSizeMax, landPercentage, waterLevel,
-        elevationMinimum, elevationMaximum, mapBorderX, mapBorderZ, erosionPercentage;
-    public int[] plantLevel;
-
-    public static MapAttributes Default()
-    {
-        MapAttributes ma = new MapAttributes();
-        ma.jitterProbability = 0.25f;
-        ma.highRiseProbability = 0.25f;
-        ma.sinkProbability = 0.2f;
-        ma.chunkSizeMin = 20;
-        ma.chunkSizeMax = 30;
-        ma.landPercentage = 60;
-        ma.waterLevel = 1;
-        ma.elevationMinimum = -2;
-        ma.elevationMaximum = 6;
-        ma.mapBorderX = 2;
-        ma.mapBorderZ = 2;
-        ma.erosionPercentage = 50;
-        ma.plantLevel = new int[6] { 0, 0, 1, 2, 3, 0 };
-        return ma;
-    }
-
-    public MapAttributes (float a, float b, float c, int d, int e, int f, int g, int h, int i, int j, int k, int l, int[] m)
-    {
-        jitterProbability = a;
-        highRiseProbability = b;
-        sinkProbability = c;
-        chunkSizeMin = d;
-        chunkSizeMax = e;
-        landPercentage = f;
-        waterLevel = g;
-        elevationMinimum = h;
-        elevationMaximum = i;
-        mapBorderX = j;
-        mapBorderZ = k;
-        erosionPercentage = l;
-        plantLevel = m;
-    }
-}
-
 
