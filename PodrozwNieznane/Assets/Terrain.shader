@@ -3,8 +3,7 @@
     Properties
     {
         _Color ("Color", Color) = (1,1,1,1)
-        //_MainTex ("Terrain Texture Array", 2DArray) = "white" {}
-		_MainTex("Noisy Texture Array", 2DArray) = "white" {}
+        _MainTex ("Terrain Texture Array", 2DArray) = "white" {}
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Specular("Specular", Color) = (0.2, 0.2, 0.2)
 		_BackgroundColor("Background Color", Color) = (0,0,0)

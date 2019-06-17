@@ -90,12 +90,13 @@ public class HexMapGenerator : MonoBehaviour
         Random.state = originalRandomState;
 
         //AddMountainBorder(x, z);
-        for (int i = 0; i < grid.cellCountX * grid.cellCountZ; i++)
+        /*for (int i = 0; i < grid.cellCountX * grid.cellCountZ; i++)
         {
             HexCell hexCell = grid.GetCell(i);
             hexCell.IncreaseVisibility();
             //grid.AddUnit(Instantiate(HexUnit.unitPrefab), hexCell, Random.Range(0f, 360f));
         }
+        */
     }
 
     void CreateLand()
@@ -379,19 +380,26 @@ public class HexMapGenerator : MonoBehaviour
             }
         }
     }
-    
+
+    bool invertBorder = false;
 
     HexCell GetRandomCell()
     {
         /*One way of making borsers is to limit the centres of random splats*/
-        
+
         //return grid.GetCell(Random.Range(0, cellCount));
+
+        if (invertBorder)
+        {
+            int a = Random.value > 0.5f ? Random.Range(0, xMin) : Random.Range(xMax, grid.cellCountX);
+            int b = Random.value > 0.5f ? Random.Range(0, zMin) : Random.Range(zMax, grid.cellCountZ);
+            return grid.GetCell(a, b);
+        }
         return grid.GetCell(Random.Range(xMin, xMax), Random.Range(zMin, zMax));
     }
 
     void AddMountainBorder(int x, int z)
     {
-        /*Another way of making borders is to artificially raise some cells to the maximum*/
         int mountainBorderX = 1;//mapBorderX;
         int mountainBorderZ = 1;//mapBorderZ;
         for (int i=0; i<x; i++)
@@ -422,15 +430,27 @@ public class HexMapGenerator : MonoBehaviour
         switch (choice)
         {
             case 0:
+                invertBorder = false;
                 ApplyAttributes(MapAttributes.Default()); break;
             case 1:
+                invertBorder = false;
                 ApplyAttributes(MapAttributes.GetSwampy()); break;
             case 2:
+                invertBorder = false;
                 ApplyAttributes(MapAttributes.GetIsland()); break;
             case 3:
+                invertBorder = false;
                 ApplyAttributes(MapAttributes.GetMountain()); break;
+            case 4:
+                invertBorder = false;
+                ApplyAttributes(MapAttributes.GetPlains()); break;
+            case 5:
+                invertBorder = true;
+                ApplyAttributes(MapAttributes.GetCanyon()); break;
+            case 6:
             default:
-                break;
+                invertBorder = false;
+                ApplyAttributes(MapAttributes.Default()); break;
         }
     }
 
