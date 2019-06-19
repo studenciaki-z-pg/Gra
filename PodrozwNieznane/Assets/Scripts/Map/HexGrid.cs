@@ -50,7 +50,7 @@ public class HexGrid : MonoBehaviour
     public void CreateMap() //called every time by "refresh" button
     {
         RemoveAllUnits();
-        items.Clear(); //not really useful, just a placeholder
+        items.Clear(); //this list is not really useful, just a placeholder
 
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
         cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
@@ -66,7 +66,7 @@ public class HexGrid : MonoBehaviour
             {
                 homeCell = GetRandomCell();
             }
-            while (!homeCell.Explorable);
+            while (!(homeCell.Explorable && homeCell.Walkable));
             homeCell.ItemLevel = 0;
             AddUnit(Instantiate(HexUnit.unitPrefab), homeCell, Random.Range(0f, 360f));
         }

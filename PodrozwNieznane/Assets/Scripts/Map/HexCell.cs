@@ -30,6 +30,8 @@ public class HexCell : MonoBehaviour
     public HexCell NextWithSamePriority { get; set; }
     public HexCellShaderData ShaderData { get; set; }
     public int Index { get; set; }
+    public bool Walkable { get; set; }
+
 
 
     public bool IsExplored
