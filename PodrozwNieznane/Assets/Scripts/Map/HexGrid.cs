@@ -211,7 +211,7 @@ public class HexGrid : MonoBehaviour
 
 
     //------------------------
-    //Dijkstra etc:
+    //Dijkstra na kiju etc:
 
     HexCellPriorityQueue searchFrontier;
 
@@ -365,7 +365,7 @@ public class HexGrid : MonoBehaviour
     {
         position = transform.InverseTransformPoint(position);
         HexCoordinates coordinates = HexCoordinates.FromPosition(position);
-        Debug.Log("Got you babe: " + coordinates.ToString());
+        //Debug.Log("Got you babe: " + coordinates.ToString());     ///////////////////////////////////
 
         int index = coordinates.X + coordinates.Z * cellCountX + coordinates.Z / 2;
         HexCell cell = cells[index];

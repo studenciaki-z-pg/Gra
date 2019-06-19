@@ -6,6 +6,7 @@ public class HexMapGenerator : MonoBehaviour
     public HexGrid grid;
     public bool useFixedSeed;
     public int seed;
+    ItemChest interableObjectPrefab;
 
     int cellCount;
     HexCellPriorityQueue searchFrontier;
@@ -325,6 +326,7 @@ public class HexMapGenerator : MonoBehaviour
                 cell = grid.GetRandomCell();
             }
             while (!cell.Explorable);
+            cell.interableObject = Instantiate<InterableObject>(interableObjectPrefab);
             cell.ItemLevel = 1;
         }
     }
