@@ -27,7 +27,7 @@ public class HexUnit : MonoBehaviour
     {
         get
         {
-            return 3;
+            return visionRange;
         }
     }
 
