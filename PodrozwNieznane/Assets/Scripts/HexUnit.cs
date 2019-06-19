@@ -100,10 +100,19 @@ public class HexUnit : MonoBehaviour
             transform.localRotation = Quaternion.LookRotation(d);
             yield return null;
         }
+
+        //Debug.Log(Grid.GetCell(location.Position).ItemLevel); // Milan interakcja
+        if(Grid.GetCell(location.Position).ItemLevel != 0)
+        {
+            Grid.GetCell(location.Position).interableObject.FinallySomeoneFoundMe();
+        }
+
+
         transform.localPosition = location.Position;
         orientation = transform.localRotation.eulerAngles.y;
         ListPool<HexCell>.Add(pathToTravel);
         pathToTravel = null;
+        
     }
 
     IEnumerator LookAt(Vector3 point)
@@ -201,6 +210,7 @@ public class HexUnit : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(TravelPath());
         
+        Debug.Log("aaa");
 
     }
 

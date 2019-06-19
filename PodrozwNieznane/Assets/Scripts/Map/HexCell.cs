@@ -12,6 +12,8 @@ public class HexCell : MonoBehaviour
 
     [SerializeField]
     HexCell[] neighbors;
+    [SerializeField] public
+    InterableObject interableObject;
 
     int elevation = int.MinValue;
     int terrainTypeIndex = 0;
