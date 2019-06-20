@@ -334,6 +334,9 @@ public class HexMapGenerator : MonoBehaviour
                 cell = grid.GetRandomCell();
             }
             while (!(cell.Explorable && cell.Walkable));
+            //cell.interableObject = Instantiate<InterableObject>(cell.interableObjectPrefab);
+            cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
+
             cell.ItemLevel = 1;
         }
     }
