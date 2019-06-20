@@ -3,14 +3,20 @@
 public class ItemChest : InterableObject
 {
     [SerializeField] Item item;
+    [SerializeField] ItemList items;
 
     ItemChest itemChestPrefab;
+
+    private void Start()
+    {
+        
+    }
 
     override
     public void FinallySomeoneFoundMe()
     {
 
-        Debug.Log("Your princess is in another, another castle. But take that gem maybe it will be helpful.");
+        Debug.Log("Your princess is in another, another castle. But take that dżem maybe it will be helpful.");
     }
 
 

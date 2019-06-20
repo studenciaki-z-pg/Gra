@@ -56,7 +56,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  interableObjectPrefab: {fileID: 712182609107392175, guid: 7af8116e14845a54891e49a1d2665b1d,
+  interableObjectPrefab: {fileID: 7602797575816217281, guid: 7af8116e14845a54891e49a1d2665b1d,
     type: 3}
-  ItemChestPrefab: {fileID: 8481580906566582480, guid: a0e8f076c34fc7642a286dde8d835a0e,
+  ItemChestPrefab: {fileID: 8151206206328104961, guid: a0e8f076c34fc7642a286dde8d835a0e,
     type: 3}
