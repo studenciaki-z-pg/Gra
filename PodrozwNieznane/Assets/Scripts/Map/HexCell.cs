@@ -9,11 +9,14 @@ public class HexCell : MonoBehaviour
     public HexCoordinates coordinates;
     public RectTransform uiRect;
     public HexGridChunk chunk;
+    public InterableObject interableObject;
 
     [SerializeField]
     HexCell[] neighbors;
     [SerializeField] public
-    InterableObject interableObject;
+    InterableObject interableObjectPrefab;
+    [SerializeField] public
+    ItemChest ItemChestPrefab;
 
     int elevation = int.MinValue;
     int terrainTypeIndex = 0;

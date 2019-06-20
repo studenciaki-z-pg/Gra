@@ -4,15 +4,15 @@ public class InterableObject : MonoBehaviour
 {
 
 
-
     public void Activate()
     {
 
     }
 
+    virtual
     public void FinallySomeoneFoundMe()
     {
-        Debug.Log("Your princess is in anothe castle.");
+        Debug.Log("Your princess is in another castle.");
     }
 
 
