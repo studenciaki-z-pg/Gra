@@ -38,7 +38,7 @@ public class HexGameUI : MonoBehaviour
         if(UpdateCurrentCell())
         {
             // avoiding unpassable terrains/ other units
-            if(currentCell && selectedUnit.IsValidDestination(currentCell))
+            if(currentCell && currentCell.IsValidDestination(selectedUnit))
             {
                 grid.FindPath(selectedUnit.Location, currentCell, selectedUnit);
             }
@@ -94,6 +94,10 @@ public class HexGameUI : MonoBehaviour
             //selectedUnit.Location = currentCell;
             selectedUnit.Travel(grid.GetPath());
             grid.ClearPath();
+        }
+        else
+        {
+            Debug.Log("Sorry, that's unreachable");
         }
     }
 }

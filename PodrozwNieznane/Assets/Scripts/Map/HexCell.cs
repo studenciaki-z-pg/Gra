@@ -36,6 +36,11 @@ public class HexCell : MonoBehaviour
     public bool Walkable { get; set; }
 
 
+    //We can use this for water cells (obstacles) later
+    public bool IsValidDestination(HexUnit unit)
+    {
+        return /*!this.IsUnderwater &&*/ this.Walkable && this.IsExplored && !this.Unit;
+    }
 
     public bool IsExplored
     {
