@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// Instatiates plants and item chests (handles logic for selecting prefabs)
+/// </summary>
 public class HexFeatureManager : MonoBehaviour
 {
     public HexFeatureCollection[] urbanCollections, itemCollections, plantCollections;
@@ -21,83 +25,67 @@ public class HexFeatureManager : MonoBehaviour
 
     public void Apply() { }
 
-    public void AddFeatures(HexCell cell, Vector3 position, HexGrid grid)
+    public void AddFeatures(HexCell cell, Vector3 position)
     {
         HexHash hash = HexMetrics.SampleHashGrid(position);
 
+        AddItemFeature(cell, position, hash);
+
+        //AddPlantOrUrbanFeature(cell, cell.Position); //middle of cell
+        for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+        {
+            Vector3 center = cell.Position;
+            Vector3 corner1 = center + HexMetrics.GetFirstSolidCorner(d);
+            Vector3 corner2 = center + HexMetrics.GetSecondSolidCorner(d);
+            AddPlantOrUrbanFeature(cell, (center + corner1 + corner2) * 1f / 3f);
+        }
+    }
+
+    public void AddItemFeature(HexCell cell, Vector3 position, HexHash hash)
+    {
         switch (cell.ItemLevel)
         {
             case 1:
-                HexFeatureCollection c = itemCollections[0];
-                int index = Random.Range(0, c.Length);
-                cell.ItemType = index;
-                Instantiating(c.Get(index), position, 360f * hash.e);
-                grid.AddItem(index);
+                HexFeatureCollection collection = itemCollections[0];
+                int index = Random.Range(0, collection.Length); //wybór prefabu (tj. rozmiaru skrzyneczki)
+                Instantiating(collection.Get(index), position, 360f * hash.e);
                 break;
             case 2:
             case 3:
                 //not supported yet
-                //either  c = itemCollections[1]  or  index = (different random)
+                //HexFeatureCollection collection = itemCollections[1]
                 break;
             case 0:
             default:
                 break;
         }
-
-        //ItemLevel ^
-        //PlantLevel and Urban Level - work as always:
-
-        //-->middle of cell:
-        //let's leave that empty in case there would be a item.
-        //AddFeature(cell, cell.Position);
-
-        //-->around the cell:
-        for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
-        {
-            Vector3 center = cell.Position;
-            EdgeVertices e = new EdgeVertices(
-                center + HexMetrics.GetFirstSolidCorner(d), center + HexMetrics.GetSecondSolidCorner(d));
-            AddFeature(cell, (center + e.v1 + e.v5) * (1f / 3f));
-        }
     }
 
-    public void AddFeature(HexCell cell, Vector3 position)
+    public void AddPlantOrUrbanFeature(HexCell cell, Vector3 position)
     {
         HexHash hash = HexMetrics.SampleHashGrid(position);
-        Transform prefab = PickPrefab(urbanCollections, cell.UrbanLevel, hash.a, hash.d);
-        Transform otherPrefab = PickPrefab(plantCollections, cell.PlantLevel, hash.b, hash.d);
+        Transform urbanPrefab = PickPrefab(urbanCollections, cell.UrbanLevel, hash.a, hash.d);
+        Transform plantPrefab = PickPrefab(plantCollections, cell.PlantLevel, hash.b, hash.d);
+        Transform winningPrefab = null;
         float usedHash = hash.a;
-        if (prefab)
+        if (urbanPrefab)
         {
-            if (otherPrefab && hash.b < hash.a) //if both prefab and otherPrefab exists, choose the one with the lowest hash value
+            if (plantPrefab && hash.b < hash.a) //if both prefabs exist, choose the one with the lowest hash value
             {
-                prefab = otherPrefab;
+                winningPrefab = plantPrefab;
                 usedHash = hash.b;
             }
         }
-        else if (otherPrefab)
+        else if (plantPrefab)
         {
-            prefab = otherPrefab;
+            winningPrefab = plantPrefab;
         }
-
-        /*otherPrefab = PickPrefab(itemCollections, cell.ItemLevel, hash.c, hash.d);
-        if (prefab)
-        {
-            if (otherPrefab && hash.c < usedHash)
-            {
-                prefab = otherPrefab;
-            }
-        }
-        else if (otherPrefab)
-        {
-            prefab = otherPrefab;
-        }*/
         else
         {
             return;
         }
 
-        Instantiating(prefab, position, 360f * hash.e);
+        Instantiating(winningPrefab, position, 360f * hash.e);
     }
 
     void Instantiating(Transform prefab, Vector3 position, float rotation)
@@ -114,7 +102,7 @@ public class HexFeatureManager : MonoBehaviour
     {
         if (level > 0)
         {
-            float[] thresholds = HexMetrics.GetFeatureThresholds(level - 1);
+            float[] thresholds = GetFeatureThresholds(level - 1);
             for (int i = 0; i < thresholds.Length; i++)
             {
                 if (hash < thresholds[i])
@@ -125,6 +113,26 @@ public class HexFeatureManager : MonoBehaviour
         }
         return null;
     }
+
+
+    /*static float[][] featureThresholds = {
+        new float[] {0.0f, 0.0f, 0.4f},
+        new float[] {0.0f, 0.4f, 0.6f},
+        new float[] {0.4f, 0.6f, 0.8f}
+    };*/
+    static float[][] featureThresholds = {
+        new float[] {0.0f, 0.0f, 0.2f},
+        new float[] {0.0f, 0.2f, 0.3f},
+        new float[] {0.2f, 0.3f, 0.4f}
+    };
+
+    static float[] GetFeatureThresholds(int level)
+    {
+        if (level >= featureThresholds.Length)
+            level = featureThresholds.Length;
+        return featureThresholds[level];
+    }
+
 
 }
 

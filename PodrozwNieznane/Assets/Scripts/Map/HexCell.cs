@@ -24,7 +24,6 @@ public class HexCell : MonoBehaviour
     bool explored;
 
 
-    public int ItemType { get; set; }
     public bool Explorable { get; set; }
     public HexUnit Unit { get; set; }
     public int SearchPhase { get; set;}

@@ -13,7 +13,7 @@ public class HexGrid : MonoBehaviour
     HexCell[] cells;
     HexGridChunk[] chunks;
     List<HexUnit> units = new List<HexUnit>();
-    List<int> items = new List<int>();
+    List<ItemChest> items = new List<ItemChest>();
     HexCellShaderData cellShaderData;
 
 
@@ -47,26 +47,13 @@ public class HexGrid : MonoBehaviour
     public void CreateMap() //called every time by "refresh" button
     {
         RemoveAllUnits();
-        items.Clear(); //this list is not really useful, just a placeholder
+        RemoveAllItems();
 
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
         cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
 
+        CreateMap(chunkCountX, chunkCountZ);
         mapGenerator.GenerateMap(cellCountX, cellCountZ);
-        //CreateMap(chunkCountX, chunkCountZ); //this function is called from inside mapGenerator.GenerateMap()
-
-        //Place players:
-        for (int i = 0; i < 2; i++)
-        {
-            HexCell homeCell;
-            do
-            {
-                homeCell = GetRandomCell();
-            }
-            while (!(homeCell.Explorable && homeCell.Walkable));
-            homeCell.ItemLevel = 0;
-            AddUnit(Instantiate(HexUnit.unitPrefab), homeCell, Random.Range(0f, 360f));
-        }
     }
 
     public void CreateMap(int chunkCountX, int chunkCountZ)
@@ -146,9 +133,7 @@ public class HexGrid : MonoBehaviour
         cell.Index = i;
 
         cell.ShaderData = cellShaderData;
-        cell.Explorable =
-            x > 0 && z > 0 && x < cellCountX - 1 && z < cellCountZ - 1;
-        cell.ItemType = 0;
+        cell.Explorable = x > 0 && z > 0 && x < cellCountX - 1 && z < cellCountZ - 1;
 
 
         if (x > 0) {
@@ -265,9 +250,18 @@ public class HexGrid : MonoBehaviour
 
     #region Items adding and removing
 
-    public void AddItem(int item)
+    public void AddItem(ItemChest item)
     {
         items.Add(item);
+    }
+
+    public void RemoveAllItems()
+    {
+        foreach (ItemChest item in items)
+        {
+            Destroy(item.gameObject);
+        }
+        items.Clear();
     }
 
     #endregion

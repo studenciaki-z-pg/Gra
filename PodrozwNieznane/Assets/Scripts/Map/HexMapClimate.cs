@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// Calculates moisture and cloud levels for each cell (a very convoluted algorithm)
+/// </summary>
 public class HexMapClimate
 {
 
@@ -23,7 +27,7 @@ public class HexMapClimate
     public float startingMoisture = 0.1f;
 
 
-    public List<ClimateData> CreateClimate(int cellCount, HexGrid grid, int elevationMaximum) //mapGenerator should cal this
+    public List<ClimateData> CreateClimate(int cellCount, HexGrid grid, int elevationMaximum)
     {
         climate.Clear();
         nextClimate.Clear();

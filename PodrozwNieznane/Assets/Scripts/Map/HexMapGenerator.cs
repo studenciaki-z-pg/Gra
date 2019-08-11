@@ -1,17 +1,26 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// Generates cells' elevation and terrain type (i.e. texture), according to previously set landscape
+/// </summary>
 public class HexMapGenerator : MonoBehaviour
 {
     public HexGrid grid;
+    public HexMapFeatureGenerator featuresGenerator;
+    int cellCount;
+
     public bool useFixedSeed;
     public int seed;
 
-    int cellCount;
     HexCellPriorityQueue searchFrontier;
     int searchFrontierPhase;
     int xMin, xMax, zMin, zMax;
     readonly int erosionTriggerThreshold = 2;
+
+    bool invertBorder = false;
+
 
     [Range(0f, 0.5f)]
     public float jitterProbability = 0.25f;
@@ -49,9 +58,20 @@ public class HexMapGenerator : MonoBehaviour
     [Range(0, 100)]
     public int erosionPercentage = 50;
 
-    int[] plantLevels;
-    int textureOffset = 0, textureLimit = 1;
+    int[] plantLevels; //determines cell.PlantLevel depending on moisture level
+    int textureOffset = 0;
+    int textureLimit = 1;
     int uncrossableElevation = int.MaxValue; //maybe use a list of elevations in the future
+
+
+    #region Getters
+
+    public int[] GetPlantLevels()
+    {
+        return this.plantLevels;
+    }
+
+    #endregion
 
     public void GenerateMap(int x, int z)
     {
@@ -64,16 +84,17 @@ public class HexMapGenerator : MonoBehaviour
             seed &= int.MaxValue;
         }
         Random.InitState(seed);
+        
         cellCount = x * z;
         xMin = mapBorderX;
         xMax = x - mapBorderX;
         zMin = mapBorderZ;
         zMax = z - mapBorderZ;
-        grid.CreateMap(grid.chunkCountX, grid.chunkCountZ);
         if (searchFrontier == null)
         {
             searchFrontier = new HexCellPriorityQueue();
         }
+
         for (int i = 0; i < cellCount; i++)
         {
             grid.GetCell(i).WaterLevel = waterLevel;
@@ -81,12 +102,12 @@ public class HexMapGenerator : MonoBehaviour
         CreateLand();
         ErodeLand();
         SetTerrainType();
-        SetPostGenerationFeatures();
+        featuresGenerator.GenerateFeatures();
+
         for (int i = 0; i < cellCount; i++)
         {
             grid.GetCell(i).SearchPhase = 0;
         }
-
         Random.state = originalRandomState;
 
         //AddMountainBorder(x, z);
@@ -321,84 +342,24 @@ public class HexMapGenerator : MonoBehaviour
         }
     }
 
-    void SetPostGenerationFeatures()
-    {
-        ApplyMoistureDrivenFeatures(plantLevels);
-
-        int itemsAmount = 10;
-        for (int i = 0; i < itemsAmount; i++)
-        {
-            HexCell cell;
-            do
-            {
-                cell = grid.GetRandomCell();
-            }
-            while (!(cell.Explorable && cell.Walkable));
-            //cell.interableObject = Instantiate<InterableObject>(cell.interableObjectPrefab);
-            cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
-
-            cell.ItemLevel = 1;
-        }
-    }
-
-    void ApplyMoistureDrivenFeatures(int[] plantLevel)
-    {
-        List<ClimateData> climate = (new HexMapClimate()).CreateClimate(cellCount, grid, elevationMaximum);
-        for (int i = 0; i < cellCount; i++)
-        {
-            HexCell cell = grid.GetCell(i);
-            float moisture = climate[i].moisture;
-            if (!cell.IsUnderwater)
-            {
-                if (moisture < 0.05f)
-                {
-                    //cell.TerrainTypeIndex = 4;
-                    cell.PlantLevel = plantLevel[0] % 4;
-                }
-                else if (moisture < 0.12f)
-                {
-                    //cell.TerrainTypeIndex = 3;
-                    cell.PlantLevel = plantLevel[1] % 4;
-                }
-                else if (moisture < 0.28f)
-                {
-                    //cell.TerrainTypeIndex = 2;
-                    cell.PlantLevel = plantLevel[2] % 4;
-                }
-                else if (moisture < 0.85f)
-                {
-                    //cell.TerrainTypeIndex = 1;
-                    cell.PlantLevel = plantLevel[3] % 4;
-                }
-                else
-                {
-                    //cell.TerrainTypeIndex = 1;
-                    cell.PlantLevel = plantLevel[4] % 4;
-                }
-            }
-            else
-            {
-                //cell.TerrainTypeIndex = 0;
-                cell.PlantLevel = plantLevel[5] % 4;
-            }
-        }
-    }
-
-    bool invertBorder = false;
-
     HexCell GetRandomCell()
     {
         /*One way of making borsers is to limit the centres of random splats*/
 
         //return grid.GetCell(Random.Range(0, cellCount));
-
+        int offsetX = 0;
+        int offsetZ = 0;
         if (invertBorder)
         {
-            int a = Random.value > 0.5f ? Random.Range(0, xMin) : Random.Range(xMax, grid.cellCountX);
-            int b = Random.value > 0.5f ? Random.Range(0, zMin) : Random.Range(zMax, grid.cellCountZ);
-            return grid.GetCell(a, b);
+            offsetX = Random.value > 0.5f ? Random.Range(0, xMin) : Random.Range(xMax, grid.cellCountX);
+            offsetZ = Random.value > 0.5f ? Random.Range(0, zMin) : Random.Range(zMax, grid.cellCountZ);
         }
-        return grid.GetCell(Random.Range(xMin, xMax), Random.Range(zMin, zMax));
+        else
+        {
+            offsetX = Random.Range(xMin, xMax);
+            offsetZ = Random.Range(zMin, zMax);
+        }
+        return grid.GetCell(offsetX, offsetZ);
     }
 
     void AddMountainBorder(int x, int z)
@@ -424,35 +385,28 @@ public class HexMapGenerator : MonoBehaviour
 
     }
 
-
-
-    //****************Attributes management******************
+    #region Attributes management
 
     public void SetLandscape(int choice)
     {
+        invertBorder = false;
         switch (choice)
         {
             case 0:
-                invertBorder = false;
                 ApplyAttributes(MapAttributes.Default()); break;
             case 1:
-                invertBorder = false;
                 ApplyAttributes(MapAttributes.GetSwampy()); break;
             case 2:
-                invertBorder = false;
                 ApplyAttributes(MapAttributes.GetIsland()); break;
             case 3:
-                invertBorder = false;
                 ApplyAttributes(MapAttributes.GetMountain()); break;
             case 4:
-                invertBorder = false;
                 ApplyAttributes(MapAttributes.GetPlains()); break;
             case 5:
                 invertBorder = true;
                 ApplyAttributes(MapAttributes.GetCanyon()); break;
             case 6:
             default:
-                invertBorder = false;
                 ApplyAttributes(MapAttributes.Default()); break;
         }
     }
@@ -476,6 +430,8 @@ public class HexMapGenerator : MonoBehaviour
         textureLimit = mapAttributes.textureLimit;
         uncrossableElevation = mapAttributes.uncrossableElevation;
     }
+
+    #endregion
 
 }
 
