@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -11,29 +12,131 @@ public class HexMapFeatureGenerator: MonoBehaviour
     public HexMapGenerator generator;
     public HexGrid grid;
 
-    int itemsAmount = 10;
-    int playersAmount = 2;
+    readonly int itemsAmount = 10;
+    readonly int playersAmount = 2;
+    readonly int probesAmount = 5;
+
+    List<HexCell> playersLocations = new List<HexCell>();
+    List<HexCell> itemsLocations = new List<HexCell>();
+    List<HexCell> largestFlatGround;
 
 
-    public void GenerateFeatures()
+    public bool GenerateFeatures()
     {
+        int flatGroundMinimumSize = (int)(grid.cellCountX * grid.cellCountZ * 0.5f);
+
+        FindFlatGround();
+        if (largestFlatGround.Count < flatGroundMinimumSize)
+        {
+            return false;
+        }
+
+        playersLocations = ListPool<HexCell>.Get();
+        itemsLocations = ListPool<HexCell>.Get();
+
         DistributePlayers();
         DistributeItems();
         DistributePlantLevels(generator.GetPlantLevels());
+
+        ListPool<HexCell>.Add(playersLocations);
+        ListPool<HexCell>.Add(itemsLocations);
+        ListPool<HexCell>.Add(largestFlatGround);
+
+        return true;
+    }
+
+    private void FindFlatGround()
+    {
+        largestFlatGround = ListPool<HexCell>.Get();
+        for (int i = 0; i < probesAmount; i++)
+        {
+            HexCell probe = grid.GetRandomCell();
+            List<HexCell> reachableGround = GetReachableGround(probe);
+
+            if (largestFlatGround.Count < reachableGround.Count)
+                largestFlatGround = reachableGround;
+        }
+    }
+
+    private bool IsReachable(HexCell fromCell, HexCell toCell)
+    {
+        grid.BeginSearch(fromCell);
+        while (!grid.EndOfSearch())
+        {
+            HexCell current = grid.GetCurrentlySearchedCell();
+
+            if (current == toCell) //end of search
+            {
+                return true;
+            }
+
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = grid.GetNeighborToSearch(current, d);
+                if (neighbor == null || !neighbor.Walkable || !neighbor.Explorable)
+                    continue;
+
+                HexEdgeType edgeType = current.GetEdgeType(neighbor);
+                if (edgeType == HexEdgeType.Cliff)
+                {
+                    continue;
+                }
+
+                int distance = current.Distance + 1;
+
+                bool success = grid.PutNeighborToSearch(neighbor, distance, 0);
+                if (success == false)
+                    grid.UpdateNeighborToSearch(neighbor, distance);
+            }
+        }
+        return false;
+    }
+
+    private List<HexCell> GetReachableGround(HexCell fromCell)
+    {
+        List<HexCell> reachableGroundCells = ListPool<HexCell>.Get();
+        grid.BeginSearch(fromCell);
+        while (!grid.EndOfSearch())
+        {
+            HexCell current = grid.GetCurrentlySearchedCell();
+            reachableGroundCells.Add(current);
+
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = grid.GetNeighborToSearch(current, d);
+                if (neighbor == null || !neighbor.Walkable || !neighbor.Explorable)
+                   continue;
+
+                HexEdgeType edgeType = current.GetEdgeType(neighbor);
+                if (edgeType == HexEdgeType.Cliff)
+                {
+                    continue;
+                }
+
+                int distance = current.Distance + 1;
+
+                bool success = grid.PutNeighborToSearch(neighbor, distance, 0);
+                if (success == false)
+                    grid.UpdateNeighborToSearch(neighbor, distance);
+            }
+        }
+        return reachableGroundCells;
     }
 
 
     void DistributePlayers()
     {
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < playersAmount; i++)
         {
             HexCell homeCell;
             do
             {
-                homeCell = grid.GetRandomCell();
+                homeCell = largestFlatGround[Random.Range(0, largestFlatGround.Count)];
             }
-            while (!(homeCell.Explorable && homeCell.Walkable));
-            homeCell.ItemLevel = 0;
+            while (!(homeCell.Explorable && homeCell.Walkable) || itemsLocations.Contains(homeCell));
+
+            playersLocations.Add(homeCell);
+
             grid.AddUnit(Instantiate(HexUnit.unitPrefab), homeCell, Random.Range(0f, 360f));
         }
     }
@@ -45,12 +148,13 @@ public class HexMapFeatureGenerator: MonoBehaviour
             HexCell cell;
             do
             {
-                cell = grid.GetRandomCell();
+                cell = largestFlatGround[Random.Range(0, largestFlatGround.Count)];
             }
-            while (!(cell.Explorable && cell.Walkable));
+            while (!(cell.Explorable && cell.Walkable) || playersLocations.Contains(cell));
+
+            itemsLocations.Add(cell);
 
             cell.ItemLevel = 1;
-
             //cell.interableObject = Instantiate<InterableObject>(cell.interableObjectPrefab);
             cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
             cell.interableObject.transform.SetParent(grid.transform);
@@ -58,19 +162,25 @@ public class HexMapFeatureGenerator: MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Assigns plant levels (obtained from MapAttributes; values from 0 to 3) according to predefined moisture thresholds
+    /// </summary>
+    /// <param name="plantLevel"></param>
     void DistributePlantLevels(int[] plantLevel)
     {
         int cellCount = grid.cellCountX * grid.cellCountZ;
         List<ClimateData> climate = new HexMapClimate().CreateClimate(cellCount, grid, generator.elevationMaximum);
         float[] moistureThresholds = new float[] { 0.05f, 0.12f, 0.28f, 0.85f, float.MaxValue };
+        // moistureThresholds.Length == plantLevel.Length - 1
+
         for (int i = 0; i < cellCount; i++)
         {
             HexCell cell = grid.GetCell(i);
-            float moisture = climate[i].moisture;
+            float cellMoisture = climate[i].moisture;
             if (!cell.IsUnderwater)
             {
                 int j = 0;
-                while (moisture > moistureThresholds[j])
+                while (cellMoisture > moistureThresholds[j])
                     j++;
                 cell.PlantLevel = plantLevel[j];
             }

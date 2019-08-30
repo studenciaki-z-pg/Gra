@@ -73,6 +73,12 @@ public class HexMapGenerator : MonoBehaviour
 
     public void GenerateMap(int x, int z)
     {
+        cellCount = x * z;
+        xMin = mapBorderX;
+        xMax = x - mapBorderX;
+        zMin = mapBorderZ;
+        zMax = z - mapBorderZ;
+
         Random.State originalRandomState = Random.state;
         if (!useFixedSeed)
         {
@@ -82,21 +88,25 @@ public class HexMapGenerator : MonoBehaviour
             seed &= int.MaxValue;
         }
         Random.InitState(seed);
-        
-        cellCount = x * z;
-        xMin = mapBorderX;
-        xMax = x - mapBorderX;
-        zMin = mapBorderZ;
-        zMax = z - mapBorderZ;
+
 
         for (int i = 0; i < cellCount; i++)
         {
             grid.GetCell(i).WaterLevel = waterLevel;
         }
-        CreateLand();
-        ErodeLand();
-        SetTerrainType();
-        featuresGenerator.GenerateFeatures();
+        bool success = true;
+        do
+        {
+            for (int i = 0; i < cellCount; i++)
+            {
+                grid.GetCell(i).Elevation = 0;
+            }
+            CreateLand();
+            ErodeLand();
+            SetTerrainType();
+            success = featuresGenerator.GenerateFeatures();
+        }
+        while (!success);
 
         for (int i = 0; i < cellCount; i++)
         {
@@ -331,7 +341,7 @@ public class HexMapGenerator : MonoBehaviour
 
     HexCell GetRandomCell()
     {
-        /*One way of making borsers is to limit the centres of random splats*/
+        /*One way of making borders is to limit the centres of random splats*/
 
         //return grid.GetCell(Random.Range(0, cellCount));
         int offsetX = 0;
