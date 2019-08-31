@@ -105,6 +105,7 @@ public class HexUnit : MonoBehaviour
         if(Grid.GetCell(location.Position).ItemLevel != 0)
         {
             Grid.GetCell(location.Position).interableObject.FinallySomeoneFoundMe();
+            Grid.GetCell(location.Position).ItemLevel = 0;
         }
 
 
