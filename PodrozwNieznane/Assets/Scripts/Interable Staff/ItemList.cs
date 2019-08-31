@@ -19,7 +19,6 @@ public class ItemList : MonoBehaviour
         foreach (string itemName in finallPath)
         {
             string tmp = itemName.Replace('\\', '/');
-            //Debug.Log(tmp);
             int index = tmp.LastIndexOf("/");
             string localPath = "Assets" + path;
 
@@ -31,7 +30,6 @@ public class ItemList : MonoBehaviour
                 items.Add(item);
                 Debug.Log(item.name.ToString());
             }
-            //Debug.Log("?");
         }
     }
     
