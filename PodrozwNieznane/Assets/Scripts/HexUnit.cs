@@ -196,12 +196,6 @@ public class HexUnit : MonoBehaviour
         Destroy(gameObject);
     }
 
-    //We can use this for water cells (obstacles) later
-    public bool IsValidDestination(HexCell cell)
-    {
-        return /*!cell.IsUnderwater &&*/ cell.Walkable && cell.IsExplored && !cell.Unit;
-    }
-
     public void Travel(List<HexCell> path)
     {
         location.Unit = null;

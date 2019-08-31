@@ -151,22 +151,6 @@ public static class HexMetrics
         return hashGrid[x + z * hashGridSize];
     }
 
-    /*static float[][] featureThresholds = {
-        new float[] {0.0f, 0.0f, 0.4f},
-        new float[] {0.0f, 0.4f, 0.6f},
-        new float[] {0.4f, 0.6f, 0.8f}
-    };*/
-    static float[][] featureThresholds = {
-        new float[] {0.0f, 0.0f, 0.2f},
-        new float[] {0.0f, 0.2f, 0.3f},
-        new float[] {0.2f, 0.3f, 0.4f}
-    };
-
-    public static float[] GetFeatureThresholds(int level)
-    {
-        return featureThresholds[level];
-    }
-
 
 }
 

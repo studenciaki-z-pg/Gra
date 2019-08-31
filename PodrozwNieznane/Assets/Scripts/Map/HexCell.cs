@@ -23,8 +23,9 @@ public class HexCell : MonoBehaviour
     int visibility;
     bool explored;
 
-
-    public int ItemType { get; set; }
+    /// <summary>
+    /// Determines if player or item can be placed on HexCell, and if it can become visible
+    /// </summary>
     public bool Explorable { get; set; }
     public HexUnit Unit { get; set; }
     public int SearchPhase { get; set;}
@@ -33,9 +34,16 @@ public class HexCell : MonoBehaviour
     public HexCell NextWithSamePriority { get; set; }
     public HexCellShaderData ShaderData { get; set; }
     public int Index { get; set; }
+    /// <summary>
+    /// Determines if player or item can be placed on HexCell
+    /// </summary>
     public bool Walkable { get; set; }
 
 
+    public bool IsValidDestination(HexUnit unit)
+    {
+        return /*!this.IsUnderwater &&*/ this.Walkable && this.IsExplored && !this.Unit;
+    }
 
     public bool IsExplored
     {
@@ -173,6 +181,26 @@ public class HexCell : MonoBehaviour
 
         }
     }
+
+    public int TerrainTypeIndex
+    {
+        get
+        {
+            return terrainTypeIndex;
+        }
+        set
+        {
+            if (terrainTypeIndex != value)
+            {
+                terrainTypeIndex = value;
+                ShaderData.RefreshTerrain(this);
+            }
+        }
+    }
+
+
+    #region Label and highlight
+
     /*void UpdateDistanceLabel()
     {
         Text label = uiRect.GetComponent<Text>();
@@ -196,9 +224,9 @@ public class HexCell : MonoBehaviour
         highlight.enabled = true;
     }
 
+    #endregion
 
-    //--------------------
-    //cuboid features:
+    #region UrbanLevel, ItemLevel, PlantLevel properties
 
     int urbanLevel, itemLevel, plantLevel;
     public int UrbanLevel
@@ -246,13 +274,11 @@ public class HexCell : MonoBehaviour
             }
         }
     }
-    //end of cuboid features
-    //-------------------
 
+    #endregion
 
+    #region Water-related properties
 
-
-    //water:
     public int WaterLevel
     {
         get
@@ -278,27 +304,10 @@ public class HexCell : MonoBehaviour
             return waterLevel > elevation;
         }
     }
-    //end of water
-    //-------------------
 
+    #endregion
 
-    public int TerrainTypeIndex
-    {
-        get
-        {
-            return terrainTypeIndex;
-        }
-        set
-        {
-            if (terrainTypeIndex != value)
-            {
-                terrainTypeIndex = value;
-                ShaderData.RefreshTerrain(this);
-            }
-        }
-    }
-
-    //-------------FOG----------------//
+    #region Fog & visibility
 
     public bool IsVisible
     {
@@ -334,5 +343,6 @@ public class HexCell : MonoBehaviour
         }
     }
 
-    //----------------FOG END-----------------------//
+    #endregion
+
 }
