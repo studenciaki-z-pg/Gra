@@ -12,7 +12,7 @@ public class InterableObject : MonoBehaviour
     virtual
     public void FinallySomeoneFoundMe()
     {
-        Debug.Log("Your princess is in another castle.");
+        Debug.Log("Your princess is in another monster dungeon.");
     }
 
 
