@@ -17,6 +17,12 @@ public class HexCell : MonoBehaviour
     InterableObject interableObjectPrefab;
     [SerializeField] public
     ItemChest ItemChestPrefab;
+    [SerializeField] public 
+    StrengthTest StrengthTestPrefab;
+    [SerializeField] public 
+    IntelligenceTest IntelligenceTestPrefab;
+    [SerializeField] public 
+    AgilityTest AgilityTestPrefab;
 
     int elevation = int.MinValue;
     int terrainTypeIndex = 0;

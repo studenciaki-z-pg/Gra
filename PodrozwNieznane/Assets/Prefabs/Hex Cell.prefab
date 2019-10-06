@@ -60,3 +60,9 @@ MonoBehaviour:
     type: 3}
   ItemChestPrefab: {fileID: 8151206206328104961, guid: a0e8f076c34fc7642a286dde8d835a0e,
     type: 3}
+  StrengthTestPrefab: {fileID: 1776500580014779135, guid: f8d6fb97f96d31f4ebfaa23efe53350f,
+    type: 3}
+  IntelligenceTestPrefab: {fileID: 2751002737872007456, guid: 118ad636839fd884b89ce35cfd1eec75,
+    type: 3}
+  AgilityTestPrefab: {fileID: 5233193884479355238, guid: e8d5764de8dfa4a478551495bf1aebd6,
+    type: 3}

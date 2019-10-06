@@ -2,17 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AgilityTest : MonoBehaviour
+public class AgilityTest : InterableObject
 {
-    // Start is called before the first frame update
-    void Start()
+    override
+    public void FinallySomeoneFoundMe()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Debug.Log("It's your Agility Challenge");
     }
 }

@@ -336,16 +336,30 @@ public class HexMapGenerator : MonoBehaviour
         int itemsAmount = 10;
         for (int i = 0; i < itemsAmount; i++)
         {
+            System.Random rand = new System.Random();
             HexCell cell;
             do
             {
                 cell = grid.GetRandomCell();
+                switch (rand.Next(1, 5))
+                {
+                    case 1:
+                        cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
+                        break;
+                    case 2:
+                        cell.interableObject = Instantiate<StrengthTest>(cell.StrengthTestPrefab);
+                        break;
+                    case 3:
+                        cell.interableObject = Instantiate<AgilityTest>(cell.AgilityTestPrefab);
+                        break;
+                    case 4:
+                        cell.interableObject = Instantiate<IntelligenceTest>(cell.IntelligenceTestPrefab);
+                        break;
+                }
+                cell.ItemLevel = 1;
             }
             while (!(cell.Explorable && cell.Walkable));
-            //cell.interableObject = Instantiate<InterableObject>(cell.interableObjectPrefab);
-            cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
-
-            cell.ItemLevel = 1;
+            
         }
     }
 
