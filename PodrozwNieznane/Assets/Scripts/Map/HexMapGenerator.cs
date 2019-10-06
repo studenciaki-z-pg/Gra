@@ -13,6 +13,14 @@ public class HexMapGenerator : MonoBehaviour
     int xMin, xMax, zMin, zMax;
     readonly int erosionTriggerThreshold = 2;
 
+    enum InterableList
+    {
+        ItemChest,
+        StrengthTest,
+        IntelligenceTest,
+        AgilityTest
+    }
+
     [Range(0f, 0.5f)]
     public float jitterProbability = 0.25f;
 
