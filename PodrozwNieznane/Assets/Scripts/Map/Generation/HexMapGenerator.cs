@@ -1,25 +1,24 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// Generates cells' elevation and terrain type (i.e. texture), according to previously set landscape
+/// </summary>
 public class HexMapGenerator : MonoBehaviour
 {
     public HexGrid grid;
+    public HexMapFeatureGenerator featuresGenerator;
+    int cellCount;
+
     public bool useFixedSeed;
     public int seed;
 
-    int cellCount;
-    HexCellPriorityQueue searchFrontier;
-    int searchFrontierPhase;
     int xMin, xMax, zMin, zMax;
     readonly int erosionTriggerThreshold = 2;
 
-    enum InterableList
-    {
-        ItemChest,
-        StrengthTest,
-        IntelligenceTest,
-        AgilityTest
-    }
+    bool invertBorder = false;
+    
 
     [Range(0f, 0.5f)]
     public float jitterProbability = 0.25f;
@@ -57,12 +56,29 @@ public class HexMapGenerator : MonoBehaviour
     [Range(0, 100)]
     public int erosionPercentage = 50;
 
-    int[] plantLevels;
-    int textureOffset = 0, textureLimit = 1;
+    int[] plantLevels; //determines cell.PlantLevel depending on moisture level
+    int textureOffset = 0;
+    int textureLimit = 1;
     int uncrossableElevation = int.MaxValue; //maybe use a list of elevations in the future
+
+
+    #region Getters
+
+    public int[] GetPlantLevels()
+    {
+        return this.plantLevels;
+    }
+
+    #endregion
 
     public void GenerateMap(int x, int z)
     {
+        cellCount = x * z;
+        xMin = mapBorderX;
+        xMax = x - mapBorderX;
+        zMin = mapBorderZ;
+        zMax = z - mapBorderZ;
+
         Random.State originalRandomState = Random.state;
         if (!useFixedSeed)
         {
@@ -72,29 +88,30 @@ public class HexMapGenerator : MonoBehaviour
             seed &= int.MaxValue;
         }
         Random.InitState(seed);
-        cellCount = x * z;
-        xMin = mapBorderX;
-        xMax = x - mapBorderX;
-        zMin = mapBorderZ;
-        zMax = z - mapBorderZ;
-        grid.CreateMap(grid.chunkCountX, grid.chunkCountZ);
-        if (searchFrontier == null)
-        {
-            searchFrontier = new HexCellPriorityQueue();
-        }
+
+
         for (int i = 0; i < cellCount; i++)
         {
             grid.GetCell(i).WaterLevel = waterLevel;
         }
-        CreateLand();
-        ErodeLand();
-        SetTerrainType();
-        SetPostGenerationFeatures();
+        bool success = true;
+        do
+        {
+            for (int i = 0; i < cellCount; i++)
+            {
+                grid.GetCell(i).Elevation = 0;
+            }
+            CreateLand();
+            ErodeLand();
+            SetTerrainType();
+            success = featuresGenerator.GenerateFeatures();
+        }
+        while (!success);
+
         for (int i = 0; i < cellCount; i++)
         {
             grid.GetCell(i).SearchPhase = 0;
         }
-
         Random.state = originalRandomState;
 
         //AddMountainBorder(x, z);
@@ -216,19 +233,17 @@ public class HexMapGenerator : MonoBehaviour
 
     int RaiseTerrain(int chunkSize, int budget)
     {
-        searchFrontierPhase += 1;
         HexCell firstCell = GetRandomCell();
-        firstCell.SearchPhase = searchFrontierPhase;
-        firstCell.Distance = 0;
-        firstCell.SearchHeuristic = 0;
-        searchFrontier.Enqueue(firstCell);
         HexCoordinates center = firstCell.coordinates;
+
+        grid.BeginSearch(firstCell);
 
         int rise = Random.value < highRiseProbability ? 2 : 1;
         int size = 0;
-        while (size < chunkSize && searchFrontier.Count > 0)
+        while (size < chunkSize && !grid.EndOfSearch())
         {
-            HexCell current = searchFrontier.Dequeue();
+            HexCell current = grid.GetCurrentlySearchedCell();
+
             int originalElevation = current.Elevation;
             int newElevation = originalElevation + rise;
             if (newElevation > elevationMaximum)
@@ -236,6 +251,7 @@ public class HexMapGenerator : MonoBehaviour
                 continue;
             }
             current.Elevation = newElevation;
+
             if (originalElevation < waterLevel && newElevation >= waterLevel && --budget == 0)
             {
                 break;
@@ -244,35 +260,31 @@ public class HexMapGenerator : MonoBehaviour
 
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
-                HexCell neighbor = current.GetNeighbor(d);
-                if (neighbor && neighbor.SearchPhase < searchFrontierPhase)
-                {
-                    neighbor.SearchPhase = searchFrontierPhase;
-                    neighbor.Distance = neighbor.coordinates.DistanceTo(center);
-                    neighbor.SearchHeuristic = Random.value < jitterProbability ? 1 : 0;
-                    searchFrontier.Enqueue(neighbor);
-                }
+                HexCell neighbor = grid.GetNeighborToSearch(current, d);
+                if (neighbor == null) continue;
+
+                grid.PutNeighborToSearch(neighbor,
+                    neighbor.coordinates.DistanceTo(center),
+                    Random.value < jitterProbability ? 1 : 0);                
             }
         }
-        searchFrontier.Clear();
+        grid.ClearSearch();
         return budget;
     }
 
     int SinkTerrain(int chunkSize, int budget)
     {
-        searchFrontierPhase += 1;
         HexCell firstCell = GetRandomCell();
-        firstCell.SearchPhase = searchFrontierPhase;
-        firstCell.Distance = 0;
-        firstCell.SearchHeuristic = 0;
-        searchFrontier.Enqueue(firstCell);
         HexCoordinates center = firstCell.coordinates;
+
+        grid.BeginSearch(firstCell);
 
         int sink = Random.value < highRiseProbability ? 2 : 1;
         int size = 0;
-        while (size < chunkSize && searchFrontier.Count > 0)
+        while (size < chunkSize && !grid.EndOfSearch())
         {
-            HexCell current = searchFrontier.Dequeue();
+            HexCell current = grid.GetCurrentlySearchedCell();
+
             int originalElevation = current.Elevation;
             int newElevation = current.Elevation - sink;
             if (newElevation < elevationMinimum)
@@ -288,17 +300,15 @@ public class HexMapGenerator : MonoBehaviour
 
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
-                HexCell neighbor = current.GetNeighbor(d);
-                if (neighbor && neighbor.SearchPhase < searchFrontierPhase)
-                {
-                    neighbor.SearchPhase = searchFrontierPhase;
-                    neighbor.Distance = neighbor.coordinates.DistanceTo(center);
-                    neighbor.SearchHeuristic = Random.value < jitterProbability ? 1 : 0;
-                    searchFrontier.Enqueue(neighbor);
-                }
+                HexCell neighbor = grid.GetNeighborToSearch(current, d);
+                if (neighbor == null) continue;
+
+                grid.PutNeighborToSearch(neighbor,
+                    neighbor.coordinates.DistanceTo(center),
+                    Random.value < jitterProbability ? 1 : 0);
             }
         }
-        searchFrontier.Clear();
+        grid.ClearSearch();
         return budget;
     }
 
@@ -328,7 +338,7 @@ public class HexMapGenerator : MonoBehaviour
 
         }
     }
-
+    
     void SetPostGenerationFeatures()
     {
         ApplyMoistureDrivenFeatures(plantLevels);
@@ -405,22 +415,25 @@ public class HexMapGenerator : MonoBehaviour
             }
         }
     }
-
-    bool invertBorder = false;
-
+    
     HexCell GetRandomCell()
     {
-        /*One way of making borsers is to limit the centres of random splats*/
+        /*One way of making borders is to limit the centres of random splats*/
 
         //return grid.GetCell(Random.Range(0, cellCount));
-
+        int offsetX = 0;
+        int offsetZ = 0;
         if (invertBorder)
         {
-            int a = Random.value > 0.5f ? Random.Range(0, xMin) : Random.Range(xMax, grid.cellCountX);
-            int b = Random.value > 0.5f ? Random.Range(0, zMin) : Random.Range(zMax, grid.cellCountZ);
-            return grid.GetCell(a, b);
+            offsetX = Random.value > 0.5f ? Random.Range(0, xMin) : Random.Range(xMax, grid.cellCountX);
+            offsetZ = Random.value > 0.5f ? Random.Range(0, zMin) : Random.Range(zMax, grid.cellCountZ);
         }
-        return grid.GetCell(Random.Range(xMin, xMax), Random.Range(zMin, zMax));
+        else
+        {
+            offsetX = Random.Range(xMin, xMax);
+            offsetZ = Random.Range(zMin, zMax);
+        }
+        return grid.GetCell(offsetX, offsetZ);
     }
 
     void AddMountainBorder(int x, int z)
@@ -446,35 +459,28 @@ public class HexMapGenerator : MonoBehaviour
 
     }
 
-
-
-    //****************Attributes management******************
+    #region Attributes management
 
     public void SetLandscape(int choice)
     {
+        invertBorder = false;
         switch (choice)
         {
             case 0:
-                invertBorder = false;
                 ApplyAttributes(MapAttributes.Default()); break;
             case 1:
-                invertBorder = false;
                 ApplyAttributes(MapAttributes.GetSwampy()); break;
             case 2:
-                invertBorder = false;
                 ApplyAttributes(MapAttributes.GetIsland()); break;
             case 3:
-                invertBorder = false;
                 ApplyAttributes(MapAttributes.GetMountain()); break;
             case 4:
-                invertBorder = false;
                 ApplyAttributes(MapAttributes.GetPlains()); break;
             case 5:
                 invertBorder = true;
                 ApplyAttributes(MapAttributes.GetCanyon()); break;
             case 6:
             default:
-                invertBorder = false;
                 ApplyAttributes(MapAttributes.Default()); break;
         }
     }
@@ -498,6 +504,8 @@ public class HexMapGenerator : MonoBehaviour
         textureLimit = mapAttributes.textureLimit;
         uncrossableElevation = mapAttributes.uncrossableElevation;
     }
+
+    #endregion
 
 }
 

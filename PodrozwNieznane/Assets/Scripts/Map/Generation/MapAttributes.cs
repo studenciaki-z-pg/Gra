@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+/// <summary>
+/// Static class for storing various landscapes parameters (for HexMapGenerator landscapes)
+/// </summary>
 public struct MapAttributes
 {
     //textureOffset and textureLimit refer to the current Texture Array
