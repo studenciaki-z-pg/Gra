@@ -288,3 +288,23 @@ MonoBehaviour:
     - {fileID: 2377094277492345404, guid: fca2bb4064e0c47438c9dbb42b00ba68, type: 3}
   - prefabs:
     - {fileID: 2377094277492345404, guid: 97ec2540588ea5f4a93246c8b4681e38, type: 3}
+  chestCollections:
+  - prefabs:
+    - {fileID: 5512469639097963406, guid: a0e8f076c34fc7642a286dde8d835a0e, type: 3}
+    - {fileID: 5512469639097963406, guid: 1215c0f3e0f3bb74a832c34ca9479e82, type: 3}
+    - {fileID: 5512469639097963406, guid: c953beabcf6613f44b5ba36a873ea6ca, type: 3}
+  strengthCollections:
+  - prefabs:
+    - {fileID: 8720667173826274451, guid: f8d6fb97f96d31f4ebfaa23efe53350f, type: 3}
+    - {fileID: 8720667173826274451, guid: 0f0721a5338abb7448cced4b93758bf2, type: 3}
+    - {fileID: 8720667173826274451, guid: 529b24fb3e493ff42a20bad8ce4dd1d9, type: 3}
+  intelligenceCollections:
+  - prefabs:
+    - {fileID: 4593708324605098876, guid: 118ad636839fd884b89ce35cfd1eec75, type: 3}
+    - {fileID: 4593708324605098876, guid: 4881e1067e00e90409db92f60994beb2, type: 3}
+    - {fileID: 4593708324605098876, guid: 023497ec0deb8df488600210e5385ff7, type: 3}
+  agilityCollections:
+  - prefabs:
+    - {fileID: 2346310885136631203, guid: e8d5764de8dfa4a478551495bf1aebd6, type: 3}
+    - {fileID: 2346310885136631203, guid: 5094f0d34e5b4f442bfd52d9a5a11f0e, type: 3}
+    - {fileID: 2346310885136631203, guid: c8d1314a0ff867a47a9b6f14a08c6920, type: 3}
