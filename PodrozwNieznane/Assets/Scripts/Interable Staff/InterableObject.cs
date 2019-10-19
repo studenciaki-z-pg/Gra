@@ -16,5 +16,11 @@ public class InterableObject : MonoBehaviour
     }
 
 
+    virtual
+    public void FinallySomeoneFoundMe(Character character)
+    {
+        Debug.Log("Your princess is in another monster dungeon.");
+    }
+
 
 }

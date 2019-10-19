@@ -9,4 +9,9 @@ public class StrengthTest : InterableObject
     {
         Debug.Log("It's your Strength Challenge");
     }
+    override
+    public void FinallySomeoneFoundMe(Character character)
+    {
+        Debug.Log("It's your Strength Challenge but your skill power is only: " + character.Strength.Value);
+    }
 }

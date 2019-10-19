@@ -9,4 +9,9 @@ public class AgilityTest : InterableObject
     {
         Debug.Log("It's your Agility Challenge");
     }
+    override
+    public void FinallySomeoneFoundMe(Character character)
+    {
+        Debug.Log("It's your Agility Challenge but your skill power is only: " + character.Agility.Value);
+    }
 }
