@@ -12,7 +12,7 @@ public class HexMapFeatureGenerator: MonoBehaviour
     public HexMapGenerator generator;
     public HexGrid grid;
 
-    readonly int itemsAmount = 10;
+    readonly int itemsAmount = 30;
     readonly int playersAmount = 2;
     readonly int probesAmount = 5;
 
@@ -145,6 +145,7 @@ public class HexMapFeatureGenerator: MonoBehaviour
     {
         for (int i = 0; i < itemsAmount; i++)
         {
+            System.Random random = new System.Random();
             HexCell cell;
             do
             {
@@ -152,13 +153,48 @@ public class HexMapFeatureGenerator: MonoBehaviour
             }
             while (!(cell.Explorable && cell.Walkable) || playersLocations.Contains(cell));
 
-            itemsLocations.Add(cell);
+            
 
-            cell.ItemLevel = 1;
-            //cell.interableObject = Instantiate<InterableObject>(cell.interableObjectPrefab);
-            cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
-            cell.interableObject.transform.SetParent(grid.transform);
-            grid.AddItem(cell.interableObject as ItemChest);
+            switch (random.Next(1, 6))
+            {
+                case 1:
+                    cell.ItemLevel = 1;
+                    cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
+                    cell.interableObject.transform.SetParent(grid.transform);
+                    grid.AddItem(cell.interableObject as ItemChest);
+                    Debug.Log("1");
+                    break;
+                case 2:
+                    cell.ItemLevel = 2;
+                    cell.interableObject = Instantiate<IntelligenceTest>(cell.IntelligenceTestPrefab);
+                    cell.interableObject.transform.SetParent(grid.transform);
+                    grid.AddItem(cell.interableObject as IntelligenceTest);
+                    Debug.Log("2");
+                    break;
+                case 3:
+                    cell.ItemLevel = 3;
+                    cell.interableObject = Instantiate<StrengthTest>(cell.StrengthTestPrefab);
+                    cell.interableObject.transform.SetParent(grid.transform);
+                    grid.AddItem(cell.interableObject as StrengthTest);
+                    Debug.Log("3");
+                    break;
+                case 4:
+                    cell.ItemLevel = 4;
+                    cell.interableObject = Instantiate<AgilityTest>(cell.AgilityTestPrefab);
+                    cell.interableObject.transform.SetParent(grid.transform);
+                    grid.AddItem(cell.interableObject as AgilityTest);
+                    Debug.Log("4");
+                    break;
+                default:
+                    cell.ItemLevel = 5;
+                    cell.interableObject = Instantiate<InterableObject>(cell.ItemChestPrefab); //wydażenie
+                    cell.interableObject.transform.SetParent(grid.transform);
+                    grid.AddItem(cell.interableObject as InterableObject);
+                    Debug.Log("5");
+                    break;
+            }
+
+            itemsLocations.Add(cell);
         }
     }
 
