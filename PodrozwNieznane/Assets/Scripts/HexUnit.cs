@@ -204,8 +204,6 @@ public class HexUnit : MonoBehaviour
         pathToTravel = path;
         StopAllCoroutines();
         StartCoroutine(TravelPath());
-        
-        Debug.Log("aaa");
 
     }
 

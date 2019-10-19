@@ -18,7 +18,7 @@ public class HexMapGenerator : MonoBehaviour
     readonly int erosionTriggerThreshold = 2;
 
     bool invertBorder = false;
-
+    
 
     [Range(0f, 0.5f)]
     public float jitterProbability = 0.25f;
@@ -338,7 +338,84 @@ public class HexMapGenerator : MonoBehaviour
 
         }
     }
+    
+    void SetPostGenerationFeatures()
+    {
+        ApplyMoistureDrivenFeatures(plantLevels);
 
+        int itemsAmount = 10;
+        for (int i = 0; i < itemsAmount; i++)
+        {
+            System.Random rand = new System.Random();
+            HexCell cell;
+            do
+            {
+                cell = grid.GetRandomCell();
+                switch (rand.Next(1, 5))
+                {
+                    case 1:
+                        cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
+                        break;
+                    case 2:
+                        cell.interableObject = Instantiate<StrengthTest>(cell.StrengthTestPrefab);
+                        break;
+                    case 3:
+                        cell.interableObject = Instantiate<AgilityTest>(cell.AgilityTestPrefab);
+                        break;
+                    case 4:
+                        cell.interableObject = Instantiate<IntelligenceTest>(cell.IntelligenceTestPrefab);
+                        break;
+                }
+                cell.ItemLevel = 1;
+            }
+            while (!(cell.Explorable && cell.Walkable));
+            
+        }
+    }
+
+    void ApplyMoistureDrivenFeatures(int[] plantLevel)
+    {
+        List<ClimateData> climate = (new HexMapClimate()).CreateClimate(cellCount, grid, elevationMaximum);
+        for (int i = 0; i < cellCount; i++)
+        {
+            HexCell cell = grid.GetCell(i);
+            float moisture = climate[i].moisture;
+            if (!cell.IsUnderwater)
+            {
+                if (moisture < 0.05f)
+                {
+                    //cell.TerrainTypeIndex = 4;
+                    cell.PlantLevel = plantLevel[0] % 4;
+                }
+                else if (moisture < 0.12f)
+                {
+                    //cell.TerrainTypeIndex = 3;
+                    cell.PlantLevel = plantLevel[1] % 4;
+                }
+                else if (moisture < 0.28f)
+                {
+                    //cell.TerrainTypeIndex = 2;
+                    cell.PlantLevel = plantLevel[2] % 4;
+                }
+                else if (moisture < 0.85f)
+                {
+                    //cell.TerrainTypeIndex = 1;
+                    cell.PlantLevel = plantLevel[3] % 4;
+                }
+                else
+                {
+                    //cell.TerrainTypeIndex = 1;
+                    cell.PlantLevel = plantLevel[4] % 4;
+                }
+            }
+            else
+            {
+                //cell.TerrainTypeIndex = 0;
+                cell.PlantLevel = plantLevel[5] % 4;
+            }
+        }
+    }
+    
     HexCell GetRandomCell()
     {
         /*One way of making borders is to limit the centres of random splats*/
