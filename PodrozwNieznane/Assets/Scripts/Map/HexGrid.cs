@@ -12,7 +12,7 @@ public class HexGrid : MonoBehaviour
 
     HexCell[] cells;
     HexGridChunk[] chunks;
-    List<HexUnit> units = new List<HexUnit>();
+    public List<HexUnit> units = new List<HexUnit>();
     List<ItemChest> items = new List<ItemChest>();
     HexCellShaderData cellShaderData;
 
@@ -40,7 +40,7 @@ public class HexGrid : MonoBehaviour
         cellShaderData = gameObject.AddComponent<HexCellShaderData>();
         cellShaderData.Grid = this;
         mapGenerator.SetLandscape(0);
-        CreateMap();
+        //CreateMap();
     }
 
 

@@ -15,6 +15,7 @@ public class HexUnit : MonoBehaviour
     public HexGrid Grid { get; set; }
     public static HexUnit unitPrefab;
 
+
     public int Speed
     {
         get
