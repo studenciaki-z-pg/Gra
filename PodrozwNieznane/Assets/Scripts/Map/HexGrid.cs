@@ -13,7 +13,7 @@ public class HexGrid : MonoBehaviour
     HexCell[] cells;
     HexGridChunk[] chunks;
     List<HexUnit> units = new List<HexUnit>();
-    List<ItemChest> items = new List<ItemChest>();
+    List<InterableObject> items = new List<InterableObject>();
     HexCellShaderData cellShaderData;
 
 
@@ -250,7 +250,7 @@ public class HexGrid : MonoBehaviour
 
     #region Items adding and removing
 
-    public void AddItem(ItemChest item)
+    public void AddItem(InterableObject item)
     {
         items.Add(item);
     }

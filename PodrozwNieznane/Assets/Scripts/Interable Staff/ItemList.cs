@@ -28,7 +28,7 @@ public class ItemList : MonoBehaviour
             if (item != null)
             {
                 items.Add(item);
-                Debug.Log(item.name.ToString());
+                //Debug.Log(item.name.ToString());
             }
         }
     }
