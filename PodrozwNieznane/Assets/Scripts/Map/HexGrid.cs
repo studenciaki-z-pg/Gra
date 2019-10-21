@@ -343,7 +343,7 @@ public class HexGrid : MonoBehaviour
         return path;
     }
 
-    public List<HexCell> GetFixedPath(int MovementPoints)
+    public List<HexCell> GetFixedPath(HexUnit unit)
     {
         if (!currentPathExists)
         {
@@ -357,33 +357,30 @@ public class HexGrid : MonoBehaviour
         path.Add(currentPathFrom);
         path.Reverse();
 
-        for(int i=0;i<path.Count-2;i++)
+        var movementPoints = unit.Speed;
+        var moveCost = 0;
+
+        for (int i=0;i<path.Count-1;i++)
         {
-            HexEdgeType edgeType = path[i].GetEdgeType(path[i + 1]);
-            switch (edgeType)
+            moveCost += unit.GetMoveCost(path[i], path[i + 1]);
+
+            //specjalna sytuacja(wchdozenie na zbocze gdy ma sie 2p ruchu)
+            if ((movementPoints == 2 && unit.GetMoveCost(path[i], path[i + 1]) == 3))
             {
-                case HexEdgeType.Flat:
-                    MovementPoints -= 1;
-                    break;
-                case HexEdgeType.Slope:
-                    MovementPoints -= 3;
-                    break;
-                case HexEdgeType.Cliff:
-                    break;
-                default:
-                    Debug.Log("Tried to pass Cliff");
-                    break;
+                continue;
             }
 
-
-
-            if (MovementPoints <= 0)
+            //standardowa sytuacja
+            if ((movementPoints - moveCost) < 0)
             {
-                path.RemoveRange(i,path.Count-i);
+                path.RemoveRange(i, path.Count - i);
+                Debug.Log("Move cost: " + moveCost);
                 return path;
             }
-        }
 
+            
+        }
+        Debug.Log("Move cost: " + moveCost);
         return path;
     }
 
@@ -395,7 +392,7 @@ public class HexGrid : MonoBehaviour
             HexCell current = currentPathTo;
             while (current != currentPathFrom)
             {
-                current.SetLabel(((current.Distance-1)/(speed+1)).ToString());
+                current.SetLabel(((current.Distance-1)/(speed)).ToString());
                 current.EnableHighlight(Color.white);
                 current = current.PathFrom;
             }
@@ -451,7 +448,7 @@ public class HexGrid : MonoBehaviour
                     continue;
                 }
 
-                int moveCost = unit.GetMoveCost(current, neighbor, d);
+                int moveCost = unit.GetMoveCost(current, neighbor);
                 if (moveCost < 0)
                 {
                     continue;
@@ -472,7 +469,7 @@ public class HexGrid : MonoBehaviour
         }
         return false;
     }
-    
+
     #endregion
 
     #region Search Manager

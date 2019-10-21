@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class HexUnit : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class HexUnit : MonoBehaviour
     public HexGrid Grid { get; set; }
     public static HexUnit unitPrefab;
 
-    public int speed = 24;
+    public int speed = 7;
     public int Speed
     {
         get => speed;
@@ -52,7 +53,7 @@ public class HexUnit : MonoBehaviour
     IEnumerator TravelPath()
     {
         Vector3 a, b, c = pathToTravel[0].Position;
-        if(pathToTravel.Count>1) yield return LookAt(pathToTravel[1].Position);
+        if(pathToTravel.Count>0) yield return LookAt(pathToTravel[1].Position);
 
         Grid.DecreaseVisibility(
             currentTravelLocation ? currentTravelLocation : pathToTravel[0], 
@@ -77,7 +78,10 @@ public class HexUnit : MonoBehaviour
             }
             Grid.DecreaseVisibility(pathToTravel[i], visionRange);
             t -= 1f;
-            Speed -= 1; //Some glorious magic
+
+            //Some glorious movement magic
+            Speed -= GetMoveCost(pathToTravel[i - 1], pathToTravel[i]);
+            Debug.Log("Movement points: " + Speed);
         }
         currentTravelLocation = null;
 
@@ -197,13 +201,14 @@ public class HexUnit : MonoBehaviour
         StartCoroutine(TravelPath());
     }
 
-    public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direction)
+    public int GetMoveCost(HexCell fromCell, HexCell toCell)//dodac zaleznosc od speed
     {
         HexEdgeType edgeType = fromCell.GetEdgeType(toCell);
         if (edgeType == HexEdgeType.Cliff) return -1;
         if (edgeType == HexEdgeType.Slope) return 3;
         return 1;
     }
+
 
 
 }

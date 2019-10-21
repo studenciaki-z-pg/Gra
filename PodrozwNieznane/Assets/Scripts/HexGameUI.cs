@@ -38,7 +38,7 @@ public class HexGameUI : MonoBehaviour
         if(UpdateCurrentCell())
         {
             // avoiding unpassable terrains/ other units
-            if(currentCell && currentCell.IsValidDestination(selectedUnit))
+            if(currentCell && currentCell.IsValidDestination(selectedUnit)&&selectedUnit.Speed>0)
             {
                 grid.FindPath(selectedUnit.Location, currentCell, selectedUnit);
             }
@@ -91,7 +91,7 @@ public class HexGameUI : MonoBehaviour
                     selectedUnit = currentCell.Unit;
                 else
                 {
-                    Debug.Log("Sorry, that is not yours");
+                    Debug.Log("Sorry, this is not yours");
                 }
             }
             //Wybrano cos innego
@@ -108,7 +108,7 @@ public class HexGameUI : MonoBehaviour
         if (grid.HasPath && selectedUnit.Speed > 0)
         {
             //selectedUnit.Location = currentCell;
-            selectedUnit.Travel(grid.GetFixedPath(selectedUnit.Speed));
+            selectedUnit.Travel(grid.GetFixedPath(selectedUnit));
             grid.ClearPath();
         }
         else

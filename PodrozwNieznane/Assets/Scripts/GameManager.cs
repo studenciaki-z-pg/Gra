@@ -23,8 +23,6 @@ using Random = System.Random;
 public class GameManager : MonoBehaviour
 {
     //referencje
-    [SerializeField] Text nameText;
-
     public HexGrid hexGrid;                 //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
     public static GameManager instance;
 
