@@ -53,7 +53,8 @@ public class HexUnit : MonoBehaviour
     IEnumerator TravelPath()
     {
         Vector3 a, b, c = pathToTravel[0].Position;
-        if(pathToTravel.Count>0) yield return LookAt(pathToTravel[1].Position);
+        if(pathToTravel.Count>1) yield return LookAt(pathToTravel[1].Position);
+        else yield return LookAt(pathToTravel[0].Position);
 
         Grid.DecreaseVisibility(
             currentTravelLocation ? currentTravelLocation : pathToTravel[0], 
@@ -81,7 +82,7 @@ public class HexUnit : MonoBehaviour
 
             //Some glorious movement magic
             Speed -= GetMoveCost(pathToTravel[i - 1], pathToTravel[i]);
-            Debug.Log("Movement points: " + Speed);
+
         }
         currentTravelLocation = null;
 
@@ -192,7 +193,6 @@ public class HexUnit : MonoBehaviour
 
     public void Travel(List<HexCell> path)
     {
-        if (path.Count <= 1) return;
         location.Unit = null;
         location = path[path.Count - 1];
         location.Unit = this;

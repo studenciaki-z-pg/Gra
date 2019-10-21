@@ -374,13 +374,9 @@ public class HexGrid : MonoBehaviour
             if ((movementPoints - moveCost) < 0)
             {
                 path.RemoveRange(i, path.Count - i);
-                Debug.Log("Move cost: " + moveCost);
                 return path;
-            }
-
-            
+            }    
         }
-        Debug.Log("Move cost: " + moveCost);
         return path;
     }
 
