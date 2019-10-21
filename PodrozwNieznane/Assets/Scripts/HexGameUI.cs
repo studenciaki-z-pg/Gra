@@ -77,27 +77,48 @@ public class HexGameUI : MonoBehaviour
         }
         return false;
     }
+
     void DoSelection()
     {
         grid.ClearPath();
         UpdateCurrentCell();
         if (currentCell)
         {
-            selectedUnit = currentCell.Unit;
+            //Wybrano jednostke
+            if (currentCell.Unit)
+            {
+                if (GameManager.instance.IsItMyUnit(currentCell.Unit))
+                    selectedUnit = currentCell.Unit;
+                else
+                {
+                    Debug.Log("Sorry, that is not yours");
+                }
+            }
+            //Wybrano cos innego
+            else
+            {
+                Debug.Log("This is not an unit");
+            }
+
         }
     }
 
     void DoMove()
     {
-        if (grid.HasPath)
+        if (grid.HasPath && selectedUnit.Speed > 0)
         {
             //selectedUnit.Location = currentCell;
-            selectedUnit.Travel(grid.GetPath());
+            selectedUnit.Travel(grid.GetFixedPath(selectedUnit.Speed));
             grid.ClearPath();
         }
         else
         {
             Debug.Log("Sorry, that's unreachable");
         }
+    }
+
+    public void EndTurn()
+    {
+        GameManager.instance.NextPlayer();
     }
 }

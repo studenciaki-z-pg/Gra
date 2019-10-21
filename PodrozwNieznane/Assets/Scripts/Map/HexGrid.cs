@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class HexGrid : MonoBehaviour
 {
@@ -40,7 +42,7 @@ public class HexGrid : MonoBehaviour
         cellShaderData = gameObject.AddComponent<HexCellShaderData>();
         cellShaderData.Grid = this;
         mapGenerator.SetLandscape(0);
-        //CreateMap();
+        CreateMap();
     }
 
 
@@ -322,7 +324,7 @@ public class HexGrid : MonoBehaviour
         currentPathFrom = fromCell;
         currentPathTo = toCell;
         currentPathExists = Search(fromCell, toCell, unit); //checking if path exist
-        ShowPath(unit.Speed);
+        ShowPath(unit.Speed);//movement points
     }
 
     public List<HexCell> GetPath()
@@ -341,6 +343,50 @@ public class HexGrid : MonoBehaviour
         return path;
     }
 
+    public List<HexCell> GetFixedPath(int MovementPoints)
+    {
+        if (!currentPathExists)
+        {
+            return null;
+        }
+        List<HexCell> path = ListPool<HexCell>.Get();
+        for (HexCell c = currentPathTo; c != currentPathFrom; c = c.PathFrom)
+        {
+            path.Add(c);
+        }
+        path.Add(currentPathFrom);
+        path.Reverse();
+
+        for(int i=0;i<path.Count-2;i++)
+        {
+            HexEdgeType edgeType = path[i].GetEdgeType(path[i + 1]);
+            switch (edgeType)
+            {
+                case HexEdgeType.Flat:
+                    MovementPoints -= 1;
+                    break;
+                case HexEdgeType.Slope:
+                    MovementPoints -= 3;
+                    break;
+                case HexEdgeType.Cliff:
+                    break;
+                default:
+                    Debug.Log("Tried to pass Cliff");
+                    break;
+            }
+
+
+
+            if (MovementPoints <= 0)
+            {
+                path.RemoveRange(i,path.Count-i);
+                return path;
+            }
+        }
+
+        return path;
+    }
+
     //Using saved path we can visualize it
     void ShowPath(int speed)
     {
@@ -349,7 +395,7 @@ public class HexGrid : MonoBehaviour
             HexCell current = currentPathTo;
             while (current != currentPathFrom)
             {
-                current.SetLabel(((current.Distance - 1) / speed).ToString());
+                current.SetLabel(((current.Distance-1)/(speed+1)).ToString());
                 current.EnableHighlight(Color.white);
                 current = current.PathFrom;
             }
@@ -394,7 +440,7 @@ public class HexGrid : MonoBehaviour
                 return true;
             }
 
-            int currentTurn = (current.Distance - 1) / speed;
+            int currentTurn = (current.Distance)/(speed+1);
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
                 HexCell neighbor = GetNeighborToSearch(current, d);
@@ -412,11 +458,11 @@ public class HexGrid : MonoBehaviour
                 }
 
                 int distance = current.Distance + moveCost;
-                int turn = (distance - 1) / speed;
-                if (turn > currentTurn)
-                {
-                    distance = turn * speed + moveCost;
-                }
+                //int turn = (distance)/speed;
+                //if (turn > currentTurn)
+                //{
+                //    distance = turn + moveCost + speed;
+                //}
 
                 int neighborHeuristics = neighbor.coordinates.DistanceTo(toCell.coordinates);
                 bool success = PutNeighborToSearch(neighbor, distance, neighborHeuristics, current);

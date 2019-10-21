@@ -9,162 +9,90 @@ using UnityEngine.UI;
 using Color = UnityEngine.Color;
 using Random = System.Random;
 
+//TODO: Wyswietlenie komunikatu o turze na ekranie (UI/Camera)
+//TODO: Handler do przycisku konca tury
+//TODO: Zmiana statystyk interface'u (UI/Camera)
+//TODO: Wycentrowanie kamery na pionku (UI/Camera)
+//TODO: Zablokowanie dostepu do pionka drugiego gracza(?)
+//TODO: Sprawdzenie warunkow zwyciestwa/porazki
+//TODO: Zmiana aktywnego gracza i przekazanie tury
+//TODO: Usuniecie pionkow graczy
+//TODO: Generowanie mapy
+//TODO: Przypisanie pionkow
+
 public class GameManager : MonoBehaviour
 {
-    /* RoadMap
-        Start szablonu GameManager
+    //referencje
+    [SerializeField] Text nameText;
 
-        Stworzenie game managera w scenie, przypisanie mu hex grida
-
-        //--1--// - Menu Gry
-
-         * Zacznij Gre
-         * Instrukcje
-         * Opcje
-         * Credits
-         * Wyjscie
+    public HexGrid hexGrid;                 //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
+    public static GameManager instance;
 
 
-        //--2--//
-
-         * Stworzenie graczy (tu moze byc dodatkowy panel ktory pozwala wybrac kolor pionka graczom i nazw)
-         * * Inicjalizacja
-         * * ...
-         * Instancja mapy (Awake Hex Grid)
-         * ...
-         * * Create Map
-         * * Generacja obiektów
-         * ...
-         * Przeslanie do game managera listy pionkow ()
-         * Operacje na pionkach (nadanie koloru, nazwy, kamery)
-
-    */
-
-    //#Kod
-
-    //Zmienne globalne rozgrywki:
-
-    //Wielkosc mapy
-    //Poziom koncowy
-    //...
-
-    //Aktywny gracz, pasywny gracz i ich kolorki
-
+    //zmienne
     private int Size;
     private int LvlCap;
-    private Players[] players = new Players[2];
+    private bool EndTurnButtonPressed = false;//?
 
-    public HexGrid hexGrid;
-    public int activePlayer = 0;
+    public int activePlayer;
+    public Player[] players = new Player[2];
 
-    public struct Players
+
+    //struktury
+    public struct Player
     {
         public Character Character;
         public HexUnit HexUnit;
         public Color color;
     }
 
-    public static GameManager instance;
-
-
-
-
+    //funkcje
     private void Awake()
     {
         instance = this;
     }
 
-    /// <summary>
-    /// Zycie na ryzyku zawsze jest przyjemne ~~ Daniel Milanowski 19.10.19r.
-    /// </summary>
     private void Start()
     {
-
-        //Menu
-
-        //Start - wybor kolorow gracza
+        //Inicjalizacja graczy
+        players[0].Character = new Character();
+        players[1].Character = new Character();
         players[0].color = Color.white;
         players[1].color = Color.black;
 
-        //Stworzenie graczy
-        players[0].Character = new Character();
-        players[1].Character = new Character();
+        //Statystyki - ustawienia -> Ustawia sie tylko raz podczas inicjalizacji
 
-        //Inicjalizacja mapy
-        hexGrid.CreateMap();
 
-        //Przypisanie pionkow
+        //Pionek - ustawienia -> Ustawia sie przy kazdorazowym przejsciu mapy, stad oddzielna funkcja
+        InitializePlayerUnit();
+
+        //Rozpoczecie gry
+        activePlayer = 0;
+    }
+
+    public void InitializePlayerUnit()
+    {
+        //przypisanie pionka
         players[0].HexUnit = hexGrid.units[0];
         players[1].HexUnit = hexGrid.units[1];
 
-        //Przypisanie kolorow
-        players[0].HexUnit.GetComponentInChildren<MeshRenderer>().material.SetColor("_Color",players[0].color);
+        //przypisania poczatkowej predkosci(punkty ruchu) w oparciu o statystyki
+        players[0].HexUnit.Speed = 7;
+        players[1].HexUnit.Speed = 7;
+
+        //ustawienie kolorow
+        players[0].HexUnit.GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", players[0].color);
         players[1].HexUnit.GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", players[1].color);
-
-        //Rozpoczecie gry
-        activePlayer = UnityEngine.Random.Range(0, 1);
-        Turn();
-
     }
 
-
-    void Turn()
+    public void NextPlayer()
     {
-
-        //TODO: Wyswietlenie komunikatu o turze na ekranie (UI/Camera)
-
-
-        EnterState();
-
-        //Tutaj w Update GM wychwytuje zdarzenia(interakcje i handluje je dopóki nie zostanie wciśniety przycisk koniec tury)
-        //TODO: Handler do przycisku konca tury
-
-        ExitState();
-
-    }
-
-    void EnterState()
-    {
-        //TODO: zmiana statystyk interface'u (UI/Camera)
-
-
-        //TODO: Wycentrowanie kamery na pionku (UI/Camera)
-
-
-        //TODO: zablokowanie dostepu do pionka drugiego gracza(?)
-
-
-        //TODO:Refresh punktow ruchu (HexUnit)
-
-    }
-
-    private void Update()
-    {
-        //TODO: Update: Miejsce na dzialania gracza, dopoki nie kliknie przycisku koniec tury (Update)
-
-
-    }
-
-    void ExitState()
-    {
-
-        //TODO: Sprawdzenie warunkow zwyciestwa/porazki
-
-
-        //Zmiana aktywnego gracza i przekazanie tury
         activePlayer = (activePlayer + 1) % 2;
-        //Turn();
+        players[activePlayer].HexUnit.Speed = 7; //TODO: Uzaleznic od statystyk
     }
 
-    void MapRefresh()
+    public bool IsItMyUnit(HexUnit unit)
     {
-        //Od nowej mapy zaczyna gracz, ktory nie dotarl do obeliska
-        activePlayer = (activePlayer + 1) % 2;
-
-        //TODO: Usuniecie pionkow graczy
-        //TODO: Generowanie mapy
-        //TODO: Przypisanie pionkow
-
-        Turn();
+        return players[activePlayer].HexUnit == unit;
     }
 }

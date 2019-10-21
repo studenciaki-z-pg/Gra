@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class HexUnit : MonoBehaviour
@@ -8,19 +9,21 @@ public class HexUnit : MonoBehaviour
     float orientation;
     List<HexCell> pathToTravel;
 
-    const float travelSpeed = 4f;
-    const float rotationSpeed = 180f;
+    const float travelSpeed = 3f;
+    const float rotationSpeed = 160f;
     const int visionRange = 3;
 
     public HexGrid Grid { get; set; }
     public static HexUnit unitPrefab;
 
-
+    public int speed = 24;
     public int Speed
     {
-        get
+        get => speed;
+        set
         {
-            return 24;
+            if (speed != value)
+                speed = value;
         }
     }
 
@@ -30,18 +33,6 @@ public class HexUnit : MonoBehaviour
         {
             return visionRange;
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     void OnEnable()
@@ -61,7 +52,7 @@ public class HexUnit : MonoBehaviour
     IEnumerator TravelPath()
     {
         Vector3 a, b, c = pathToTravel[0].Position;
-        yield return LookAt(pathToTravel[1].Position);
+        if(pathToTravel.Count>1) yield return LookAt(pathToTravel[1].Position);
 
         Grid.DecreaseVisibility(
             currentTravelLocation ? currentTravelLocation : pathToTravel[0], 
@@ -86,6 +77,7 @@ public class HexUnit : MonoBehaviour
             }
             Grid.DecreaseVisibility(pathToTravel[i], visionRange);
             t -= 1f;
+            Speed -= 1; //Some glorious magic
         }
         currentTravelLocation = null;
 
@@ -142,9 +134,6 @@ public class HexUnit : MonoBehaviour
     }
 
 
-
-
-
     public HexCell Location
     {
         get
@@ -199,28 +188,21 @@ public class HexUnit : MonoBehaviour
 
     public void Travel(List<HexCell> path)
     {
+        if (path.Count <= 1) return;
         location.Unit = null;
         location = path[path.Count - 1];
         location.Unit = this;
         pathToTravel = path;
         StopAllCoroutines();
         StartCoroutine(TravelPath());
-
     }
 
     public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direction)
     {
         HexEdgeType edgeType = fromCell.GetEdgeType(toCell);
-        if (edgeType == HexEdgeType.Cliff)
-        {
-            return -1;
-        }
-        int moveCost;
-        moveCost = edgeType == HexEdgeType.Flat ? 5 : 10;
-        moveCost +=
-            toCell.UrbanLevel + toCell.ItemLevel + toCell.PlantLevel;
-
-        return moveCost;
+        if (edgeType == HexEdgeType.Cliff) return -1;
+        if (edgeType == HexEdgeType.Slope) return 3;
+        return 1;
     }
 
 
