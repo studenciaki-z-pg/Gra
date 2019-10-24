@@ -133,7 +133,7 @@ public class HexMapFeatureGenerator: MonoBehaviour
             {
                 homeCell = largestFlatGround[Random.Range(0, largestFlatGround.Count)];
             }
-            while (!(homeCell.Explorable && homeCell.Walkable) || itemsLocations.Contains(homeCell));
+            while (!(homeCell.Explorable && homeCell.Walkable) || itemsLocations.Contains(homeCell) || playersLocations.Contains(homeCell));
 
             playersLocations.Add(homeCell);
 
@@ -145,17 +145,14 @@ public class HexMapFeatureGenerator: MonoBehaviour
     {
         for (int i = 0; i < itemsAmount; i++)
         {
-            System.Random random = new System.Random();
             HexCell cell;
             do
             {
                 cell = largestFlatGround[Random.Range(0, largestFlatGround.Count)];
             }
-            while (!(cell.Explorable && cell.Walkable) || playersLocations.Contains(cell));
+            while (!(cell.Explorable && cell.Walkable) || itemsLocations.Contains(homeCell) || playersLocations.Contains(homeCell));
 
-            
-
-            switch (random.Next(1, 6))
+            switch (Random.Range(1, 6))
             {
                 case 1:
                     cell.ItemLevel = 1;

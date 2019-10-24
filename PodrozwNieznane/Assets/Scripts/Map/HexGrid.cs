@@ -259,7 +259,7 @@ public class HexGrid : MonoBehaviour
 
     public void RemoveAllItems()
     {
-        foreach (ItemChest item in items)
+        foreach (InterableObject item in items)
         {
             Destroy(item.gameObject);
         }

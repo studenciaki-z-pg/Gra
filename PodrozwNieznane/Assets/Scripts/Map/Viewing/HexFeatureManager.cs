@@ -47,28 +47,23 @@ public class HexFeatureManager : MonoBehaviour
         {
             case 1:
                 HexFeatureCollection chestCollection = chestCollections[0];
-                int indexChest = Random.Range(0, chestCollection.Length); //wybór prefabu (tj. rozmiaru skrzyneczki)
-                Instantiating(chestCollection.Get(indexChest), position, 360f * hash.e);
+                Instantiating(chestCollection.Pick(hash.a), position, 360f * hash.e);
                 break;
             case 2:
                 HexFeatureCollection intelligenceCollection = intelligenceCollections[0];
-                int indexIntelligence = Random.Range(0, intelligenceCollection.Length); //wybór prefabu (tj. rozmiaru skrzyneczki)
-                Instantiating(intelligenceCollection.Get(indexIntelligence), position, 360f * hash.e);
+                Instantiating(intelligenceCollection.Pick(hash.a), position, 360f * hash.e);
                 break;
             case 3:
                 HexFeatureCollection strengthCollection = strengthCollections[0];
-                int indexStrength = Random.Range(0, strengthCollection.Length); //wybór prefabu (tj. rozmiaru skrzyneczki)
-                Instantiating(strengthCollection.Get(indexStrength), position, 360f * hash.e);
+                Instantiating(strengthCollection.Pick(hash.a), position, 360f * hash.e);
                 break;
             case 4:
                 HexFeatureCollection agilityCollection = agilityCollections[0];
-                int indexAgility = Random.Range(0, agilityCollection.Length); //wybór prefabu (tj. rozmiaru skrzyneczki)
-                Instantiating(agilityCollection.Get(indexAgility), position, 360f * hash.e);
+                Instantiating(agilityCollection.Pick(hash.a), position, 360f * hash.e);
                 break;
             case 5:
                 HexFeatureCollection collection = itemCollections[0];
-                int indexItem = Random.Range(0, collection.Length); //wybór prefabu (tj. rozmiaru skrzyneczki)
-                Instantiating(collection.Get(indexItem), position, 360f * hash.e);
+                Instantiating(collection.Pick(hash.a), position, 360f * hash.e);
                 break;
             default:
                 break;
