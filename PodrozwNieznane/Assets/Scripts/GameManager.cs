@@ -15,15 +15,17 @@ using Random = System.Random;
 //TODO: Wycentrowanie kamery na pionku (UI/Camera)
 //TODO: Zablokowanie dostepu do pionka drugiego gracza(?)
 //TODO: Sprawdzenie warunkow zwyciestwa/porazki
-//TODO: Zmiana aktywnego gracza i przekazanie tury
-//TODO: Usuniecie pionkow graczy
-//TODO: Generowanie mapy
-//TODO: Przypisanie pionkow
+//TODO: liczenie punktów
+//TODO: Zmiana aktywnego gracza i przekazanie tury  X
+//TODO: Usuniecie pionkow graczy    X
+//TODO: Generowanie mapy            X
+//TODO: Przypisanie pionkow         X
 
 public class GameManager : MonoBehaviour
 {
     //referencje
     public HexGrid hexGrid;                 //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
+    public HexGameUI hexGameUI;
     public static GameManager instance;
 
 
@@ -87,10 +89,20 @@ public class GameManager : MonoBehaviour
     {
         activePlayer = (activePlayer + 1) % 2;
         players[activePlayer].HexUnit.Speed = 7; //TODO: Uzaleznic od statystyk
+        hexGameUI.SetSelectedUnit(players[activePlayer].HexUnit);
     }
 
-    public bool IsItMyUnit(HexUnit unit)
+    public void NextRound()
+    {
+        hexGrid.CreateMap();
+        InitializePlayerUnit();
+        //TODO: zwrócić uwagę czyja ma być kolej
+        hexGameUI.SetSelectedUnit(players[activePlayer].HexUnit);
+    }
+
+    public bool IsActiveUnit(HexUnit unit)
     {
         return players[activePlayer].HexUnit == unit;
     }
+
 }

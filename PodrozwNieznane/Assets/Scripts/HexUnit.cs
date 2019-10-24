@@ -82,6 +82,7 @@ public class HexUnit : MonoBehaviour
 
             //Some glorious movement magic
             Speed -= GetMoveCost(pathToTravel[i - 1], pathToTravel[i]);
+            Debug.Log($"speed = {speed}");
 
         }
         currentTravelLocation = null;
@@ -111,7 +112,9 @@ public class HexUnit : MonoBehaviour
         orientation = transform.localRotation.eulerAngles.y;
         ListPool<HexCell>.Add(pathToTravel);
         pathToTravel = null;
-        
+
+        Debug.Log($"You have {speed} movement points remaining (speed)");
+
     }
 
     IEnumerator LookAt(Vector3 point)
