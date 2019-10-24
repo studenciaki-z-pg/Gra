@@ -150,7 +150,7 @@ public class HexMapFeatureGenerator: MonoBehaviour
             {
                 cell = largestFlatGround[Random.Range(0, largestFlatGround.Count)];
             }
-            while (!(cell.Explorable && cell.Walkable) || itemsLocations.Contains(homeCell) || playersLocations.Contains(homeCell));
+            while (!(cell.Explorable && cell.Walkable) || itemsLocations.Contains(cell) || playersLocations.Contains(cell));
 
             switch (Random.Range(1, 6))
             {
