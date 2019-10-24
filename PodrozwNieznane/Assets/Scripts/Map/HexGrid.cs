@@ -50,6 +50,7 @@ public class HexGrid : MonoBehaviour
     {
         RemoveAllUnits();
         RemoveAllItems();
+        ClearPath();
 
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
         cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;

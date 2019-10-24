@@ -36,6 +36,7 @@ public class HexMapFeatureGenerator: MonoBehaviour
 
         DistributePlayers();
         DistributeItems();
+        PutEndPoint();
         DistributePlantLevels(generator.GetPlantLevels());
 
         ListPool<HexCell>.Add(playersLocations);
@@ -157,43 +158,54 @@ public class HexMapFeatureGenerator: MonoBehaviour
                 case 1:
                     cell.ItemLevel = 1;
                     cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
-                    cell.interableObject.transform.SetParent(grid.transform);
-                    grid.AddItem(cell.interableObject as ItemChest);
                     Debug.Log("1");
                     break;
                 case 2:
                     cell.ItemLevel = 2;
                     cell.interableObject = Instantiate<IntelligenceTest>(cell.IntelligenceTestPrefab);
-                    cell.interableObject.transform.SetParent(grid.transform);
-                    grid.AddItem(cell.interableObject as IntelligenceTest);
                     Debug.Log("2");
                     break;
                 case 3:
                     cell.ItemLevel = 3;
                     cell.interableObject = Instantiate<StrengthTest>(cell.StrengthTestPrefab);
-                    cell.interableObject.transform.SetParent(grid.transform);
-                    grid.AddItem(cell.interableObject as StrengthTest);
                     Debug.Log("3");
                     break;
                 case 4:
                     cell.ItemLevel = 4;
                     cell.interableObject = Instantiate<AgilityTest>(cell.AgilityTestPrefab);
-                    cell.interableObject.transform.SetParent(grid.transform);
-                    grid.AddItem(cell.interableObject as AgilityTest);
                     Debug.Log("4");
                     break;
+                case 5:
                 default:
                     cell.ItemLevel = 5;
-                    cell.interableObject = Instantiate<InterableObject>(cell.ItemChestPrefab); //wydażenie
-                    cell.interableObject.transform.SetParent(grid.transform);
-                    grid.AddItem(cell.interableObject as InterableObject);
+                    cell.interableObject = Instantiate<InterableObject>(cell.ItemChestPrefab); //wydarzenie
                     Debug.Log("5");
                     break;
             }
+            cell.interableObject.transform.SetParent(grid.transform);
+            grid.AddItem(cell.interableObject);
 
             itemsLocations.Add(cell);
         }
     }
+
+
+    void PutEndPoint()
+    {
+        //temporary location: lower left corner of the map
+        HexCell cell;
+        int index = 1;
+        do
+        {
+            cell = grid.GetCell(index++);//largestFlatGround[Random.Range(0, largestFlatGround.Count)];
+        }
+        while (!(cell.Explorable && cell.Walkable) || itemsLocations.Contains(cell) || playersLocations.Contains(cell));
+
+        cell.ItemLevel = -1;
+        //cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);// TODO: endPoint prefab
+        //cell.interableObject.transform.SetParent(grid.transform);
+    }
+
 
     /// <summary>
     /// Assigns plant levels (obtained from MapAttributes; values from 0 to 3) according to predefined moisture thresholds

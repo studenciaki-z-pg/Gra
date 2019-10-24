@@ -105,4 +105,10 @@ public class GameManager : MonoBehaviour
         return players[activePlayer].HexUnit == unit;
     }
 
+    public void OnFinish(HexUnit unit)
+    {
+        //TODO: unit earns a point
+        NextRound();
+    }
+
 }

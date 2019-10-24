@@ -65,6 +65,9 @@ public class HexFeatureManager : MonoBehaviour
                 HexFeatureCollection collection = itemCollections[0];
                 Instantiating(collection.Pick(hash.a), position, 360f * hash.e);
                 break;
+            case -1:
+                //TODO: visualise endPoint
+                break;
             default:
                 break;
         }
