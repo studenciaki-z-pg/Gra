@@ -81,7 +81,7 @@ public class HexUnit : MonoBehaviour
             t -= 1f;
 
             //Some glorious movement magic
-            Speed -= GetMoveCost(pathToTravel[i - 1], pathToTravel[i]);
+            //Speed -= GetMoveCost(pathToTravel[i - 1], pathToTravel[i]);
 
         }
         currentTravelLocation = null;
