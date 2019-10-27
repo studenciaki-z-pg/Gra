@@ -23,6 +23,7 @@ public class Character : MonoBehaviour
 
     private void OnValidate()
     {
+        Debug.Log("Vitality: " + Vitality.Value); //TO DELETE
         for (int i = 0; i < statPanel.Length; i++)
         {
             statPanel[i].SetStats(Strength, Intelligence, Agility, Vitality);
