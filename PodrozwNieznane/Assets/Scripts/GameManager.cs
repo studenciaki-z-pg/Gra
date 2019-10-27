@@ -88,8 +88,8 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("POTRZEBUJE VITALITY. NA TERAZ!!!"); //TO DELETE
         //przypisania poczatkowej predkosci(punkty ruchu) w oparciu o statystyki
-        players[0].HexUnit.Speed = 5 + (int)(players[0].Character.Vitality.Value / 5); //TODO dopasować wartość statystyk by była rozsądna
-        players[1].HexUnit.Speed = 5 + (int)(players[1].Character.Vitality.Value / 5); //TODO dopasować wartość statystyk by była rozsądna
+        players[0].HexUnit.Speed = 5;// + (int)(players[0].Character.Vitality.Value / 5); //TODO dopasować wartość statystyk by była rozsądna
+        players[1].HexUnit.Speed = 5;// + (int)(players[1].Character.Vitality.Value / 5); //TODO dopasować wartość statystyk by była rozsądna
 
         //ustawienie kolorow
         players[0].HexUnit.GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", players[0].color);
