@@ -2,14 +2,11 @@
 using UnityEngine.UI;
 public class Character : MonoBehaviour
 {
-    public int HP = 0;
 
-    public CharacterStats Strength = new CharacterStats(10);
-    public CharacterStats Intelligence = new CharacterStats(10);
-    public CharacterStats Agility = new CharacterStats(10);
-    public CharacterStats Vitality = new CharacterStats(10);
-    public CharacterStats Dexterity = new CharacterStats(10);
-    public CharacterStats Luck = new CharacterStats(10);
+    public CharacterStats Strength = new CharacterStats(10); //siłą
+    public CharacterStats Intelligence = new CharacterStats(10); //inteligencja
+    public CharacterStats Agility = new CharacterStats(10); //zręczność
+    public CharacterStats Vitality = new CharacterStats(10); //wytrzymałość ~~ punkty ruchu
 
     [SerializeField] Inventory inventory;
     [SerializeField] EquimentPanel equipmentPanel;
@@ -28,7 +25,7 @@ public class Character : MonoBehaviour
     {
         for (int i = 0; i < statPanel.Length; i++)
         {
-            statPanel[i].SetStats(Strength, Intelligence, Agility, Vitality, Dexterity, Luck);
+            statPanel[i].SetStats(Strength, Intelligence, Agility, Vitality);
             statPanel[i].UpdateStatValues();
         }
         if(AvailableSkillPoints < 1)
@@ -36,12 +33,6 @@ public class Character : MonoBehaviour
             {
                 b.enabled = false;
                 b.image.sprite = inactiveSprite;
-            }
-        else
-            foreach (Button b in statButtons)
-            {
-                b.image.sprite = activeSprite;
-                b.enabled = true;
             }
         gameObject.SetActive(false);
     }
@@ -61,7 +52,7 @@ public class Character : MonoBehaviour
     {
         for (int i = 0; i < statPanel.Length; i++)
         {
-            statPanel[i].SetStats(Strength, Intelligence, Agility, Vitality, Dexterity, Luck);
+            statPanel[i].SetStats(Strength, Intelligence, Agility, Vitality);
             statPanel[i].UpdateStatValues();
         }
 
@@ -201,40 +192,6 @@ public class Character : MonoBehaviour
             AvailableSkillPoints--;
             AssignedSkillPoints++;
             Vitality.BaseValue++;
-            for (int i = 0; i < statPanel.Length; i++)
-                statPanel[i].UpdateStatValues();
-            if (AvailableSkillPoints == 0)
-                foreach (Button b in statButtons)
-                {
-                    b.image.sprite = inactiveSprite;
-                    b.enabled = false;
-                }
-        }
-    }
-    public void AddDexterityPoint()
-    {
-        if (AvailableSkillPoints > 0)
-        {
-            AvailableSkillPoints--;
-            AssignedSkillPoints++;
-            Dexterity.BaseValue++;
-            for (int i = 0; i < statPanel.Length; i++)
-                statPanel[i].UpdateStatValues();
-            if (AvailableSkillPoints == 0)
-                foreach (Button b in statButtons)
-                {
-                    b.image.sprite = inactiveSprite;
-                    b.enabled = false;
-                }
-        }
-    }
-    public void AddLuckPoint()
-    {
-        if (AvailableSkillPoints > 0)
-        {
-            AvailableSkillPoints--;
-            AssignedSkillPoints++;
-            Luck.BaseValue++;
             for (int i = 0; i < statPanel.Length; i++)
                 statPanel[i].UpdateStatValues();
             if (AvailableSkillPoints == 0)

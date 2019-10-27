@@ -19,6 +19,8 @@ using Random = System.Random;
 //TODO: Usuniecie pionkow graczy
 //TODO: Generowanie mapy
 //TODO: Przypisanie pionkow
+//TODO: Dokończenie interakcji z obiektami
+//TODO: Usuwanie obiektów interaktywnych
 
 public class GameManager : MonoBehaviour
 {
