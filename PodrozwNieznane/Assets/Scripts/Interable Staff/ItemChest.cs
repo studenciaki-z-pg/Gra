@@ -18,7 +18,7 @@ public class ItemChest : InterableObject
     public void FinallySomeoneFoundMe()
     {
         //RandomItemFromList();
-        Debug.Log("Your princess is in another, another castle. But take that "+ item.name +" maybe it will be helpful.");
+        //Debug.Log("Your princess is in another, another castle. But take that "+ item.name +" maybe it will be helpful.");
     }
 
 
