@@ -24,7 +24,7 @@ commity nazywają wprowadzoną funkcjonalność do brancha, w języku ang dla uj
 Dokumentacja będzie znajdowała się na GoogleDrive [Folder](https://drive.google.com/drive/folders/1-TXw71-4jGPqNo9YOU30A2GcEAl4-KPu?ths=true)  
 
 ## Role w projekcie:
-Daniel Milanowski - Właściciel projektu, Programista  
+Daniel Milanowski - Właściciel produktu, Programista  
 Kamila Kaliszewicz - Programistka, Tester  
 Grzegorz Strelczuk - Scrum master, Programista 
 Jakub Miller - Opiekun projektu  
