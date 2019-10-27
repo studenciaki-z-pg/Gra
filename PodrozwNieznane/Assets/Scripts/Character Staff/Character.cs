@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 public class Character : MonoBehaviour
 {
-
+    
     public CharacterStats Strength = new CharacterStats(10); //siłą
     public CharacterStats Intelligence = new CharacterStats(10); //inteligencja
     public CharacterStats Agility = new CharacterStats(10); //zręczność
@@ -71,15 +71,14 @@ public class Character : MonoBehaviour
             if(Player != player)
             {
                 Player = player;
-                ChangePlayer();
             }
             gameObject.SetActive(true);
         }
     }
 
-    private void ChangePlayer()
+    public int SpeedValue()
     {
-
+        return 5 + (int)(this.Vitality.Value / 5);
     }
     
     private void EquipFromInventory(Item item)

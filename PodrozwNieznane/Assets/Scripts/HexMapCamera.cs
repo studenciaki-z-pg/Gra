@@ -13,9 +13,9 @@ public class HexMapCamera : MonoBehaviour
     public float stickMinZoom, stickMaxZoom;
     float zoom = 1f;
     Transform swivel, stick;
-    public void setCameraPosition(float x, float y)
+    public void SetCameraPosition(float x, float z, Vector3 position)
     {
-        AdjustPosition(x, y);
+        transform.localPosition = ClampPosition(position);
     }
     void Update() 
     {
