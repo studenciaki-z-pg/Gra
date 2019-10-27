@@ -20,11 +20,15 @@ using Random = System.Random;
 //TODO: Przypisanie pionkow
 //TODO: Dokończenie interakcji z obiektami
 //TODO: Usuwanie obiektów interaktywnych
+//TODO: Usprawnić metodę losowania wydarzeń/skrzynek/przeciwników
+//TODO: Losowanie przedmiotów do skrzynek
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] Character char1;
     [SerializeField] Character char2;
+    [SerializeField] HexMapCamera hexMapCamera;
+
 
     //referencje
     public HexGrid hexGrid;                 //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
@@ -82,9 +86,10 @@ public class GameManager : MonoBehaviour
         players[0].HexUnit = hexGrid.units[0];
         players[1].HexUnit = hexGrid.units[1];
 
+        Debug.Log("POTRZEBUJE VITALITY. NA TERAZ!!!"); //TO DELETE
         //przypisania poczatkowej predkosci(punkty ruchu) w oparciu o statystyki
-        players[0].HexUnit.Speed = 7;
-        players[1].HexUnit.Speed = 7;
+        players[0].HexUnit.Speed = 5 + (int)(players[0].Character.Vitality.Value / 5); //TODO dopasować wartość statystyk by była rozsądna
+        players[1].HexUnit.Speed = 5 + (int)(players[1].Character.Vitality.Value / 5); //TODO dopasować wartość statystyk by była rozsądna
 
         //ustawienie kolorow
         players[0].HexUnit.GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", players[0].color);
@@ -94,8 +99,10 @@ public class GameManager : MonoBehaviour
     public void NextPlayer()
     {
         activePlayer = (activePlayer + 1) % 2;
-        players[activePlayer].HexUnit.Speed = (int)(players[activePlayer].Character.Vitality.Value*7/10); //TO DO dopasować wartość statystyk by była rozsądna [atm *7/10]
-        Debug.Log("Twoja prędkość to:"+ players[activePlayer].HexUnit.Speed);
+        players[activePlayer].HexUnit.Speed = 5 + (int)(players[activePlayer].Character.Vitality.Value/5); //TODO dopasować wartość statystyk by była rozsądna
+        Debug.Log("Twoja prędkość to: "+ players[activePlayer].HexUnit.Speed); //TO DELETE
+        Debug.Log("Lokacja: " + players[activePlayer].HexUnit.Location.Position);
+        hexMapCamera.setCameraPosition(players[activePlayer].HexUnit.Location.Position.x, players[activePlayer].HexUnit.Location.Position.y);
     }
 
     public bool IsItMyUnit(HexUnit unit)
