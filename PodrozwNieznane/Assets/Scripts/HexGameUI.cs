@@ -105,12 +105,20 @@ public class HexGameUI : MonoBehaviour
 
     void DoMove()
     {
+        
         if (grid.HasPath && selectedUnit.Speed > 0 )
         {
-            if (grid.GetFixedPath(selectedUnit).Count > 1)
+            var path = grid.GetFixedPath(selectedUnit);
+            if (path.Count > 1)
             {
+                
                 //selectedUnit.Location = currentCell;
-                selectedUnit.Travel(grid.GetFixedPath(selectedUnit));
+                for (var i = 0; i < path.Count - 1; i++ )
+                {
+                    selectedUnit.Speed -= selectedUnit.GetMoveCost(path[i], path[i+1]);
+                    Debug.Log(selectedUnit.Speed);
+                }
+                selectedUnit.Travel(path);
                 grid.ClearPath();
             }
             else Debug.Log("Too far");

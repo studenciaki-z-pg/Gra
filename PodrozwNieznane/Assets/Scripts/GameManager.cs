@@ -10,17 +10,19 @@ using Color = UnityEngine.Color;
 using Random = System.Random;
 
 //TODO: Wyswietlenie komunikatu o turze na ekranie (UI/Camera)
-//TODO: Handler do przycisku konca tury
 //TODO: Zmiana statystyk interface'u (UI/Camera)
 //TODO: Wycentrowanie kamery na pionku (UI/Camera)
 //TODO: Zablokowanie dostepu do pionka drugiego gracza(?)
 //TODO: Sprawdzenie warunkow zwyciestwa/porazki
 //TODO: Zmiana aktywnego gracza i przekazanie tury
 //TODO: Usuniecie pionkow graczy
+<<<<<<< HEAD
 //TODO: Generowanie mapy
 //TODO: Przypisanie pionkow
 //TODO: Dokończenie interakcji z obiektami
 //TODO: Usuwanie obiektów interaktywnych
+=======
+>>>>>>> 132a227b0997f07782ec5f5d612be2e87d308f51
 
 public class GameManager : MonoBehaviour
 {
