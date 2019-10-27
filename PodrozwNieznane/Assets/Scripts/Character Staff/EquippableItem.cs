@@ -42,10 +42,6 @@ public class EquippableItem : Item
             c.Agility.AddModifier(new StatModifier(AgilityBonus, StatModType.Flat, this));
         if (VitalityBonus != 0)
             c.Vitality.AddModifier(new StatModifier(VitalityBonus, StatModType.Flat, this));
-        if (DexterityBonus != 0)
-            c.Dexterity.AddModifier(new StatModifier(DexterityBonus, StatModType.Flat, this));
-        if (LuckBonus != 0)
-            c.Luck.AddModifier(new StatModifier(LuckBonus, StatModType.Flat, this));
 
         if (StrengthPercentBonus != 0)
             c.Strength.AddModifier(new StatModifier(StrengthPercentBonus, StatModType.PercentMult, this));
@@ -55,10 +51,6 @@ public class EquippableItem : Item
             c.Agility.AddModifier(new StatModifier(AgilityPercentBonus, StatModType.PercentMult, this));
         if (VitalityPercentBonus != 0)
             c.Vitality.AddModifier(new StatModifier(VitalityPercentBonus, StatModType.PercentMult, this));
-        if (DexterityPercentBonus != 0)
-            c.Dexterity.AddModifier(new StatModifier(DexterityPercentBonus, StatModType.PercentMult, this));
-        if (LuckPercentBonus != 0)
-            c.Luck.AddModifier(new StatModifier(LuckPercentBonus, StatModType.PercentMult, this));
     }
 
     public void Unequip(Character c)
@@ -67,7 +59,5 @@ public class EquippableItem : Item
         c.Intelligence.RemoveAllModifiersFromSource(this);
         c.Agility.RemoveAllModifiersFromSource(this);
         c.Vitality.RemoveAllModifiersFromSource(this);
-        c.Dexterity.RemoveAllModifiersFromSource(this);
-        c.Luck.RemoveAllModifiersFromSource(this);
     }
 }
