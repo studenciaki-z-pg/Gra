@@ -10,22 +10,22 @@ using Color = UnityEngine.Color;
 using Random = System.Random;
 
 //TODO: Wyswietlenie komunikatu o turze na ekranie (UI/Camera)
-//TODO: Zmiana statystyk interface'u (UI/Camera)
+//TODO: Ujednolicenie grafiki ekwipunku (UI/Camera)
 //TODO: Wycentrowanie kamery na pionku (UI/Camera)
 //TODO: Zablokowanie dostepu do pionka drugiego gracza(?)
 //TODO: Sprawdzenie warunkow zwyciestwa/porazki
 //TODO: Zmiana aktywnego gracza i przekazanie tury
 //TODO: Usuniecie pionkow graczy
-<<<<<<< HEAD
 //TODO: Generowanie mapy
 //TODO: Przypisanie pionkow
 //TODO: Dokończenie interakcji z obiektami
 //TODO: Usuwanie obiektów interaktywnych
-=======
->>>>>>> 132a227b0997f07782ec5f5d612be2e87d308f51
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] Character char1;
+    [SerializeField] Character char2;
+
     //referencje
     public HexGrid hexGrid;                 //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
     public static GameManager instance;
@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
 
     public int activePlayer;
     public Player[] players = new Player[2];
+
 
 
     //struktury
@@ -57,8 +58,11 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         //Inicjalizacja graczy
-        players[0].Character = new Character();
-        players[1].Character = new Character();
+        //players[0].Character = new Character();
+        //players[1].Character = new Character();
+        players[0].Character = char1;
+        players[1].Character = char2;
+
         players[0].color = Color.white;
         players[1].color = Color.black;
 
@@ -90,7 +94,8 @@ public class GameManager : MonoBehaviour
     public void NextPlayer()
     {
         activePlayer = (activePlayer + 1) % 2;
-        players[activePlayer].HexUnit.Speed = 7; //TODO: Uzaleznic od statystyk
+        players[activePlayer].HexUnit.Speed = (int)(players[activePlayer].Character.Vitality.Value*7/10); //TO DO dopasować wartość statystyk by była rozsądna [atm *7/10]
+        Debug.Log("Twoja prędkość to:"+ players[activePlayer].HexUnit.Speed);
     }
 
     public bool IsItMyUnit(HexUnit unit)
