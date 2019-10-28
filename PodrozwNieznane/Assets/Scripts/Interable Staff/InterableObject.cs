@@ -2,7 +2,12 @@
 
 public class InterableObject : MonoBehaviour
 {
+    protected int value;
 
+    public InterableObject()
+    {
+        value = 0;
+    }
 
     public void Activate()
     {
@@ -21,6 +26,6 @@ public class InterableObject : MonoBehaviour
     {
         Debug.Log("Your princess is in another monster dungeon.");
     }
-
+    
 
 }

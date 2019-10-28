@@ -23,7 +23,6 @@ public class Character : MonoBehaviour
 
     private void OnValidate()
     {
-        Debug.Log("Vitality: " + Vitality.Value); //TO DELETE
         for (int i = 0; i < statPanel.Length; i++)
         {
             statPanel[i].SetStats(Strength, Intelligence, Agility, Vitality);
@@ -36,6 +35,11 @@ public class Character : MonoBehaviour
                 b.image.sprite = inactiveSprite;
             }
         gameObject.SetActive(false);
+    }
+
+    public int getLevel()
+    {
+        return PlayerLevel;
     }
 
     public void LevelUp()
