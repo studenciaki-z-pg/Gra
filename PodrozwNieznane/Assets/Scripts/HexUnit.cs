@@ -18,6 +18,9 @@ public class HexUnit : MonoBehaviour
     public static HexUnit unitPrefab;
 
     public int speed = 7;
+
+    #region Properties
+
     public int Speed
     {
         get => speed;
@@ -27,117 +30,6 @@ public class HexUnit : MonoBehaviour
                 speed = value;
         }
     }
-
-    public int VisionRange
-    {
-        get
-        {
-            return visionRange;
-        }
-    }
-
-    void OnEnable()
-    {
-        if (location)
-        {
-            transform.localPosition = location.Position;
-            if (currentTravelLocation)
-            {
-                Grid.IncreaseVisibility(location, visionRange);
-                Grid.DecreaseVisibility(currentTravelLocation, visionRange);
-                currentTravelLocation = null;
-            }
-        }
-    }
-
-    IEnumerator TravelPath()
-    {
-        Vector3 a, b, c = pathToTravel[0].Position;
-        if(pathToTravel.Count>1) yield return LookAt(pathToTravel[1].Position);
-        else yield return LookAt(pathToTravel[0].Position);
-
-        Grid.DecreaseVisibility(
-            currentTravelLocation ? currentTravelLocation : pathToTravel[0], 
-            visionRange);
-
-        float t = Time.deltaTime * travelSpeed; 
-
-        for (int i = 1; i < pathToTravel.Count; i++)
-        {
-            currentTravelLocation = pathToTravel[i];
-            a = c;
-            b = pathToTravel[i - 1].Position;
-            c = (b + currentTravelLocation.Position) * 0.5f;
-            Grid.IncreaseVisibility(pathToTravel[i], visionRange);
-            for (; t < 1f; t += Time.deltaTime * travelSpeed)
-            {
-                transform.localPosition = Bezier.GetPoint(a, b, c, t);
-                Vector3 d = Bezier.GetDerivative(a, b, c, t);
-                d.y = 0f;
-                transform.localRotation = Quaternion.LookRotation(d);
-                yield return null;
-            }
-            Grid.DecreaseVisibility(pathToTravel[i], visionRange);
-            t -= 1f;
-
-            //Some glorious movement magic
-            //Speed -= GetMoveCost(pathToTravel[i - 1], pathToTravel[i]);
-
-        }
-        currentTravelLocation = null;
-
-        a = c;
-        b = location.Position;
-        c = b;
-        Grid.IncreaseVisibility(location, visionRange);
-        for (; t < 1f; t += Time.deltaTime * travelSpeed)
-        {
-            transform.localPosition = Bezier.GetPoint(a, b, c, t);
-            Vector3 d = Bezier.GetDerivative(a, b, c, t);
-            d.y = 0f;
-            transform.localRotation = Quaternion.LookRotation(d);
-            yield return null;
-        }
-
-        //Debug.Log(Grid.GetCell(location.Position).ItemLevel); // Milan interakcja
-        if(Grid.GetCell(location.Position).ItemLevel != 0)
-        {
-            Grid.GetCell(location.Position).interableObject.FinallySomeoneFoundMe();
-            Grid.GetCell(location.Position).ItemLevel = 0;
-        }
-
-
-        transform.localPosition = location.Position;
-        orientation = transform.localRotation.eulerAngles.y;
-        ListPool<HexCell>.Add(pathToTravel);
-        pathToTravel = null;
-        
-    }
-
-    IEnumerator LookAt(Vector3 point)
-    {
-        point.y = transform.localPosition.y;
-        Quaternion fromRotation = transform.localRotation;
-        Quaternion toRotation =
-            Quaternion.LookRotation(point - transform.localPosition);
-        float angle = Quaternion.Angle(fromRotation, toRotation);
-        if(angle > 0f)
-        {
-            float speed = rotationSpeed / angle;
-
-            for (float t = Time.deltaTime * speed; t < 1f; t += Time.deltaTime * speed)
-            {
-                transform.localRotation =
-                    Quaternion.Slerp(fromRotation, toRotation, t);
-                yield return null;
-            }
-        }
-        
-
-        transform.LookAt(point);
-        orientation = transform.localRotation.eulerAngles.y;
-    }
-
 
     public HexCell Location
     {
@@ -171,10 +63,123 @@ public class HexUnit : MonoBehaviour
         set
         {
             orientation = value;
-            
+
             transform.localRotation = Quaternion.Euler(0f, value, 0f);
         }
     }
+
+
+    public int VisionRange
+    {
+        get
+        {
+            return visionRange;
+        }
+    }
+
+    #endregion
+
+    void OnEnable()
+    {
+        if (location)
+        {
+            transform.localPosition = location.Position;
+            if (currentTravelLocation)
+            {
+                Grid.IncreaseVisibility(location, visionRange);
+                Grid.DecreaseVisibility(currentTravelLocation, visionRange);
+                currentTravelLocation = null;
+            }
+        }
+    }
+
+    IEnumerator TravelPath()
+    {
+        Vector3 a, b, c = pathToTravel[0].Position;
+        if(pathToTravel.Count>1) yield return LookAt(pathToTravel[1].Position);
+        else yield return LookAt(pathToTravel[0].Position);
+
+        Grid.DecreaseVisibility(
+            currentTravelLocation ? currentTravelLocation : pathToTravel[0], 
+            visionRange);
+
+        float t = Time.deltaTime * travelSpeed;
+
+        //move unit (with updating visibility)
+        for (int i = 1; i < pathToTravel.Count; i++)
+        {
+            currentTravelLocation = pathToTravel[i];
+            a = c;
+            b = pathToTravel[i - 1].Position;
+            c = (b + currentTravelLocation.Position) * 0.5f;
+            Grid.IncreaseVisibility(pathToTravel[i], visionRange);
+            for (; t < 1f; t += Time.deltaTime * travelSpeed)
+            {
+                transform.localPosition = Bezier.GetPoint(a, b, c, t);
+                Vector3 d = Bezier.GetDerivative(a, b, c, t);
+                d.y = 0f;
+                transform.localRotation = Quaternion.LookRotation(d);
+                yield return null;
+            }
+            Grid.DecreaseVisibility(pathToTravel[i], visionRange);
+            t -= 1f;
+
+            //Some glorious movement magic
+            //Speed -= GetMoveCost(pathToTravel[i - 1], pathToTravel[i]);
+
+            if (currentTravelLocation != this.location)
+                InteractWithSurroundings(currentTravelLocation);
+
+        }
+        currentTravelLocation = null;
+
+        //increase visibility at unit's final position:
+        a = c;
+        b = location.Position;
+        c = b;
+        Grid.IncreaseVisibility(location, visionRange);
+        for (; t < 1f; t += Time.deltaTime * travelSpeed)
+        {
+            transform.localPosition = Bezier.GetPoint(a, b, c, t);
+            Vector3 d = Bezier.GetDerivative(a, b, c, t);
+            d.y = 0f;
+            transform.localRotation = Quaternion.LookRotation(d);
+            yield return null;
+        }
+
+        //cleanup:
+        transform.localPosition = location.Position;
+        orientation = transform.localRotation.eulerAngles.y;
+        ListPool<HexCell>.Add(pathToTravel);
+        pathToTravel = null;
+
+        InteractWithSurroundings(location);
+    }
+
+    IEnumerator LookAt(Vector3 point)
+    {
+        point.y = transform.localPosition.y;
+        Quaternion fromRotation = transform.localRotation;
+        Quaternion toRotation =
+            Quaternion.LookRotation(point - transform.localPosition);
+        float angle = Quaternion.Angle(fromRotation, toRotation);
+        if(angle > 0f)
+        {
+            float speed = rotationSpeed / angle;
+
+            for (float t = Time.deltaTime * speed; t < 1f; t += Time.deltaTime * speed)
+            {
+                transform.localRotation =
+                    Quaternion.Slerp(fromRotation, toRotation, t);
+                yield return null;
+            }
+        }
+        
+
+        transform.LookAt(point);
+        orientation = transform.localRotation.eulerAngles.y;
+    }
+
 
     public void ValidateLocation()
     {
@@ -207,6 +212,26 @@ public class HexUnit : MonoBehaviour
         if (edgeType == HexEdgeType.Cliff) return -1;
         if (edgeType == HexEdgeType.Slope) return 3;
         return 1;
+    }
+
+    /// <summary>
+    /// Called when HexUnit reaches its destination HexCell, and while travelling
+    /// </summary>
+    void InteractWithSurroundings(HexCell surroundings)
+    {
+        //Debug.Log($"{surroundings.coordinates.X}-{surroundings.coordinates.Y}-{surroundings.coordinates.Z}");
+        if (surroundings.ItemLevel != 0)
+        {
+            if (surroundings.ItemLevel == -1)
+            {
+                GameManager.instance.OnFinish(this);
+            }
+            else
+            {
+                surroundings.interableObject.FinallySomeoneFoundMe();
+                surroundings.ItemLevel = 0;
+            }
+        }
     }
 
 

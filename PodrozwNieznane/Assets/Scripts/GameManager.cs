@@ -14,10 +14,7 @@ using Random = System.Random;
 //TODO: Wycentrowanie kamery na pionku (UI/Camera)
 //TODO: Zablokowanie dostepu do pionka drugiego gracza(?)
 //TODO: Sprawdzenie warunkow zwyciestwa/porazki
-//TODO: Zmiana aktywnego gracza i przekazanie tury
-//TODO: Usuniecie pionkow graczy
-//TODO: Generowanie mapy
-//TODO: Przypisanie pionkow
+//TODO: Liczenie punktów
 //TODO: Dokończenie interakcji z obiektami
 //TODO: Usuwanie obiektów interaktywnych
 //TODO: Usprawnić metodę losowania wydarzeń/skrzynek/przeciwników
@@ -32,6 +29,7 @@ public class GameManager : MonoBehaviour
 
     //referencje
     public HexGrid hexGrid;                 //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
+    public HexGameUI hexGameUI;
     public static GameManager instance;
 
 
@@ -97,10 +95,26 @@ public class GameManager : MonoBehaviour
         activePlayer = (activePlayer + 1) % 2;
         players[activePlayer].HexUnit.Speed = players[activePlayer].Character.SpeedValue();
         hexMapCamera.SetCameraPosition(players[activePlayer].HexUnit.Location.Position.x, players[activePlayer].HexUnit.Location.Position.z, players[activePlayer].HexUnit.Location.Position);
+        hexGameUI.SetSelectedUnit(players[activePlayer].HexUnit);
     }
 
-    public bool IsItMyUnit(HexUnit unit)
+    public void NextRound()
+    {
+        hexGrid.CreateMap();
+        InitializePlayerUnit();
+        //TODO: zwrócić uwagę czyja ma być kolej
+        hexGameUI.SetSelectedUnit(players[activePlayer].HexUnit);
+    }
+
+    public bool IsActiveUnit(HexUnit unit)
     {
         return players[activePlayer].HexUnit == unit;
     }
+
+    public void OnFinish(HexUnit unit)
+    {
+        //TODO: unit earns a point
+        NextRound();
+    }
+
 }
