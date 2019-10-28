@@ -36,8 +36,9 @@ public class HexMapFeatureGenerator: MonoBehaviour
 
         DistributePlayers();
         DistributeItems();
-        PutEndPoint();
         DistributePlantLevels(generator.GetPlantLevels());
+
+        PutEndPoint();
 
         ListPool<HexCell>.Add(playersLocations);
         ListPool<HexCell>.Add(itemsLocations);
@@ -192,18 +193,15 @@ public class HexMapFeatureGenerator: MonoBehaviour
 
     void PutEndPoint()
     {
-        //temporary location: lower left corner of the map
         HexCell cell;
-        int index = 1;
         do
         {
-            cell = grid.GetCell(index++);//largestFlatGround[Random.Range(0, largestFlatGround.Count)];
+            cell = largestFlatGround[Random.Range(0, largestFlatGround.Count)];
         }
         while (!(cell.Explorable && cell.Walkable) || itemsLocations.Contains(cell) || playersLocations.Contains(cell));
 
+        cell.PlantLevel = 0;
         cell.ItemLevel = -1;
-        //cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);// TODO: endPoint prefab
-        //cell.interableObject.transform.SetParent(grid.transform);
     }
 
 

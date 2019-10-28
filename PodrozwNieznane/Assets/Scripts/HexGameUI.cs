@@ -123,7 +123,7 @@ public class HexGameUI : MonoBehaviour
                 for (var i = 0; i < path.Count - 1; i++ )
                 {
                     selectedUnit.Speed -= selectedUnit.GetMoveCost(path[i], path[i+1]);
-                    Debug.Log(selectedUnit.Speed);
+                    Debug.Log($"speed = {selectedUnit.Speed}");
                 }
                 selectedUnit.Travel(path);
                 grid.ClearPath();

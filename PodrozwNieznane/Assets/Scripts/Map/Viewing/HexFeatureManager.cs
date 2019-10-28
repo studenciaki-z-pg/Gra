@@ -9,6 +9,7 @@ using UnityEngine;
 public class HexFeatureManager : MonoBehaviour
 {
     public HexFeatureCollection[] urbanCollections, itemCollections, plantCollections, chestCollections, strengthCollections, intelligenceCollections, agilityCollections;
+    public Transform portalPiecePrefab;
     Transform container;
 
 
@@ -66,7 +67,7 @@ public class HexFeatureManager : MonoBehaviour
                 Instantiating(collection.Pick(hash.a), position, 360f * hash.e);
                 break;
             case -1:
-                //TODO: visualise endPoint
+                //middle of portal
                 break;
             default:
                 break;
@@ -76,6 +77,13 @@ public class HexFeatureManager : MonoBehaviour
     public void AddPlantOrUrbanFeature(HexCell cell, Vector3 position)
     {
         HexHash hash = HexMetrics.SampleHashGrid(position);
+        if (cell.ItemLevel == -1)
+        {
+            Instantiating(portalPiecePrefab, position, 0, false);
+            //Instantiating(portalPiecePrefab, position, 360f * hash.e, false); //random rotation
+            return;
+        }
+        
         Transform urbanPrefab = PickPrefab(urbanCollections, cell.UrbanLevel, hash.a, hash.d);
         Transform plantPrefab = PickPrefab(plantCollections, cell.PlantLevel, hash.b, hash.d);
         Transform winningPrefab = null;
@@ -100,11 +108,11 @@ public class HexFeatureManager : MonoBehaviour
         Instantiating(winningPrefab, position, 360f * hash.e);
     }
 
-    void Instantiating(Transform prefab, Vector3 position, float rotation)
+    void Instantiating(Transform prefab, Vector3 position, float rotation, bool doPerturb = true)
     {
         Transform instance = Instantiate(prefab);
         position.y += instance.localScale.y * 0.5f;
-        instance.localPosition = HexMetrics.Perturb(position);
+        instance.localPosition = doPerturb ? HexMetrics.Perturb(position) : position;
         instance.localRotation = Quaternion.Euler(0f, rotation, 0f);
         instance.SetParent(container, false);
     }

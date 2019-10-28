@@ -14,10 +14,7 @@ using Random = System.Random;
 //TODO: Wycentrowanie kamery na pionku (UI/Camera)
 //TODO: Zablokowanie dostepu do pionka drugiego gracza(?)
 //TODO: Sprawdzenie warunkow zwyciestwa/porazki
-//TODO: liczenie punktów
-//TODO: Zmiana aktywnego gracza i przekazanie tury  X
-//TODO: Usuniecie pionkow graczy    X
-//TODO: Generowanie mapy            X
+//TODO: Liczenie punktów
 //TODO: Dokończenie interakcji z obiektami
 //TODO: Usuwanie obiektów interaktywnych
 //TODO: Usprawnić metodę losowania wydarzeń/skrzynek/przeciwników
