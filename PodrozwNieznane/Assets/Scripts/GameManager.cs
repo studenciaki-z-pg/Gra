@@ -10,8 +10,7 @@ using Color = UnityEngine.Color;
 using Random = System.Random;
 
 //TODO: Wyswietlenie komunikatu o turze na ekranie (UI/Camera)
-//TODO: Handler do przycisku konca tury
-//TODO: Zmiana statystyk interface'u (UI/Camera)
+//TODO: Ujednolicenie grafiki ekwipunku (UI/Camera)
 //TODO: Wycentrowanie kamery na pionku (UI/Camera)
 //TODO: Zablokowanie dostepu do pionka drugiego gracza(?)
 //TODO: Sprawdzenie warunkow zwyciestwa/porazki
@@ -19,10 +18,18 @@ using Random = System.Random;
 //TODO: Zmiana aktywnego gracza i przekazanie tury  X
 //TODO: Usuniecie pionkow graczy    X
 //TODO: Generowanie mapy            X
-//TODO: Przypisanie pionkow         X
+//TODO: Dokończenie interakcji z obiektami
+//TODO: Usuwanie obiektów interaktywnych
+//TODO: Usprawnić metodę losowania wydarzeń/skrzynek/przeciwników
+//TODO: Losowanie przedmiotów do skrzynek
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] Character char1;
+    [SerializeField] Character char2;
+    [SerializeField] HexMapCamera hexMapCamera;
+
+
     //referencje
     public HexGrid hexGrid;                 //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
     public HexGameUI hexGameUI;
@@ -36,6 +43,7 @@ public class GameManager : MonoBehaviour
 
     public int activePlayer;
     public Player[] players = new Player[2];
+
 
 
     //struktury
@@ -55,19 +63,19 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         //Inicjalizacja graczy
-        players[0].Character = new Character();
-        players[1].Character = new Character();
+        players[0].Character = char1;
+        players[1].Character = char2;
+
         players[0].color = Color.white;
         players[1].color = Color.black;
-
-        //Statystyki - ustawienia -> Ustawia sie tylko raz podczas inicjalizacji
-
+        
 
         //Pionek - ustawienia -> Ustawia sie przy kazdorazowym przejsciu mapy, stad oddzielna funkcja
         InitializePlayerUnit();
 
         //Rozpoczecie gry
         activePlayer = 0;
+        hexMapCamera.SetCameraPosition(players[activePlayer].HexUnit.Location.Position.x, players[activePlayer].HexUnit.Location.Position.z, players[activePlayer].HexUnit.Location.Position);
     }
 
     public void InitializePlayerUnit()
@@ -75,10 +83,10 @@ public class GameManager : MonoBehaviour
         //przypisanie pionka
         players[0].HexUnit = hexGrid.units[0];
         players[1].HexUnit = hexGrid.units[1];
-
+        
         //przypisania poczatkowej predkosci(punkty ruchu) w oparciu o statystyki
-        players[0].HexUnit.Speed = 7;
-        players[1].HexUnit.Speed = 7;
+        players[0].HexUnit.Speed = players[activePlayer].Character.SpeedValue();
+        players[1].HexUnit.Speed = players[activePlayer].Character.SpeedValue();
 
         //ustawienie kolorow
         players[0].HexUnit.GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", players[0].color);
@@ -88,7 +96,8 @@ public class GameManager : MonoBehaviour
     public void NextPlayer()
     {
         activePlayer = (activePlayer + 1) % 2;
-        players[activePlayer].HexUnit.Speed = 7; //TODO: Uzaleznic od statystyk
+        players[activePlayer].HexUnit.Speed = players[activePlayer].Character.SpeedValue();
+        hexMapCamera.SetCameraPosition(players[activePlayer].HexUnit.Location.Position.x, players[activePlayer].HexUnit.Location.Position.z, players[activePlayer].HexUnit.Location.Position);
         hexGameUI.SetSelectedUnit(players[activePlayer].HexUnit);
     }
 

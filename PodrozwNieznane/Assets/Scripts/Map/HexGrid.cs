@@ -365,11 +365,14 @@ public class HexGrid : MonoBehaviour
         {
             moveCost += unit.GetMoveCost(path[i], path[i + 1]);
 
-            //specjalna sytuacja(wchdozenie na zbocze gdy ma sie 2p ruchu)
-            if ((movementPoints == 2 && unit.GetMoveCost(path[i], path[i + 1]) == 3))
+            /*//specjalna sytuacja(wchdozenie na zbocze gdy ma sie 2p ruchu)
+            if (((movementPoints - moveCost) == -1 && unit.GetMoveCost(path[i], path[i + 1]) == 3))
             {
-                continue;
-            }
+                Debug.Log("cliffing: " + moveCost);
+                i++;
+                path.RemoveRange(i, path.Count - i);
+                return path;
+            }*/
 
             //standardowa sytuacja
             if ((movementPoints - moveCost) < 0)

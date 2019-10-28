@@ -158,28 +158,28 @@ public class HexMapFeatureGenerator: MonoBehaviour
                 case 1:
                     cell.ItemLevel = 1;
                     cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
-                    Debug.Log("1");
+                    Debug.Log("1"); //TO DELETE
                     break;
                 case 2:
                     cell.ItemLevel = 2;
                     cell.interableObject = Instantiate<IntelligenceTest>(cell.IntelligenceTestPrefab);
-                    Debug.Log("2");
+                    Debug.Log("2"); //TO DELETE
                     break;
                 case 3:
                     cell.ItemLevel = 3;
                     cell.interableObject = Instantiate<StrengthTest>(cell.StrengthTestPrefab);
-                    Debug.Log("3");
+                    Debug.Log("3"); //TO DELETE
                     break;
                 case 4:
                     cell.ItemLevel = 4;
                     cell.interableObject = Instantiate<AgilityTest>(cell.AgilityTestPrefab);
-                    Debug.Log("4");
+                    Debug.Log("4"); //TO DELETE
                     break;
                 case 5:
                 default:
                     cell.ItemLevel = 5;
                     cell.interableObject = Instantiate<InterableObject>(cell.ItemChestPrefab); //wydarzenie
-                    Debug.Log("5");
+                    Debug.Log("5"); //TO DELETE
                     break;
             }
             cell.interableObject.transform.SetParent(grid.transform);
