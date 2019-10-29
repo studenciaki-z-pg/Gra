@@ -53,6 +53,11 @@ public class Character : MonoBehaviour
         }
     }
 
+    public Inventory GetInventory()
+    {
+        return inventory;
+    }
+
     private void Awake()
     {
         for (int i = 0; i < statPanel.Length; i++)

@@ -4,33 +4,70 @@ using UnityEngine;
 using System.IO;
 using UnityEditor;
 
-public class ItemList : MonoBehaviour
+public class ItemList
 {
-    [SerializeField] string path;
+    private string path = "Items";
 
     private string finallPath;
-    public ArrayList items = new ArrayList();
+    public static EquippableItem[] ListOfItems;
 
-    // Start is called before the first frame update
-    void Start()
+    // Tworzenie listy przedmiotów wybranej ścieżce
+    public ItemList()
     {
-        string[] finallPath = Directory.GetFiles(Application.dataPath + path);
-        
-        foreach (string itemName in finallPath)
+        ArrayList arrayList = new ArrayList();
+        string[] fileEntries = Directory.GetFiles(Application.dataPath + "\\" + path);
+        foreach (string fileName in fileEntries)
         {
-            string tmp = itemName.Replace('\\', '/');
-            int index = tmp.LastIndexOf("/");
-            string localPath = "Assets" + path;
+            int index = fileName.LastIndexOf("\\");
+            string localPath = "Assets\\" + path;
 
             if (index > 0)
-                localPath += tmp.Substring(index);
+                localPath += fileName.Substring(index);
             Object item = AssetDatabase.LoadAssetAtPath(localPath, typeof(EquippableItem));
             if (item != null)
-            {
-                items.Add(item);
-                //Debug.Log(item.name.ToString());
-            }
+                arrayList.Add(item);
+        }
+
+        ListOfItems = new EquippableItem[arrayList.Count];
+        for (int i = 0; i < arrayList.Count; i++)
+        {
+            ListOfItems[i] = (EquippableItem)arrayList[i];
+            //Debug.Log(ListOfItems[i].name); //TO DELETE
         }
     }
+
+    public ItemList(string anotherPath)
+    {
+        ArrayList arrayList = new ArrayList();
+        string[] fileEntries = Directory.GetFiles(Application.dataPath + "\\" + anotherPath);
+        foreach (string fileName in fileEntries)
+        {
+            int index = fileName.LastIndexOf("\\");
+            string localPath = "Assets\\" + anotherPath;
+
+            if (index > 0)
+                localPath += fileName.Substring(index);
+            Object item = AssetDatabase.LoadAssetAtPath(localPath, typeof(EquippableItem));
+            if (item != null)
+                arrayList.Add(item);
+        }
+
+        ListOfItems = new EquippableItem[arrayList.Count];
+        for (int i = 0; i < arrayList.Count; i++)
+        {
+            ListOfItems[i] = (EquippableItem)arrayList[i];
+            //Debug.Log(ListOfItems[i].name); //TO DELETE
+        }
+    }
+
+        public EquippableItem[] getItemList()
+    {
+        return ListOfItems;
+    }
     
+    public void setPath(string newPath)
+    {
+        path = newPath;
+    }
+
 }

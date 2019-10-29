@@ -25,8 +25,6 @@ public class ItemTooltip : MonoBehaviour
         AddStat(item.IntelligenceBonus, "Intelligence");
         AddStat(item.AgilityBonus, "Agility");
         AddStat(item.VitalityBonus, "Vitality");
-        AddStat(item.DexterityBonus, "Dexterity");
-        AddStat(item.LuckBonus, "Luck");
 
         ItemStatText.text = stringBuilder.ToString();
 

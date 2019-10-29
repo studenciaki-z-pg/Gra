@@ -5,33 +5,27 @@ public class ItemChest : InterableObject
 {
     [SerializeField] EquippableItem item;
 
-    private ItemList ItemList;
-
     ItemChest itemChestPrefab;
 
     private void Start()
     {
-        ItemList = FindObjectOfType<ItemList>();
+        item = RandomItemFromList();
     }
 
     override
     public void FinallySomeoneFoundMe()
     {
-        //RandomItemFromList();
-        //Debug.Log("Your princess is in another, another castle. But take that "+ item.name +" maybe it will be helpful.");
+        Debug.Log("Your princess is in another, another castle. But take that "+ item.name +" maybe it will be helpful.");
+        GameManager.instance.players[GameManager.instance.activePlayer].Character.GetInventory().AddItem(item);
     }
 
 
-    public void RandomItemFromList()
+    public EquippableItem RandomItemFromList()
     {
-        item = new EquippableItem();
+        EquippableItem luckyOne = new EquippableItem();
         Random rand = new Random();
-        //item = ItemList.items[rand.Next(ItemList.items.Count)];
-
-    }
-    public void RandomItem()
-    {
-
+        luckyOne = GameManager.instance.ListOfItems[rand.Next(GameManager.instance.ListOfItems.Length)];
+        return luckyOne;
     }
 
 }

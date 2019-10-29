@@ -11,12 +11,9 @@ using Random = System.Random;
 
 //TODO: Wyswietlenie komunikatu o turze na ekranie (UI/Camera)
 //TODO: Ujednolicenie grafiki ekwipunku (UI/Camera)
-//TODO: Wycentrowanie kamery na pionku (UI/Camera)
 //TODO: Zablokowanie dostepu do pionka drugiego gracza(?)
 //TODO: Sprawdzenie warunkow zwyciestwa/porazki
 //TODO: Liczenie punktów
-//TODO: Dokończenie interakcji z obiektami
-//TODO: Usuwanie obiektów interaktywnych
 //TODO: Usprawnić metodę losowania wydarzeń/skrzynek/przeciwników
 //TODO: Losowanie przedmiotów do skrzynek
 
@@ -30,6 +27,7 @@ public class GameManager : MonoBehaviour
     //referencje
     public HexGrid hexGrid;                 //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
     public HexGameUI hexGameUI;
+    public EquippableItem[] ListOfItems;
     public static GameManager instance;
 
 
@@ -62,6 +60,8 @@ public class GameManager : MonoBehaviour
         //Inicjalizacja graczy
         players[0].Character = char1;
         players[1].Character = char2;
+        ItemList itemList = new ItemList();
+        ListOfItems = itemList.getItemList();
 
         players[0].color = Color.white;
         players[1].color = Color.black;
