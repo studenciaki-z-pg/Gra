@@ -325,7 +325,7 @@ public class HexGrid : MonoBehaviour
         currentPathFrom = fromCell;
         currentPathTo = toCell;
         currentPathExists = Search(fromCell, toCell, unit); //checking if path exist
-        ShowPath(unit.Speed);//movement points
+        ShowPath(unit?.Speed ?? HexUnit.initSpeed);//movement points
     }
 
     public List<HexCell> GetPath()
@@ -426,7 +426,7 @@ public class HexGrid : MonoBehaviour
 
     bool Search(HexCell fromCell, HexCell toCell, HexUnit unit)
     {
-        int speed = unit.Speed;
+        //int speed = unit.Speed;
         BeginSearch(fromCell);
         while (!EndOfSearch())
         {
@@ -437,7 +437,7 @@ public class HexGrid : MonoBehaviour
                 return true;
             }
 
-            int currentTurn = (current.Distance)/(speed+1);
+            //int currentTurn = (current.Distance)/(speed+1);
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
                 HexCell neighbor = GetNeighborToSearch(current, d);

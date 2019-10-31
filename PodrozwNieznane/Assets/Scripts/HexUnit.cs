@@ -17,19 +17,11 @@ public class HexUnit : MonoBehaviour
     public HexGrid Grid { get; set; }
     public static HexUnit unitPrefab;
 
-    public int speed = 7;
+    public static int initSpeed = 7;
 
     #region Properties
 
-    public int Speed
-    {
-        get => speed;
-        set
-        {
-            if (speed != value)
-                speed = value;
-        }
-    }
+    public int Speed { get; set; } = initSpeed;
 
     public HexCell Location
     {
