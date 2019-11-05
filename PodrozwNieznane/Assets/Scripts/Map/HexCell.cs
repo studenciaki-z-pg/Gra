@@ -214,7 +214,7 @@ public class HexCell : MonoBehaviour
     }*/
     public void SetLabel (string text)
     {
-        UnityEngine.UI.Text label = uiRect.GetComponent<Text>();
+        UnityEngine.UI.Text label = uiRect?.GetComponent<Text>();
         label.text = text;
     }
 
