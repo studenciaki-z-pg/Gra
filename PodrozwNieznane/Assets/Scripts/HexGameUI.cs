@@ -130,8 +130,13 @@ public class HexGameUI : MonoBehaviour
         }
     }
 
-    public void EndTurn()
+    public void EndTurn()//exitState()
     {
+        //zablokuj sciezkowanie i pionka
+        grid.ClearPath();
+        selectedUnit = null;
+
+        //zakoncz ture/zmien gracza
         GameManager.instance.NextPlayer();
     }
 }

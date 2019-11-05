@@ -99,7 +99,9 @@ public class HexUnit : MonoBehaviour
             yield return null;
         }
 
-        //Debug.Log(Grid.GetCell(location.Position).ItemLevel); // Milan interakcja
+        //Debug.Log(Grid.GetCell(location.Position).ItemLevel); // Milan interakcja ->>>>>>>>>>>>> przenies do glorious movement magic (up)
+        //                                                                                          bo ten fragment kodu odpala się po calym ruchu a nie w trakcie,
+        //                                                                                           chyba, ze tak mialo byc.
         if(Grid.GetCell(location.Position).ItemLevel != 0)
         {
             Grid.GetCell(location.Position).interableObject.FinallySomeoneFoundMe();
