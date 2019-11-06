@@ -6,10 +6,9 @@ using UnityEngine.UI;
 public class MapPicker : MonoBehaviour
 {
 
-    private int localMapChoice;
+    private MapType localMapChoice = MapType.CLASSIC;
 
-
-    public int MapChoice { get; set; } = 5;
+    public MapType MapChoice { get; set; }
 
 
     private void OnValidate()
@@ -17,9 +16,14 @@ public class MapPicker : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void ShowPicker()
+    public void ShowPicker(MapType initValue)
     {
         gameObject.SetActive(true);
+
+        //Set checkmark on the initial value:
+        string ToggleObjectName = "Map" + ((int)initValue + 1).ToString();
+        Toggle ToggleObject = GameObject.Find(ToggleObjectName).GetComponent<Toggle>();
+        ToggleObject.isOn = true;
     }
 
     public void HidePicker()
@@ -38,6 +42,11 @@ public class MapPicker : MonoBehaviour
 
 
     public void MapChoose(int i)
+    {
+        MapChoose((MapType)i);
+    }
+
+    public void MapChoose(MapType i)
     {
         localMapChoice = i;
     }

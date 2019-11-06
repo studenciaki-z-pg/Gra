@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Experimental.PlayerLoop;
 using UnityEngine.UI;
 using Color = UnityEngine.Color;
-using Random = System.Random;
+using Random = UnityEngine.Random;
 
 //TODO: Wyswietlenie komunikatu o turze na ekranie (UI/Camera)
 //TODO: Ujednolicenie grafiki ekwipunku (UI/Camera)
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
 
     //referencje
-    public HexGrid hexGrid;                 //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
+    public HexGrid hexGrid;
     public HexGameUI hexGameUI;
     public EquippableItem[] ListOfItems;
     public static GameManager instance;
@@ -58,6 +58,11 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
+        //Inicjalizacja mapy
+        MapType initType = (MapType)Random.Range(0, Enum.GetValues(typeof(MapType)).Length);
+        hexGrid.mapGenerator.SetLandscape(initType);
+        hexGrid.CreateMap();
 
         //Inicjalizacja graczy
         players[0].Character = char1;
@@ -102,10 +107,7 @@ public class GameManager : MonoBehaviour
 
     public void NextRound()
     {
-        int mapChoice = mapPicker.MapChoice;
-        Debug.Log($"i have the new orders - map is {mapChoice}");
-        hexGrid.mapGenerator.SetLandscape(mapChoice);
-
+        hexGrid.mapGenerator.SetLandscape(mapPicker.MapChoice);
         hexGrid.CreateMap();
         InitializePlayerUnit();
         //TODO: zwrócić uwagę czyja ma być kolej
@@ -121,7 +123,7 @@ public class GameManager : MonoBehaviour
     {
         //TODO: unit earns a point
 
-        mapPicker.ShowPicker();
+        mapPicker.ShowPicker(hexGrid.mapGenerator.GetLandscapeType());
         //NextRound() is caled inside MapPicker
 
         //TODO: make background inactive?

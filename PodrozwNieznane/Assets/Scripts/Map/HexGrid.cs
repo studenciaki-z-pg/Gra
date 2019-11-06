@@ -41,8 +41,6 @@ public class HexGrid : MonoBehaviour
         HexUnit.unitPrefab = unitPrefab;
         cellShaderData = gameObject.AddComponent<HexCellShaderData>();
         cellShaderData.Grid = this;
-        mapGenerator.SetLandscape(0);
-        CreateMap();
     }
 
 
@@ -185,26 +183,10 @@ public class HexGrid : MonoBehaviour
 
     #region Cell getters
 
-    //Changing Touching into getting (bitches) <3
-    //I'm not longer a weirdo xD
-    /*void TouchCell(Vector3 position)//Color cell if added color
-    {
-        position = transform.InverseTransformPoint(position);
-        HexCoordinates coordinates = HexCoordinates.FromPosition(position);
-        Debug.Log("touched at " + coordinates.ToString());
-
-        int index = coordinates.X + coordinates.Z * width + coordinates.Z / 2;
-        HexCell cell = cells[index];
-        //cell.color = touchedColor;
-        hexMesh.Triangulate(cells);
-    }*/
-
-
     public HexCell GetCell(Vector3 position)
     {
         position = transform.InverseTransformPoint(position);
         HexCoordinates coordinates = HexCoordinates.FromPosition(position);
-        //Debug.Log("Got you babe: " + coordinates.ToString());     ///////////////////////////////////
 
         int index = coordinates.X + coordinates.Z * cellCountX + coordinates.Z / 2;
         HexCell cell = cells[index];
