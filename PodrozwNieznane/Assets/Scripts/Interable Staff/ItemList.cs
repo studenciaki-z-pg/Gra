@@ -32,7 +32,6 @@ public class ItemList
         for (int i = 0; i < arrayList.Count; i++)
         {
             ListOfItems[i] = (EquippableItem)arrayList[i];
-            //Debug.Log(ListOfItems[i].name); //TO DELETE
         }
     }
 
@@ -56,7 +55,6 @@ public class ItemList
         for (int i = 0; i < arrayList.Count; i++)
         {
             ListOfItems[i] = (EquippableItem)arrayList[i];
-            //Debug.Log(ListOfItems[i].name); //TO DELETE
         }
     }
 

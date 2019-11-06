@@ -2294,7 +2294,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Map6 name (special) '
+  m_Text: Na pewno nie wyjdzie valid
 --- !u!222 &160179414
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4261,7 +4261,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Map2 name
+  m_Text: Zielona
 --- !u!222 &314714210
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7696,7 +7696,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Map3 name (island) '
+  m_Text: Archipelag ??
 --- !u!222 &696433653
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11140,7 +11140,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Map 1 name
+  m_Text: Klasyczna
 --- !u!222 &987864175
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14197,7 +14197,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Map4 name (mout) '
+  m_Text: "G\xF3rzysta"
 --- !u!222 &1225261523
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20567,7 +20567,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Map5 name (plain) '
+  m_Text: Sawanna
 --- !u!222 &1716287252
 CanvasRenderer:
   m_ObjectHideFlags: 0
