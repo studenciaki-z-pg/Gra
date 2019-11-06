@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Character char1;
     [SerializeField] Character char2;
     [SerializeField] HexMapCamera hexMapCamera;
+    [SerializeField] MapPicker mapPicker;
 
 
     //referencje
@@ -57,6 +58,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+
         //Inicjalizacja graczy
         players[0].Character = char1;
         players[1].Character = char2;
@@ -100,6 +102,10 @@ public class GameManager : MonoBehaviour
 
     public void NextRound()
     {
+        int mapChoice = mapPicker.MapChoice;
+        Debug.Log($"i have the new orders - map is {mapChoice}");
+        hexGrid.mapGenerator.SetLandscape(mapChoice);
+
         hexGrid.CreateMap();
         InitializePlayerUnit();
         //TODO: zwrócić uwagę czyja ma być kolej
@@ -114,7 +120,11 @@ public class GameManager : MonoBehaviour
     public void OnFinish(HexUnit unit)
     {
         //TODO: unit earns a point
-        NextRound();
+
+        mapPicker.ShowPicker();
+        //NextRound() is caled inside MapPicker
+
+        //TODO: make background inactive?
     }
 
 }
