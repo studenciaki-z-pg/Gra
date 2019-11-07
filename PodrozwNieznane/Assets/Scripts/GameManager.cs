@@ -13,7 +13,6 @@ using Random = UnityEngine.Random;
 //TODO: Ujednolicenie grafiki ekwipunku (UI/Camera)
 //TODO: Zablokowanie dostepu do pionka drugiego gracza(?)
 //TODO: Sprawdzenie warunkow zwyciestwa/porazki
-//TODO: Liczenie punktów
 //TODO: Usprawnić metodę losowania wydarzeń/skrzynek/przeciwników
 //TODO: Losowanie przedmiotów do skrzynek
 
@@ -121,10 +120,8 @@ public class GameManager : MonoBehaviour
 
     public void OnFinish(HexUnit unit)
     {
-        //TODO: unit earns a point
-
-        mapPicker.ShowPicker(hexGrid.mapGenerator.GetLandscapeType());
-        //NextRound() is caled inside MapPicker
+        players[activePlayer].Character.LevelUp();
+        mapPicker.ShowPicker(hexGrid.mapGenerator.GetLandscapeType()); //NextRound() is caled inside MapPicker
 
         //TODO: make background inactive?
     }
