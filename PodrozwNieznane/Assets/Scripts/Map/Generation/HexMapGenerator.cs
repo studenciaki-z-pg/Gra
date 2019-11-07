@@ -18,6 +18,8 @@ public class HexMapGenerator : MonoBehaviour
     readonly int erosionTriggerThreshold = 2;
 
     bool invertBorder = false;
+
+    MapType mapType;
     
 
     [Range(0f, 0.5f)]
@@ -67,6 +69,11 @@ public class HexMapGenerator : MonoBehaviour
     public int[] GetPlantLevels()
     {
         return this.plantLevels;
+    }
+
+    public MapType GetLandscapeType()
+    {
+        return mapType;
     }
 
     #endregion
@@ -337,84 +344,7 @@ public class HexMapGenerator : MonoBehaviour
             cell.Walkable = (cell.Elevation == uncrossableElevation ? false : true);
 
         }
-    }
-    
-    void SetPostGenerationFeatures()
-    {
-        ApplyMoistureDrivenFeatures(plantLevels);
-
-        int itemsAmount = 10;
-        for (int i = 0; i < itemsAmount; i++)
-        {
-            System.Random rand = new System.Random();
-            HexCell cell;
-            do
-            {
-                cell = grid.GetRandomCell();
-                switch (rand.Next(1, 5))
-                {
-                    case 1:
-                        cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
-                        break;
-                    case 2:
-                        cell.interableObject = Instantiate<StrengthTest>(cell.StrengthTestPrefab);
-                        break;
-                    case 3:
-                        cell.interableObject = Instantiate<AgilityTest>(cell.AgilityTestPrefab);
-                        break;
-                    case 4:
-                        cell.interableObject = Instantiate<IntelligenceTest>(cell.IntelligenceTestPrefab);
-                        break;
-                }
-                cell.ItemLevel = 1;
-            }
-            while (!(cell.Explorable && cell.Walkable));
-            
-        }
-    }
-
-    void ApplyMoistureDrivenFeatures(int[] plantLevel)
-    {
-        List<ClimateData> climate = (new HexMapClimate()).CreateClimate(cellCount, grid, elevationMaximum);
-        for (int i = 0; i < cellCount; i++)
-        {
-            HexCell cell = grid.GetCell(i);
-            float moisture = climate[i].moisture;
-            if (!cell.IsUnderwater)
-            {
-                if (moisture < 0.05f)
-                {
-                    //cell.TerrainTypeIndex = 4;
-                    cell.PlantLevel = plantLevel[0] % 4;
-                }
-                else if (moisture < 0.12f)
-                {
-                    //cell.TerrainTypeIndex = 3;
-                    cell.PlantLevel = plantLevel[1] % 4;
-                }
-                else if (moisture < 0.28f)
-                {
-                    //cell.TerrainTypeIndex = 2;
-                    cell.PlantLevel = plantLevel[2] % 4;
-                }
-                else if (moisture < 0.85f)
-                {
-                    //cell.TerrainTypeIndex = 1;
-                    cell.PlantLevel = plantLevel[3] % 4;
-                }
-                else
-                {
-                    //cell.TerrainTypeIndex = 1;
-                    cell.PlantLevel = plantLevel[4] % 4;
-                }
-            }
-            else
-            {
-                //cell.TerrainTypeIndex = 0;
-                cell.PlantLevel = plantLevel[5] % 4;
-            }
-        }
-    }
+    } 
     
     HexCell GetRandomCell()
     {
@@ -461,25 +391,26 @@ public class HexMapGenerator : MonoBehaviour
 
     #region Attributes management
 
-    public void SetLandscape(int choice)
+    public void SetLandscape(MapType choice)
     {
+        mapType = choice;
+
         invertBorder = false;
         switch (choice)
         {
-            case 0:
+            case MapType.CLASSIC:
                 ApplyAttributes(MapAttributes.Default()); break;
-            case 1:
+            case MapType.SWAMP:
                 ApplyAttributes(MapAttributes.GetSwampy()); break;
-            case 2:
+            case MapType.SHOAL:
                 ApplyAttributes(MapAttributes.GetIsland()); break;
-            case 3:
+            case MapType.MOUNTAIN:
                 ApplyAttributes(MapAttributes.GetMountain()); break;
-            case 4:
+            case MapType.PLAIN:
                 ApplyAttributes(MapAttributes.GetPlains()); break;
-            case 5:
+            case MapType.CANYON:
                 invertBorder = true;
                 ApplyAttributes(MapAttributes.GetCanyon()); break;
-            case 6:
             default:
                 ApplyAttributes(MapAttributes.Default()); break;
         }

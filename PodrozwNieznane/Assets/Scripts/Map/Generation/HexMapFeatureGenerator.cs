@@ -60,40 +60,6 @@ public class HexMapFeatureGenerator: MonoBehaviour
         }
     }
 
-    private bool IsReachable(HexCell fromCell, HexCell toCell)
-    {
-        grid.BeginSearch(fromCell);
-        while (!grid.EndOfSearch())
-        {
-            HexCell current = grid.GetCurrentlySearchedCell();
-
-            if (current == toCell) //end of search
-            {
-                return true;
-            }
-
-            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
-            {
-                HexCell neighbor = grid.GetNeighborToSearch(current, d);
-                if (neighbor == null || !neighbor.Walkable || !neighbor.Explorable)
-                    continue;
-
-                HexEdgeType edgeType = current.GetEdgeType(neighbor);
-                if (edgeType == HexEdgeType.Cliff)
-                {
-                    continue;
-                }
-
-                int distance = current.Distance + 1;
-
-                bool success = grid.PutNeighborToSearch(neighbor, distance, 0);
-                if (success == false)
-                    grid.UpdateNeighborToSearch(neighbor, distance);
-            }
-        }
-        return false;
-    }
-
     private List<HexCell> GetReachableGround(HexCell fromCell)
     {
         List<HexCell> reachableGroundCells = ListPool<HexCell>.Get();
@@ -159,28 +125,23 @@ public class HexMapFeatureGenerator: MonoBehaviour
                 case 1:
                     cell.ItemLevel = 1;
                     cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
-                    Debug.Log("1"); //TO DELETE
                     break;
                 case 2:
                     cell.ItemLevel = 2;
                     cell.interableObject = Instantiate<IntelligenceTest>(cell.IntelligenceTestPrefab);
-                    Debug.Log("2"); //TO DELETE
                     break;
                 case 3:
                     cell.ItemLevel = 3;
                     cell.interableObject = Instantiate<StrengthTest>(cell.StrengthTestPrefab);
-                    Debug.Log("3"); //TO DELETE
                     break;
                 case 4:
                     cell.ItemLevel = 4;
                     cell.interableObject = Instantiate<AgilityTest>(cell.AgilityTestPrefab);
-                    Debug.Log("4"); //TO DELETE
                     break;
                 case 5:
                 default:
                     cell.ItemLevel = 5;
                     cell.interableObject = Instantiate<InterableObject>(cell.ItemChestPrefab); //wydarzenie
-                    Debug.Log("5"); //TO DELETE
                     break;
             }
             cell.interableObject.transform.SetParent(grid.transform);
@@ -198,12 +159,29 @@ public class HexMapFeatureGenerator: MonoBehaviour
         {
             cell = largestFlatGround[Random.Range(0, largestFlatGround.Count)];
         }
-        while (!(cell.Explorable && cell.Walkable) || itemsLocations.Contains(cell) || playersLocations.Contains(cell));
+        while (!(cell.Explorable && cell.Walkable) || itemsLocations.Contains(cell) || playersLocations.Contains(cell) || 
+        !IsEvenDistanceToEndPoint(cell));
 
         cell.PlantLevel = 0;
         cell.ItemLevel = -1;
     }
 
+
+    private bool IsEvenDistanceToEndPoint(HexCell endPointCell)
+    {
+        int dist1 = playersLocations[0].coordinates.DistanceTo(endPointCell.coordinates);
+        if (dist1 < 8)
+            return false;
+
+        int dist2 = playersLocations[1].coordinates.DistanceTo(endPointCell.coordinates);
+        if (dist2 < 8)
+            return false;
+
+        if (Mathf.Abs(dist1 - dist2) > 7)
+            return false;
+
+        return true;
+    }
 
     /// <summary>
     /// Assigns plant levels (obtained from MapAttributes; values from 0 to 3) according to predefined moisture thresholds

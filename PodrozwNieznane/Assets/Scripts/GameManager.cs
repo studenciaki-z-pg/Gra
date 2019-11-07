@@ -7,16 +7,12 @@ using UnityEngine;
 using UnityEngine.Experimental.PlayerLoop;
 using UnityEngine.UI;
 using Color = UnityEngine.Color;
-using Random = System.Random;
+using Random = UnityEngine.Random;
 
 //TODO: Wyswietlenie komunikatu o turze na ekranie (UI/Camera)
 //TODO: Ujednolicenie grafiki ekwipunku (UI/Camera)
-//TODO: Wycentrowanie kamery na pionku (UI/Camera)
 //TODO: Zablokowanie dostepu do pionka drugiego gracza(?)
 //TODO: Sprawdzenie warunkow zwyciestwa/porazki
-//TODO: Liczenie punktów
-//TODO: Dokończenie interakcji z obiektami
-//TODO: Usuwanie obiektów interaktywnych
 //TODO: Usprawnić metodę losowania wydarzeń/skrzynek/przeciwników
 //TODO: Losowanie przedmiotów do skrzynek
 
@@ -25,11 +21,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] Character char1;
     [SerializeField] Character char2;
     [SerializeField] HexMapCamera hexMapCamera;
+    [SerializeField] MapPicker mapPicker;
 
 
     //referencje
-    public HexGrid hexGrid;                 //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
+    public HexGrid hexGrid;
     public HexGameUI hexGameUI;
+    public EquippableItem[] ListOfItems;
     public static GameManager instance;
 
 
@@ -59,9 +57,17 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
+        //Inicjalizacja mapy
+        MapType initType = (MapType)Random.Range(0, Enum.GetValues(typeof(MapType)).Length);
+        hexGrid.mapGenerator.SetLandscape(initType);
+        hexGrid.CreateMap();
+
         //Inicjalizacja graczy
         players[0].Character = char1;
         players[1].Character = char2;
+        ItemList itemList = new ItemList();
+        ListOfItems = itemList.getItemList();
 
         players[0].color = Color.white;
         players[1].color = Color.black;
@@ -100,6 +106,7 @@ public class GameManager : MonoBehaviour
 
     public void NextRound()
     {
+        hexGrid.mapGenerator.SetLandscape(mapPicker.MapChoice);
         hexGrid.CreateMap();
         InitializePlayerUnit();
         //TODO: zwrócić uwagę czyja ma być kolej
@@ -113,8 +120,10 @@ public class GameManager : MonoBehaviour
 
     public void OnFinish(HexUnit unit)
     {
-        //TODO: unit earns a point
-        NextRound();
+        players[activePlayer].Character.LevelUp();
+        mapPicker.ShowPicker(hexGrid.mapGenerator.GetLandscapeType()); //NextRound() is caled inside MapPicker
+
+        //TODO: make background inactive?
     }
 
 }
