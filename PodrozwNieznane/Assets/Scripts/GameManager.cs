@@ -88,8 +88,8 @@ public class GameManager : MonoBehaviour
         players[1].HexUnit = hexGrid.units[1];
         
         //przypisania poczatkowej predkosci(punkty ruchu) w oparciu o statystyki
-        players[0].HexUnit.Speed = players[activePlayer].Character.SpeedValue();
-        players[1].HexUnit.Speed = players[activePlayer].Character.SpeedValue();
+        players[0].HexUnit.Speed = players[0].Character.SpeedValue();
+        players[1].HexUnit.Speed = players[1].Character.SpeedValue();
 
         //ustawienie kolorow
         players[0].HexUnit.GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", players[0].color);
