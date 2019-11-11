@@ -34,7 +34,20 @@ public class Character : MonoBehaviour
                 b.enabled = false;
                 b.image.sprite = inactiveSprite;
             }
+        foreach (StatPanel panel in statPanel)
+        {
+            panel.SetCharacterLevel(PlayerLevel);
+        }
         gameObject.SetActive(false);
+
+    }
+
+    public void SetCharacterName(string newName)
+    {
+        foreach (StatPanel panel in statPanel)
+        {
+            panel.SetCharacterName(newName);
+        }
     }
 
     public int getLevel()
@@ -50,6 +63,10 @@ public class Character : MonoBehaviour
         {
             b.image.sprite = activeSprite;
             b.enabled = true;
+        }
+        foreach (StatPanel panel in statPanel)
+        {
+            panel.SetCharacterLevel(PlayerLevel);
         }
     }
 

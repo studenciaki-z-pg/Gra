@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+
 
 public class StatPanel : MonoBehaviour
 {
+    [SerializeField] Text CharacterName;
+    [SerializeField] Text Level;
     [SerializeField] StatDisplay[] statDisplays;
     [SerializeField] string[] statNames;
 
@@ -29,6 +33,16 @@ public class StatPanel : MonoBehaviour
             if (i < stats.Length)
                 statDisplays[i].Stat = stats[i];
         }
+    }
+
+    public void SetCharacterName(string newName)
+    {
+        CharacterName.text = newName;
+    }
+
+    public void SetCharacterLevel(int newLevel)
+    {
+        Level.text = "Poziom: "+newLevel.ToString();
     }
 
     public void  UpdateStatValues()
