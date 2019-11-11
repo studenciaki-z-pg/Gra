@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class HexFeatureManager : MonoBehaviour
 {
-    public HexFeatureCollection[] urbanCollections, itemCollections, plantCollections, chestCollections, strengthCollections, intelligenceCollections, agilityCollections;
+    public HexFeatureCollection[] itemCollections, plantCollections, chestCollections, strengthCollections, intelligenceCollections, agilityCollections;
     public Transform portalPiecePrefab;
     Transform container;
 
@@ -38,7 +38,7 @@ public class HexFeatureManager : MonoBehaviour
             Vector3 center = cell.Position;
             Vector3 corner1 = center + HexMetrics.GetFirstSolidCorner(d);
             Vector3 corner2 = center + HexMetrics.GetSecondSolidCorner(d);
-            AddPlantOrUrbanFeature(cell, (center + corner1 + corner2) * 1f / 3f);
+            AddNonItemFeature(cell, (center + corner1 + corner2) * 1f / 3f);
         }
     }
 
@@ -74,7 +74,7 @@ public class HexFeatureManager : MonoBehaviour
         }
     }
 
-    public void AddPlantOrUrbanFeature(HexCell cell, Vector3 position)
+    public void AddNonItemFeature(HexCell cell, Vector3 position)
     {
         HexHash hash = HexMetrics.SampleHashGrid(position);
         if (cell.ItemLevel == -1)
@@ -84,28 +84,11 @@ public class HexFeatureManager : MonoBehaviour
             return;
         }
         
-        Transform urbanPrefab = PickPrefab(urbanCollections, cell.UrbanLevel, hash.a, hash.d);
         Transform plantPrefab = PickPrefab(plantCollections, cell.PlantLevel, hash.b, hash.d);
-        Transform winningPrefab = null;
-        float usedHash = hash.a;
-        if (urbanPrefab)
+        if (plantPrefab)
         {
-            if (plantPrefab && hash.b < hash.a) //if both prefabs exist, choose the one with the lowest hash value
-            {
-                winningPrefab = plantPrefab;
-                usedHash = hash.b;
-            }
+            Instantiating(plantPrefab, position, 360f * hash.e);
         }
-        else if (plantPrefab)
-        {
-            winningPrefab = plantPrefab;
-        }
-        else
-        {
-            return;
-        }
-
-        Instantiating(winningPrefab, position, 360f * hash.e);
     }
 
     void Instantiating(Transform prefab, Vector3 position, float rotation, bool doPerturb = true)
