@@ -112,6 +112,7 @@ public class GameManager : MonoBehaviour
         hexGrid.CreateMap();
         InitializePlayerUnit();
         //TODO: zwrócić uwagę czyja ma być kolej
+        hexGameUI.gameObject.SetActive(true);
         hexGameUI.SetSelectedUnit(players[activePlayer].HexUnit);
     }
 
@@ -125,7 +126,8 @@ public class GameManager : MonoBehaviour
         players[activePlayer].Character.LevelUp();
         mapPicker.ShowPicker(hexGrid.mapGenerator.GetLandscapeType()); //NextRound() is caled inside MapPicker
 
-        //TODO: make background inactive?
+        hexGrid.ClearPath();
+        hexGameUI.gameObject.SetActive(false);
     }
 
 }
