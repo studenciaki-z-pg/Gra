@@ -37,17 +37,19 @@ public class IntelligenceTest : InterableObject
 
     }
 override
-    public void FinallySomeoneFoundMe()
+    public int FinallySomeoneFoundMe()
     {
         int active = GameManager.instance.activePlayer;
         if (GameManager.instance.players[active].Character.Intelligence.Value > value)
         {
             Debug.Log("Gratulacje! Pokonałeś tego maga. Zdobywasz poziom!");
             GameManager.instance.players[active].Character.LevelUp();
+            return 0;
         }
         else
         {
             Debug.Log("Niestety twoja inteligencja jest zbyt niska by pokonać tego wojownika. Wymagana inteligencja: " + value);
+            return 1;
         }
     }
 }
