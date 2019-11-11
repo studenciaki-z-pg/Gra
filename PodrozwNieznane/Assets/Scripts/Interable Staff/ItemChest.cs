@@ -13,10 +13,11 @@ public class ItemChest : InterableObject
     }
 
     override
-    public void FinallySomeoneFoundMe()
+    public int FinallySomeoneFoundMe()
     {
         Debug.Log("Your princess is in another, another castle. But take that "+ item.name +" maybe it will be helpful.");
         GameManager.instance.players[GameManager.instance.activePlayer].Character.GetInventory().AddItem(item);
+        return 0;
     }
 
 

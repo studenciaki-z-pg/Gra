@@ -9,12 +9,13 @@ using UnityEngine.UI;
 using Color = UnityEngine.Color;
 using Random = UnityEngine.Random;
 
+//TODO: Dodać menu
 //TODO: Wyswietlenie komunikatu o turze na ekranie (UI/Camera)
 //TODO: Ujednolicenie grafiki ekwipunku (UI/Camera)
-//TODO: Zablokowanie dostepu do pionka drugiego gracza(?)
 //TODO: Sprawdzenie warunkow zwyciestwa/porazki
-//TODO: Usprawnić metodę losowania wydarzeń/skrzynek/przeciwników
-//TODO: Losowanie przedmiotów do skrzynek
+//TODO: Prawdopodobieństwo wylosowania obiektu zależnie od rodzaju mapy
+//TODO: Wygenerować .exe
+//TODO: Dodać okienko zamiast logów
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Character char2;
     [SerializeField] HexMapCamera hexMapCamera;
     [SerializeField] MapPicker mapPicker;
+    [SerializeField] UnityEngine.Object LogWindow;
 
 
     //referencje

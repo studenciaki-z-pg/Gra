@@ -220,8 +220,8 @@ public class HexUnit : MonoBehaviour
             }
             else
             {
-                surroundings.interableObject.FinallySomeoneFoundMe();
-                surroundings.ItemLevel = 0;
+                if(surroundings.interableObject.FinallySomeoneFoundMe()==0)
+                    surroundings.ItemLevel = 0;
             }
         }
     }
