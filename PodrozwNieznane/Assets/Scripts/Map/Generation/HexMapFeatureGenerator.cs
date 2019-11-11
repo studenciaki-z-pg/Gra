@@ -174,7 +174,7 @@ public class HexMapFeatureGenerator: MonoBehaviour
             return false;
 
         int dist2 = playersLocations[1].coordinates.DistanceTo(endPointCell.coordinates);
-        if (dist1 < 8)
+        if (dist2 < 8)
             return false;
 
         if (Mathf.Abs(dist1 - dist2) > 7)
