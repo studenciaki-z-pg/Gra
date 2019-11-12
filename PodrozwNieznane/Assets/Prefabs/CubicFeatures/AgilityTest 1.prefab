@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7d82d5f9e8a2df54abb410f3c0c6d316, type: 2}
+  - {fileID: 2100000, guid: 390a1a7e5e6e63842ac7e3154333bd23, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 2346310885136631203}
   - component: {fileID: 5233193884479355238}
   m_Layer: 0
-  m_Name: AgilityTest
+  m_Name: AgilityTest 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
