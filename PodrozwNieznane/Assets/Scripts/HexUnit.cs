@@ -101,6 +101,25 @@ public class HexUnit : MonoBehaviour
         for (int i = 1; i < pathToTravel.Count; i++)
         {
             currentTravelLocation = pathToTravel[i];
+            bool yes = false;
+
+            //psuje wszystko
+            if (GetInteractionCost(pathToTravel[i]) == 1)
+            {
+                Debug.Log($"AKCJA");
+                //Okienko z zapytaniem czy na pewno chcesz to zrobic
+                //gdy zakończy się ruch do pola(pionek idzie dluzej niz gra liczy pola)
+                //patrz nizej
+
+                yes = true;
+               
+                /*  jezeli interakcja sie powiodla to nic z ruchem sie nie dzieje
+                 *  TODO: Niepowodzenie(przegrany test):
+                 *      i++ (ustawienie koncowej lokacji jako 'i' by zakonczyc sciezke)
+                 *      Speed -= cost - cena interakcji
+                 */
+            }
+
             a = c;
             b = pathToTravel[i - 1].Position;
             c = (b + currentTravelLocation.Position) * 0.5f;
@@ -117,10 +136,9 @@ public class HexUnit : MonoBehaviour
             t -= 1f;
 
             //Some glorious movement magic
-            //Speed -= GetMoveCost(pathToTravel[i - 1], pathToTravel[i]);
+            Speed -= GetMoveCost(pathToTravel[i - 1], pathToTravel[i]);
 
-            if (currentTravelLocation != this.location)
-                InteractWithSurroundings(currentTravelLocation);
+            if (yes)InteractWithSurroundings(currentTravelLocation);
 
         }
         currentTravelLocation = null;
@@ -145,7 +163,7 @@ public class HexUnit : MonoBehaviour
         ListPool<HexCell>.Add(pathToTravel);
         pathToTravel = null;
 
-        InteractWithSurroundings(location);
+        //InteractWithSurroundings(location);
     }
 
     IEnumerator LookAt(Vector3 point)
@@ -202,8 +220,14 @@ public class HexUnit : MonoBehaviour
     {
         HexEdgeType edgeType = fromCell.GetEdgeType(toCell);
         if (edgeType == HexEdgeType.Cliff) return -1;
-        if (edgeType == HexEdgeType.Slope) return 3;
-        return 1;
+        if (edgeType == HexEdgeType.Slope) return 3 + GetInteractionCost(toCell);
+        return 1 + GetInteractionCost(toCell);
+    }
+
+    public int GetInteractionCost(HexCell cell)
+    {
+        if (cell.ItemLevel != 0) return 1;
+        return 0;
     }
 
     /// <summary>

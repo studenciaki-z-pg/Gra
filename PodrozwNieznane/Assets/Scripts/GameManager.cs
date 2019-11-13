@@ -116,9 +116,12 @@ public class GameManager : MonoBehaviour
         hexGrid.mapGenerator.SetLandscape(mapPicker.MapChoice);
         hexGrid.CreateMap();
         InitializePlayerUnit();
-        //TODO: zwrócić uwagę czyja ma być kolej
+
         hexGameUI.gameObject.SetActive(true);
-        hexGameUI.SetSelectedUnit(players[activePlayer].HexUnit);
+        //hexGameUI.SetSelectedUnit(players[activePlayer].HexUnit);
+
+        //Zaczyna ten, ktory nie dotarl do teleportu, czyli nastepny gracz po prostu
+        NextPlayer();
     }
 
     public bool IsActiveUnit(HexUnit unit)

@@ -46,14 +46,14 @@ public class HexGameUI : MonoBehaviour
     {
         if (state)
         {
-            if (GameManager.instance.IsItMyUnit(selectedUnit))
+            if (GameManager.instance.IsActiveUnit(selectedUnit))
             {
                 selectedUnit.Location.EnableHighlight(Color.blue);
             }
 
             return;
         }
-        if (GameManager.instance.IsItMyUnit(selectedUnit))
+        if (GameManager.instance.IsActiveUnit(selectedUnit))
         {
             selectedUnit.Location.DisableHighlight();
         }
@@ -138,11 +138,11 @@ public class HexGameUI : MonoBehaviour
             if (path.Count > 1)
             {
                 //selectedUnit.Location = currentCell;
-                for (var i = 0; i < path.Count - 1; i++ )
+                /*for (var i = 0; i < path.Count - 1; i++ )
                 {
                     selectedUnit.Speed -= selectedUnit.GetMoveCost(path[i], path[i+1]);
                     //Debug.Log($"speed = {selectedUnit.Speed}");
-                }
+                }*/
                 selectedUnit.Travel(path);
                 grid.ClearPath();
             }

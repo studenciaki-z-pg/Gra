@@ -343,7 +343,18 @@ public class HexGrid : MonoBehaviour
             {
                 path.RemoveRange(i, path.Count - i);
                 return path;
-            }    
+            }
+
+            //Chcemy dosjc do Endpointa/interaktywnego obiektu i mamy dosc ruchu, to zatrzymujemy sie przed nim
+            if (unit.GetInteractionCost(path[i+1]) == 1)
+            {
+                path.RemoveRange(i, path.Count - i);
+                return path;
+            }
+
+
+
+
         }
         return path;
     }

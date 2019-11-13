@@ -174,8 +174,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fba5c9a565808424e8642e83bbf24f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterName: {fileID: 793225528}
-  Level: {fileID: 584406864}
+  CharacterName: {fileID: 0}
+  Level: {fileID: 0}
   statDisplays:
   - {fileID: 52730671}
   - {fileID: 1812588547}
@@ -3789,7 +3789,7 @@ MonoBehaviour:
   char2: {fileID: 1055128775}
   hexMapCamera: {fileID: 711052290}
   mapPicker: {fileID: 142058310}
-  LogWindow: {fileID: 1091114618}
+  LogWindow: {fileID: 0}
   hexGrid: {fileID: 610912095}
   hexGameUI: {fileID: 1648181187}
   ListOfItems: []
@@ -10091,8 +10091,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fba5c9a565808424e8642e83bbf24f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterName: {fileID: 390063424}
-  Level: {fileID: 918411261}
+  CharacterName: {fileID: 0}
+  Level: {fileID: 0}
   statDisplays:
   - {fileID: 728245320}
   - {fileID: 1799610955}
@@ -13096,8 +13096,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fba5c9a565808424e8642e83bbf24f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterName: {fileID: 154880560}
-  Level: {fileID: 1535358050}
+  CharacterName: {fileID: 0}
+  Level: {fileID: 0}
   statDisplays:
   - {fileID: 499645045}
   - {fileID: 247982174}
@@ -16085,8 +16085,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fba5c9a565808424e8642e83bbf24f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterName: {fileID: 1141400000}
-  Level: {fileID: 1841215573}
+  CharacterName: {fileID: 0}
+  Level: {fileID: 0}
   statDisplays:
   - {fileID: 88685487}
   - {fileID: 1969795417}
