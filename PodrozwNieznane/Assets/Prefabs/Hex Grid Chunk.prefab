@@ -265,15 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a81daee6c1e1b2d48849fd82797da75d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  urbanCollections:
-  - prefabs:
-    - {fileID: 2377094277492345404, guid: c0582498f4ccc51478e941290f7c6ae0, type: 3}
-    - {fileID: 2377094277492345404, guid: a16b0fac4250cc44faee9be4427b4a68, type: 3}
-  - prefabs:
-    - {fileID: 2377094277492345404, guid: 91e21b226fdcd524abc30dd0adde68b5, type: 3}
-    - {fileID: 2377094277492345404, guid: c0582498f4ccc51478e941290f7c6ae0, type: 3}
-  - prefabs:
-    - {fileID: 2377094277492345404, guid: 91e21b226fdcd524abc30dd0adde68b5, type: 3}
+  urbanCollections: []
   itemCollections:
   - prefabs:
     - {fileID: 2377094277492345404, guid: da808d975a8aa7340b4ffddb069e84f7, type: 3}
@@ -308,3 +300,5 @@ MonoBehaviour:
     - {fileID: 2346310885136631203, guid: e8d5764de8dfa4a478551495bf1aebd6, type: 3}
     - {fileID: 2346310885136631203, guid: 5094f0d34e5b4f442bfd52d9a5a11f0e, type: 3}
     - {fileID: 2346310885136631203, guid: c8d1314a0ff867a47a9b6f14a08c6920, type: 3}
+  portalPiecePrefab: {fileID: 8720667173826274451, guid: 2d5a89b05c21c8c499c22d58c592d556,
+    type: 3}

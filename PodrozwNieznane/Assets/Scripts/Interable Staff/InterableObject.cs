@@ -2,7 +2,12 @@
 
 public class InterableObject : MonoBehaviour
 {
+    protected int value;
 
+    public InterableObject()
+    {
+        value = 0;
+    }
 
     public void Activate()
     {
@@ -10,17 +15,12 @@ public class InterableObject : MonoBehaviour
     }
 
     virtual
-    public void FinallySomeoneFoundMe()
+    public int FinallySomeoneFoundMe()
     {
         Debug.Log("Your princess is in another monster dungeon.");
+        return 1;
     }
 
-
-    virtual
-    public void FinallySomeoneFoundMe(Character character)
-    {
-        Debug.Log("Your princess is in another monster dungeon.");
-    }
-
+    
 
 }

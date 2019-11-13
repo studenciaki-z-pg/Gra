@@ -4,14 +4,39 @@ using UnityEngine;
 
 public class AgilityTest : InterableObject
 {
-    override
-    public void FinallySomeoneFoundMe()
+    
+    private void Start()
     {
-        Debug.Log("It's your Agility Challenge");
+        System.Random r = new System.Random();
+        int[] players = new int[2];
+        if (Object.ReferenceEquals(GameManager.instance.players[0].Character.getLevel(), null))
+            players[0] = 1;
+        else
+            players[0] = GameManager.instance.players[0].Character.getLevel();
+        if (Object.ReferenceEquals(GameManager.instance.players[1].Character.getLevel(), null))
+            players[1] = 1;
+        else
+            players[1] = GameManager.instance.players[1].Character.getLevel();
+
+        float average = (players[0] + players[1]) / 2;
+        value = r.Next((int)average * 5, (int)average * 10);
+
     }
+
     override
-    public void FinallySomeoneFoundMe(Character character)
+    public int FinallySomeoneFoundMe()
     {
-        Debug.Log("It's your Agility Challenge but your skill power is only: " + character.Agility.Value);
+        int active = GameManager.instance.activePlayer;
+        if (GameManager.instance.players[active].Character.Agility.Value > value)
+        {
+            Debug.Log("Gratulacje! Pokonałeś tego łotrzyka. Zdobywasz poziom!");
+            GameManager.instance.players[active].Character.LevelUp();
+            return 0;
+        }
+        else
+        {
+            Debug.Log("Niestety twoja zręczność jest zbyt niska by pokonać tego łotrzyka. Wymagana zręczność: " + value);
+            return 1;
+        }
     }
 }

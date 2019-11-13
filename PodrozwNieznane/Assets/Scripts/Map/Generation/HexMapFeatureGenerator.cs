@@ -38,6 +38,8 @@ public class HexMapFeatureGenerator: MonoBehaviour
         DistributeItems();
         DistributePlantLevels(generator.GetPlantLevels());
 
+        PutEndPoint();
+
         ListPool<HexCell>.Add(playersLocations);
         ListPool<HexCell>.Add(itemsLocations);
         ListPool<HexCell>.Add(largestFlatGround);
@@ -56,40 +58,6 @@ public class HexMapFeatureGenerator: MonoBehaviour
             if (largestFlatGround.Count < reachableGround.Count)
                 largestFlatGround = reachableGround;
         }
-    }
-
-    private bool IsReachable(HexCell fromCell, HexCell toCell)
-    {
-        grid.BeginSearch(fromCell);
-        while (!grid.EndOfSearch())
-        {
-            HexCell current = grid.GetCurrentlySearchedCell();
-
-            if (current == toCell) //end of search
-            {
-                return true;
-            }
-
-            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
-            {
-                HexCell neighbor = grid.GetNeighborToSearch(current, d);
-                if (neighbor == null || !neighbor.Walkable || !neighbor.Explorable)
-                    continue;
-
-                HexEdgeType edgeType = current.GetEdgeType(neighbor);
-                if (edgeType == HexEdgeType.Cliff)
-                {
-                    continue;
-                }
-
-                int distance = current.Distance + 1;
-
-                bool success = grid.PutNeighborToSearch(neighbor, distance, 0);
-                if (success == false)
-                    grid.UpdateNeighborToSearch(neighbor, distance);
-            }
-        }
-        return false;
     }
 
     private List<HexCell> GetReachableGround(HexCell fromCell)
@@ -133,7 +101,7 @@ public class HexMapFeatureGenerator: MonoBehaviour
             {
                 homeCell = largestFlatGround[Random.Range(0, largestFlatGround.Count)];
             }
-            while (!(homeCell.Explorable && homeCell.Walkable) || itemsLocations.Contains(homeCell));
+            while (!(homeCell.Explorable && homeCell.Walkable) || itemsLocations.Contains(homeCell) || playersLocations.Contains(homeCell));
 
             playersLocations.Add(homeCell);
 
@@ -145,57 +113,74 @@ public class HexMapFeatureGenerator: MonoBehaviour
     {
         for (int i = 0; i < itemsAmount; i++)
         {
-            System.Random random = new System.Random();
             HexCell cell;
             do
             {
                 cell = largestFlatGround[Random.Range(0, largestFlatGround.Count)];
             }
-            while (!(cell.Explorable && cell.Walkable) || playersLocations.Contains(cell));
+            while (!(cell.Explorable && cell.Walkable) || itemsLocations.Contains(cell) || playersLocations.Contains(cell));
 
-            
-
-            switch (random.Next(1, 6))
+            switch (Random.Range(1, 6))
             {
                 case 1:
                     cell.ItemLevel = 1;
                     cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
-                    cell.interableObject.transform.SetParent(grid.transform);
-                    grid.AddItem(cell.interableObject as ItemChest);
-                    Debug.Log("1");
                     break;
                 case 2:
                     cell.ItemLevel = 2;
                     cell.interableObject = Instantiate<IntelligenceTest>(cell.IntelligenceTestPrefab);
-                    cell.interableObject.transform.SetParent(grid.transform);
-                    grid.AddItem(cell.interableObject as IntelligenceTest);
-                    Debug.Log("2");
                     break;
                 case 3:
                     cell.ItemLevel = 3;
                     cell.interableObject = Instantiate<StrengthTest>(cell.StrengthTestPrefab);
-                    cell.interableObject.transform.SetParent(grid.transform);
-                    grid.AddItem(cell.interableObject as StrengthTest);
-                    Debug.Log("3");
                     break;
                 case 4:
                     cell.ItemLevel = 4;
                     cell.interableObject = Instantiate<AgilityTest>(cell.AgilityTestPrefab);
-                    cell.interableObject.transform.SetParent(grid.transform);
-                    grid.AddItem(cell.interableObject as AgilityTest);
-                    Debug.Log("4");
                     break;
+                case 5:
                 default:
                     cell.ItemLevel = 5;
-                    cell.interableObject = Instantiate<InterableObject>(cell.ItemChestPrefab); //wydażenie
-                    cell.interableObject.transform.SetParent(grid.transform);
-                    grid.AddItem(cell.interableObject as InterableObject);
-                    Debug.Log("5");
+                    cell.interableObject = Instantiate<InterableObject>(cell.ItemChestPrefab); //wydarzenie
                     break;
             }
+            cell.interableObject.transform.SetParent(grid.transform);
+            grid.AddItem(cell.interableObject);
 
             itemsLocations.Add(cell);
         }
+    }
+
+
+    void PutEndPoint()
+    {
+        HexCell cell;
+        do
+        {
+            cell = largestFlatGround[Random.Range(0, largestFlatGround.Count)];
+        }
+        while (!(cell.Explorable && cell.Walkable) || itemsLocations.Contains(cell) || playersLocations.Contains(cell) || 
+        !IsEvenDistanceToEndPoint(cell));
+
+        cell.PlantLevel = 0;
+        cell.ItemLevel = -1;
+    }
+
+
+    private bool IsEvenDistanceToEndPoint(HexCell endPointCell)
+    {
+        int dist1 = playersLocations[0].coordinates.DistanceTo(endPointCell.coordinates);
+        if (dist1 < 8)
+            return false;
+
+        int dist2 = playersLocations[1].coordinates.DistanceTo(endPointCell.coordinates);
+        if (dist2 < 8)
+            return false;
+
+        if (Mathf.Abs(dist1 - dist2) > 7)
+            return false;
+
+        return true;
     }
 
     /// <summary>

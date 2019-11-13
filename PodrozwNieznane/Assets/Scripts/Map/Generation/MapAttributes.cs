@@ -76,11 +76,11 @@ public struct MapAttributes
     }
     public static MapAttributes GetPlains()
     {
-        return new MapAttributes(0.25f, 0.25f, 0f, 20, 30, 95, 4, -2, 6, 0, 0, 75, new int[6] { 0, 2, 1, 2, 3, 0 }, 0, 6, int.MaxValue);
+        return new MapAttributes(0.25f, 0.25f, 0f, 20, 30, 95, 4, -2, 6, 0, 0, 75, new int[6] { 0, 2, 1, 2, 3, 0 }, 0, 5, int.MaxValue);
     }
     public static MapAttributes GetCanyon()
     {
-        return new MapAttributes(0.5f, 0.5f, 0f, 20, 30, 64, 1, -2, 8, 8, 1, 0, new int[6] { 0, 0, 0, 1, 2, 0 }, 7, 7, int.MaxValue);
+        return new MapAttributes(0.5f, 0.5f, 0f, 20, 30, 64, 1, -2, 6, 8, 1, 15, new int[6] { 0, 0, 0, 1, 2, 0 }, 7, 6, int.MaxValue);
     }
 
 

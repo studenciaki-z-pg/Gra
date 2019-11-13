@@ -13,6 +13,10 @@ public class HexMapCamera : MonoBehaviour
     public float stickMinZoom, stickMaxZoom;
     float zoom = 1f;
     Transform swivel, stick;
+    public void SetCameraPosition(float x, float z, Vector3 position)
+    {
+        transform.localPosition = ClampPosition(position);
+    }
     void Update() 
     {
         float zoomDelta = Input.GetAxis("Mouse ScrollWheel");

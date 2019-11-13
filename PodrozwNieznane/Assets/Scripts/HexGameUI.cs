@@ -10,6 +10,12 @@ public class HexGameUI : MonoBehaviour
     HexUnit selectedUnit;
 
 
+    public void SetSelectedUnit(HexUnit unit)
+    {
+        selectedUnit = unit;
+    }
+
+
     void Update()
     {
         if (!EventSystem.current.IsPointerOverGameObject())
@@ -106,10 +112,8 @@ public class HexGameUI : MonoBehaviour
             //Wybrano jednostke
             if (currentCell.Unit)
             {
-                if (GameManager.instance.IsItMyUnit(currentCell.Unit))
-                {                   
-                    selectedUnit = currentCell.Unit;
-                }                 
+                if (GameManager.instance.IsActiveUnit(currentCell.Unit))
+                    SetSelectedUnit(currentCell.Unit);
                 else
                 {
                     Debug.Log("Sorry, this is not yours");
@@ -118,6 +122,7 @@ public class HexGameUI : MonoBehaviour
             //Wybrano cos innego
             else
             {
+                SetSelectedUnit(null);
                 Debug.Log("This is not an unit");
             }
 
@@ -136,7 +141,7 @@ public class HexGameUI : MonoBehaviour
                 for (var i = 0; i < path.Count - 1; i++ )
                 {
                     selectedUnit.Speed -= selectedUnit.GetMoveCost(path[i], path[i+1]);
-                    Debug.Log(selectedUnit.Speed);
+                    //Debug.Log($"speed = {selectedUnit.Speed}");
                 }
                 selectedUnit.Travel(path);
                 grid.ClearPath();
@@ -150,8 +155,13 @@ public class HexGameUI : MonoBehaviour
         }        
     }
 
-    public void EndTurn()
+    public void EndTurn()//exitState()
     {
+        //zablokuj sciezkowanie i pionka
+        grid.ClearPath();
+        selectedUnit = null;
+
+        //zakoncz ture/zmien gracza
         GameManager.instance.NextPlayer();
     }
 }

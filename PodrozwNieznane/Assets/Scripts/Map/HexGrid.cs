@@ -40,8 +40,6 @@ public class HexGrid : MonoBehaviour
         HexUnit.unitPrefab = unitPrefab;
         cellShaderData = gameObject.AddComponent<HexCellShaderData>();
         cellShaderData.Grid = this;
-        mapGenerator.SetLandscape(0);
-        CreateMap();
     }
 
 
@@ -49,6 +47,7 @@ public class HexGrid : MonoBehaviour
     {
         RemoveAllUnits();
         RemoveAllItems();
+        ClearPath();
 
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
         cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
@@ -187,7 +186,6 @@ public class HexGrid : MonoBehaviour
     {
         position = transform.InverseTransformPoint(position);
         HexCoordinates coordinates = HexCoordinates.FromPosition(position);
-        
         int index = coordinates.X + coordinates.Z * cellCountX + coordinates.Z / 2;
         HexCell cell = cells[index];
         return cells[index];
@@ -242,7 +240,7 @@ public class HexGrid : MonoBehaviour
 
     public void RemoveAllItems()
     {
-        foreach (ItemChest item in items)
+        foreach (InterableObject item in items)
         {
             Destroy(item.gameObject);
         }
@@ -307,7 +305,7 @@ public class HexGrid : MonoBehaviour
         currentPathFrom = fromCell;
         currentPathTo = toCell;
         currentPathExists = Search(fromCell, toCell, unit); //checking if path exist
-        ShowPath(unit.Speed);//movement points
+        ShowPath(unit?.Speed ?? HexUnit.initSpeed);//movement points
     }
 
     public List<HexCell> GetFixedPath(HexUnit unit)
@@ -392,7 +390,7 @@ public class HexGrid : MonoBehaviour
 
     bool Search(HexCell fromCell, HexCell toCell, HexUnit unit)
     {
-        int speed = unit.Speed;
+        //int speed = unit.Speed;
         BeginSearch(fromCell);
         while (!EndOfSearch())
         {
@@ -403,7 +401,7 @@ public class HexGrid : MonoBehaviour
                 return true;
             }
 
-            int currentTurn = (current.Distance)/(speed+1);
+            //int currentTurn = (current.Distance)/(speed+1);
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
                 HexCell neighbor = GetNeighborToSearch(current, d);

@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 public class Character : MonoBehaviour
 {
-
+    
     public CharacterStats Strength = new CharacterStats(10); //siłą
     public CharacterStats Intelligence = new CharacterStats(10); //inteligencja
     public CharacterStats Agility = new CharacterStats(10); //zręczność
@@ -34,7 +34,25 @@ public class Character : MonoBehaviour
                 b.enabled = false;
                 b.image.sprite = inactiveSprite;
             }
+        foreach (StatPanel panel in statPanel)
+        {
+            panel.SetCharacterLevel(PlayerLevel);
+        }
         gameObject.SetActive(false);
+
+    }
+
+    public void SetCharacterName(string newName)
+    {
+        foreach (StatPanel panel in statPanel)
+        {
+            panel.SetCharacterName(newName);
+        }
+    }
+
+    public int getLevel()
+    {
+        return PlayerLevel;
     }
 
     public void LevelUp()
@@ -46,6 +64,15 @@ public class Character : MonoBehaviour
             b.image.sprite = activeSprite;
             b.enabled = true;
         }
+        foreach (StatPanel panel in statPanel)
+        {
+            panel.SetCharacterLevel(PlayerLevel);
+        }
+    }
+
+    public Inventory GetInventory()
+    {
+        return inventory;
     }
 
     private void Awake()
@@ -70,15 +97,14 @@ public class Character : MonoBehaviour
             if(Player != player)
             {
                 Player = player;
-                ChangePlayer();
             }
             gameObject.SetActive(true);
         }
     }
 
-    private void ChangePlayer()
+    public int SpeedValue()
     {
-
+        return 5 + (int)(this.Vitality.Value / 5);
     }
     
     private void EquipFromInventory(Item item)
