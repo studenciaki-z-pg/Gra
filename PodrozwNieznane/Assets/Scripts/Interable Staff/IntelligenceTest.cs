@@ -42,13 +42,13 @@ override
         int active = GameManager.instance.activePlayer;
         if (GameManager.instance.players[active].Character.Intelligence.Value > value)
         {
-            Debug.Log("Gratulacje! Pokonałeś tego maga. Zdobywasz poziom!");
+            GameManager.instance.LogWindow.SendLog("Gratulacje!\nPokonałeś tego maga.\nZdobywasz poziom!");
             GameManager.instance.players[active].Character.LevelUp();
             return 0;
         }
         else
         {
-            Debug.Log("Niestety twoja inteligencja jest zbyt niska by pokonać tego wojownika. Wymagana inteligencja: " + value);
+            GameManager.instance.LogWindow.SendLog("Niestety twoja inteligencja jest zbyt niska by pokonać tego maga.\nWymagana inteligencja: " + value);
             return 1;
         }
     }

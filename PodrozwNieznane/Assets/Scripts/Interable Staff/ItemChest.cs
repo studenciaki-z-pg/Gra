@@ -9,13 +9,14 @@ public class ItemChest : InterableObject
 
     private void Start()
     {
-        item = RandomItemFromList();
+        //item = RandomItemFromList();
     }
 
     override
     public int FinallySomeoneFoundMe()
     {
-        Debug.Log("Your princess is in another, another castle. But take that "+ item.name +" maybe it will be helpful.");
+        item = RandomItemFromList();
+        GameManager.instance.LogWindow.SendLog("Znajdujesz nowy przedmiot!\n"+ item.name +"\nNiech ci dobrze służy");
         GameManager.instance.players[GameManager.instance.activePlayer].Character.GetInventory().AddItem(item);
         return 0;
     }

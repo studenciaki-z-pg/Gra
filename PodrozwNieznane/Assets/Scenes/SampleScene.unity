@@ -1742,8 +1742,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -28.086124}
-  m_SizeDelta: {x: 180.86124, y: 36.17225}
+  m_AnchoredPosition: {x: 175, y: -27.943924}
+  m_SizeDelta: {x: 173.45795, y: 35.88785}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &172025567
 MonoBehaviour:
@@ -3789,10 +3789,11 @@ MonoBehaviour:
   char2: {fileID: 1055128775}
   hexMapCamera: {fileID: 711052290}
   mapPicker: {fileID: 142058310}
-  LogWindow: {fileID: 1091114618}
+  logWindow: {fileID: 1091114621}
   hexGrid: {fileID: 610912095}
   hexGameUI: {fileID: 1648181187}
   ListOfItems: []
+  LogWindow: {fileID: 0}
   activePlayer: 0
 --- !u!4 &388191443
 Transform:
@@ -3806,6 +3807,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 610912096}
+  - {fileID: 649873684}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5661,10 +5663,10 @@ RectTransform:
   m_Father: {fileID: 1091114619}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 168.75, y: 39.375}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -75}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &632698752
 MonoBehaviour:
@@ -5702,7 +5704,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 40
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -5722,6 +5724,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 632698750}
   m_CullTransparentMesh: 0
+--- !u!1 &649873683
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 649873684}
+  - component: {fileID: 649873685}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &649873684
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 649873683}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 388191443}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &649873685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 649873683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbe1e2f26bdd53e48a599bda34543761, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  listOfItems:
+  - {fileID: 11400000, guid: 4479e114877453447ab7916c31a2ea11, type: 2}
+  - {fileID: 11400000, guid: 42020fad7798edb44a045bba78927f1f, type: 2}
+  - {fileID: 11400000, guid: d9576fc88ff93a643af10649af0d3380, type: 2}
 --- !u!1 &676681782
 GameObject:
   m_ObjectHideFlags: 0
@@ -9514,6 +9563,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1091114619}
   - component: {fileID: 1091114620}
+  - component: {fileID: 1091114621}
   m_Layer: 5
   m_Name: Panel Middle
   m_TagString: Untagged
@@ -9551,6 +9601,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1091114618}
   m_CullTransparentMesh: 0
+--- !u!114 &1091114621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1091114618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf390d4c210bb504bb07658a6f26694e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LogText: {fileID: 632698753}
 --- !u!1 &1093859481
 GameObject:
   m_ObjectHideFlags: 0
@@ -13217,8 +13280,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -97.17703}
-  m_SizeDelta: {x: 87.84689, y: 41.339714}
+  m_AnchoredPosition: {x: 175, y: -101.7757}
+  m_SizeDelta: {x: 101.68224, y: 47.850468}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1450752011
 MonoBehaviour:
@@ -15592,8 +15655,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 175, y: -61.339714}
-  m_SizeDelta: {x: 41.339714, y: 10.3349285}
+  m_AnchoredPosition: {x: 175, y: -61.86916}
+  m_SizeDelta: {x: 47.850468, y: 11.962617}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1741151774
 MonoBehaviour:
@@ -15811,8 +15874,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1648181187}
-        m_MethodName: EndTurn
+      - m_Target: {fileID: 1091114621}
+        m_MethodName: HideLog
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15821,28 +15884,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1750152375}
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 602465714}
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -17187,7 +17228,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Koniec tury
+  m_Text: Zamknij
 --- !u!222 &1904016559
 CanvasRenderer:
   m_ObjectHideFlags: 0

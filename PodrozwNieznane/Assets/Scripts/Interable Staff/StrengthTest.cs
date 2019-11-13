@@ -28,12 +28,12 @@ public class StrengthTest : InterableObject
         int active = GameManager.instance.activePlayer;
         if (GameManager.instance.players[active].Character.Strength.Value > value)
         {
-            Debug.Log("Gratulacje! Pokonałeś tego wojownika. Zdobywasz poziom!");
+            GameManager.instance.LogWindow.SendLog("Gratulacje!\nPokonałeś tego wojownika.\nZdobywasz poziom!");
             GameManager.instance.players[active].Character.LevelUp();
             return 0;
         } else
         {
-            Debug.Log("Niestety twoja siła jest zbyt niska by pokonać tego wojownika. Wymagana siła: " + value);
+            GameManager.instance.LogWindow.SendLog("Niestety twoja siła jest zbyt niska by pokonać tego wojownika.\nWymagana siła: " + value);
             return 1;
         }
     }

@@ -141,7 +141,7 @@ public class HexMapFeatureGenerator: MonoBehaviour
                 case 5:
                 default:
                     cell.ItemLevel = 5;
-                    cell.interableObject = Instantiate<InterableObject>(cell.ItemChestPrefab); //wydarzenie
+                    cell.interableObject = Instantiate<BonusPlace>(cell.BonusPlacePrefab); //wydarzenie
                     break;
             }
             cell.interableObject.transform.SetParent(grid.transform);

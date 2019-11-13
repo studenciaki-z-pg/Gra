@@ -29,13 +29,13 @@ public class AgilityTest : InterableObject
         int active = GameManager.instance.activePlayer;
         if (GameManager.instance.players[active].Character.Agility.Value > value)
         {
-            Debug.Log("Gratulacje! Pokonałeś tego łotrzyka. Zdobywasz poziom!");
+            GameManager.instance.LogWindow.SendLog("Gratulacje!\nPokonałeś tego łotrzyka.\nZdobywasz poziom!");
             GameManager.instance.players[active].Character.LevelUp();
             return 0;
         }
         else
         {
-            Debug.Log("Niestety twoja zręczność jest zbyt niska by pokonać tego łotrzyka. Wymagana zręczność: " + value);
+            GameManager.instance.LogWindow.SendLog("Niestety twoja zręczność jest zbyt niska by pokonać tego łotrzyka.\nWymagana zręczność: " + value);
             return 1;
         }
     }
