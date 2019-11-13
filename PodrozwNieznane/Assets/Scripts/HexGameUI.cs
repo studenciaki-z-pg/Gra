@@ -26,19 +26,38 @@ public class HexGameUI : MonoBehaviour
             }
             else if (selectedUnit)
             {
+                //highlight players unit
+                HighlightPlayer(true);
+
                 if (Input.GetMouseButtonDown(1))
                 {
                     DoMove();
+                    
                 }
                 else
                 {
                     DoPathfinding();
                 }
-                
             }
         }
     }
 
+    void HighlightPlayer(bool state)
+    {
+        if (state)
+        {
+            if (GameManager.instance.IsItMyUnit(selectedUnit))
+            {
+                selectedUnit.Location.EnableHighlight(Color.blue);
+            }
+
+            return;
+        }
+        if (GameManager.instance.IsItMyUnit(selectedUnit))
+        {
+            selectedUnit.Location.DisableHighlight();
+        }
+    }
     void DoPathfinding()
     {
         if(UpdateCurrentCell())
@@ -52,7 +71,7 @@ public class HexGameUI : MonoBehaviour
             {
                 grid.ClearPath();
             }
-            
+
         }
         
     }
@@ -118,7 +137,6 @@ public class HexGameUI : MonoBehaviour
             var path = grid.GetFixedPath(selectedUnit);
             if (path.Count > 1)
             {
-                
                 //selectedUnit.Location = currentCell;
                 for (var i = 0; i < path.Count - 1; i++ )
                 {
@@ -134,7 +152,7 @@ public class HexGameUI : MonoBehaviour
         else
         {
             Debug.Log("Sorry, that's unreachable");
-        }
+        }        
     }
 
     public void EndTurn()//exitState()

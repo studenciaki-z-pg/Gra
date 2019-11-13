@@ -80,7 +80,9 @@ public class GameManager : MonoBehaviour
 
         //Rozpoczecie gry
         activePlayer = 0;
+        players[activePlayer].HexUnit.Location.EnableHighlight(Color.cyan);
         hexMapCamera.SetCameraPosition(players[activePlayer].HexUnit.Location.Position.x, players[activePlayer].HexUnit.Location.Position.z, players[activePlayer].HexUnit.Location.Position);
+
     }
 
     public void InitializePlayerUnit()
@@ -100,7 +102,10 @@ public class GameManager : MonoBehaviour
 
     public void NextPlayer()
     {
+        players[activePlayer].HexUnit.Location.DisableHighlight();
         activePlayer = (activePlayer + 1) % 2;
+
+        players[activePlayer].HexUnit.Location.EnableHighlight(Color.cyan);
         players[activePlayer].HexUnit.Speed = players[activePlayer].Character.SpeedValue();
         hexMapCamera.SetCameraPosition(players[activePlayer].HexUnit.Location.Position.x, players[activePlayer].HexUnit.Location.Position.z, players[activePlayer].HexUnit.Location.Position);
         hexGameUI.SetSelectedUnit(players[activePlayer].HexUnit);

@@ -24,7 +24,6 @@ public class HexGrid : MonoBehaviour
     public int chunkCountX = 4, chunkCountZ = 3;
     public HexCell cellPrefab;
     public Text cellLabelPrefab;
-    //public Color defaultColor = Color.white;
 
     public Texture2D noiseSource;
     public HexGridChunk chunkPrefab;
@@ -187,7 +186,6 @@ public class HexGrid : MonoBehaviour
     {
         position = transform.InverseTransformPoint(position);
         HexCoordinates coordinates = HexCoordinates.FromPosition(position);
-
         int index = coordinates.X + coordinates.Z * cellCountX + coordinates.Z / 2;
         HexCell cell = cells[index];
         return cells[index];
@@ -310,22 +308,6 @@ public class HexGrid : MonoBehaviour
         ShowPath(unit?.Speed ?? HexUnit.initSpeed);//movement points
     }
 
-    public List<HexCell> GetPath()
-    {
-        if (!currentPathExists)
-        {
-            return null;
-        }
-        List<HexCell> path = ListPool<HexCell>.Get();
-        for (HexCell c = currentPathTo; c != currentPathFrom; c = c.PathFrom)
-        {
-            path.Add(c);
-        }
-        path.Add(currentPathFrom);
-        path.Reverse();
-        return path;
-    }
-
     public List<HexCell> GetFixedPath(HexUnit unit)
     {
         if (!currentPathExists)
@@ -437,11 +419,6 @@ public class HexGrid : MonoBehaviour
                 }
 
                 int distance = current.Distance + moveCost;
-                //int turn = (distance)/speed;
-                //if (turn > currentTurn)
-                //{
-                //    distance = turn + moveCost + speed;
-                //}
 
                 int neighborHeuristics = neighbor.coordinates.DistanceTo(toCell.coordinates);
                 bool success = PutNeighborToSearch(neighbor, distance, neighborHeuristics, current);
