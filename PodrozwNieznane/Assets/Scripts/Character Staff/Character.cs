@@ -42,6 +42,11 @@ public class Character : MonoBehaviour
 
     }
 
+    public void BonusSkillPoints(int value)
+    {
+        AvailableSkillPoints += value;
+    }
+
     public void SetCharacterName(string newName)
     {
         foreach (StatPanel panel in statPanel)

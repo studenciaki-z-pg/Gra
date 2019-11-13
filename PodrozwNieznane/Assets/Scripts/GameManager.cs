@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Character char2;
     [SerializeField] HexMapCamera hexMapCamera;
     [SerializeField] MapPicker mapPicker;
-    [SerializeField] UnityEngine.Object LogWindow;
+    [SerializeField] LogWindow logWindow;
 
 
     //referencje
@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     public HexGameUI hexGameUI;
     public EquippableItem[] ListOfItems;
     public static GameManager instance;
-
+    public LogWindow LogWindow;
 
     //zmienne
     private int Size;
@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
     {
         //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
         //Inicjalizacja mapy
+        LogWindow = logWindow;
         MapType initType = (MapType)Random.Range(0, Enum.GetValues(typeof(MapType)).Length);
         hexGrid.mapGenerator.SetLandscape(initType);
         hexGrid.CreateMap();
