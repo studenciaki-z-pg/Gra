@@ -9,7 +9,7 @@ using UnityEngine;
 public class HexFeatureManager : MonoBehaviour
 {
     public HexFeatureCollection[] itemCollections, plantCollections, chestCollections, strengthCollections, intelligenceCollections, agilityCollections;
-    public Transform portalPiecePrefab;
+    public Transform portalPiecePrefab, additionalPrefab; //w miarę możliwości zmienić nazwę prefaba na bardziaj obrazową niż 'additional'
     Transform container;
 
 
