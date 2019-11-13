@@ -22,7 +22,7 @@ public class StatPanel : MonoBehaviour
         stats = characterStats;
         if(characterStats.Length > statDisplays.Length)
         {
-            Debug.LogError("Nie wystarczająca ilość stat slotów");
+            GameManager.instance.LogWindow.SendLog("Nie wystarczająca ilość stat slotów");
             return;
         }
 

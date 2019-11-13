@@ -17,7 +17,7 @@ public class InterableObject : MonoBehaviour
     virtual
     public int FinallySomeoneFoundMe()
     {
-        Debug.Log("Your princess is in another monster dungeon.");
+        GameManager.instance.LogWindow.SendLog("Your princess is in another monster dungeon.");
         return 1;
     }
 

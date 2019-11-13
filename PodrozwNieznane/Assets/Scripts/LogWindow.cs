@@ -4,9 +4,7 @@ using UnityEngine.UI;
 
 public class LogWindow : MonoBehaviour
 {
-    [SerializeField] Text StatNameText;
-    [SerializeField] Text StatModifiersLabelText;
-    [SerializeField] Text StatModifiersText;
+    [SerializeField] Text LogText;
 
     private StringBuilder stringBuilder = new StringBuilder();
 
@@ -14,4 +12,21 @@ public class LogWindow : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    public void HideLog()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void ShowLog()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void SendLog(string s)
+    {
+        LogText.text = s;
+        ShowLog();
+    }
+
 }

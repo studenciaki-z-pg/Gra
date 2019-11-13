@@ -23,6 +23,8 @@ public class HexCell : MonoBehaviour
     IntelligenceTest IntelligenceTestPrefab;
     [SerializeField] public 
     AgilityTest AgilityTestPrefab;
+    [SerializeField] public
+    BonusPlace BonusPlacePrefab;
 
     int elevation = int.MinValue;
     int terrainTypeIndex = 0;
