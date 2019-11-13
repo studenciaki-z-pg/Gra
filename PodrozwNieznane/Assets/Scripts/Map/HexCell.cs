@@ -218,6 +218,12 @@ public class HexCell : MonoBehaviour
         label.text = text;
     }
 
+    public bool IsHighlighted()
+    {
+        Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+        return highlight.enabled;
+    }
+
 
     public void DisableHighlight () {
 		Image highlight = uiRect.GetChild(0).GetComponent<Image>();

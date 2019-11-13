@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
 
         //Rozpoczecie gry
         activePlayer = 0;
+        players[activePlayer].HexUnit.Location.EnableHighlight(Color.cyan);
     }
 
     public void InitializePlayerUnit()
@@ -93,7 +94,9 @@ public class GameManager : MonoBehaviour
 
     public void NextPlayer()
     {
+        players[activePlayer].HexUnit.Location.DisableHighlight();
         activePlayer = (activePlayer + 1) % 2;
+        players[activePlayer].HexUnit.Location.EnableHighlight(Color.cyan);
         players[activePlayer].HexUnit.Speed = (int)(players[activePlayer].Character.Vitality.Value*7/10); //TO DO dopasować wartość statystyk by była rozsądna [atm *7/10]
         Debug.Log("Twoja prędkość to:"+ players[activePlayer].HexUnit.Speed);
     }
