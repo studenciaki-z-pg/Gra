@@ -34,10 +34,6 @@ public class GameManager : MonoBehaviour
     public LogWindow LogWindow;
 
     //zmienne
-    private int Size;
-    private int LvlCap;
-    private bool EndTurnButtonPressed = false;//?
-
     public int activePlayer;
     public Player[] players = new Player[2];
 
@@ -118,9 +114,7 @@ public class GameManager : MonoBehaviour
         hexGrid.CreateMap();
         InitializePlayerUnit();
 
-        hexGameUI.gameObject.SetActive(true);
-        //hexGameUI.SetSelectedUnit(players[activePlayer].HexUnit);
-
+        ActivateBackground();
         //Zaczyna ten, ktory nie dotarl do teleportu, czyli nastepny gracz po prostu
         NextPlayer();
     }
@@ -134,9 +128,19 @@ public class GameManager : MonoBehaviour
     {
         players[activePlayer].Character.LevelUp();
         mapPicker.ShowPicker(hexGrid.mapGenerator.GetLandscapeType()); //NextRound() is caled inside MapPicker
+        DeactivateBackground();
+    }
 
+    public void DeactivateBackground()
+    {
         hexGrid.ClearPath();
+        hexGameUI.HighlightPlayer(false);
         hexGameUI.gameObject.SetActive(false);
+    }
+    public void ActivateBackground()
+    {
+        hexGameUI.gameObject.SetActive(true);
+        hexGameUI.HighlightPlayer(true);
     }
 
 }

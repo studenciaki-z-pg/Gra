@@ -16,11 +16,13 @@ public class LogWindow : MonoBehaviour
     public void HideLog()
     {
         gameObject.SetActive(false);
+        GameManager.instance.ActivateBackground();
     }
 
     public void ShowLog()
     {
         gameObject.SetActive(true);
+        GameManager.instance.DeactivateBackground();
     }
 
     public void SendLog(string s)

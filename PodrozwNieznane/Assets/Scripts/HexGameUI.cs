@@ -42,7 +42,7 @@ public class HexGameUI : MonoBehaviour
         }
     }
 
-    void HighlightPlayer(bool state)
+    public void HighlightPlayer(bool state)
     {
         if (state)
         {
