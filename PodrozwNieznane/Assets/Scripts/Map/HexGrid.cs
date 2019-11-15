@@ -352,7 +352,6 @@ public class HexGrid : MonoBehaviour
 
             if (path[i + 1].ItemLevel != 0)
             {
-                unit.action = true;
                 path.RemoveRange(i+1, path.Count - i-1);
                 return path;
             }
@@ -368,11 +367,8 @@ public class HexGrid : MonoBehaviour
             HexCell current = currentPathTo;
             while (current != currentPathFrom)
             {
-                if (((current.Distance - 1) / speed) == 0)
-                {
-                    current.SetLabel((speed - current.Distance).ToString());
-                    current.EnableHighlight(Color.white);
-                }
+                current.SetLabel(((current.Distance-1)/(speed)).ToString());
+                current.EnableHighlight(Color.white);
                 current = current.PathFrom;
             }
         }

@@ -17,7 +17,6 @@ public class HexUnit : MonoBehaviour
     public HexGrid Grid { get; set; }
     public static HexUnit unitPrefab;
 
-    public bool action = false;
     public static int initSpeed = 7;
 
     #region Properties
@@ -98,6 +97,7 @@ public class HexUnit : MonoBehaviour
             visionRange);
 
         float t = Time.deltaTime * travelSpeed;
+        int yes = -1;
 
         //move unit (with updating visibility)
         for (int i = 1; i < pathToTravel.Count; i++)
@@ -210,7 +210,7 @@ public class HexUnit : MonoBehaviour
     /// <summary>
     /// Called when HexUnit reaches its destination HexCell, and while travelling
     /// </summary>
-    public void InteractWithSurroundings(HexCell surroundings)
+    void InteractWithSurroundings(HexCell surroundings)
     {
         //Debug.Log($"{surroundings.coordinates.X}-{surroundings.coordinates.Y}-{surroundings.coordinates.Z}");
         if (surroundings.ItemLevel != 0)

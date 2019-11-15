@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class HexGameUI : MonoBehaviour
 {
     public HexGrid grid;
-
-    public bool lookingat = false;
-    public int wait = 0;
 
 
     HexCell currentCell;
@@ -22,6 +18,7 @@ public class HexGameUI : MonoBehaviour
         selectedUnit = unit;
     }
 
+
     void Update()
     {
         if (!EventSystem.current.IsPointerOverGameObject())
@@ -29,13 +26,12 @@ public class HexGameUI : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 DoSelection();
-                if (!currentCell.Unit)
-                {
-                    OnGUI();
-                }
             }
             else if (selectedUnit)
             {
+                //highlight players unit
+                HighlightPlayer(true);
+
                 //klikasz prawym i odpalasz chodzenie, ktore zatrzyma sie przed ewentualnym action itemem
                 if (Input.GetMouseButtonDown(1))
                 {
@@ -44,44 +40,20 @@ public class HexGameUI : MonoBehaviour
                 //klikasz lewym by wyjsc z pokazywania sciezki
                 else if (Input.GetMouseButtonDown(0))
                 {
-                    SetSelectedUnit(null);
+                    selectedUnit = null;
                 }
-
-                if (GameManager.instance.LogAnsWindow.isActiveAndEnabled == false && GameManager.instance.LogWindow.isActiveAndEnabled == false)
+                else
                 {
                     DoPathfinding();
                 }
-            }
 
-            if (selectedUnit && selectedUnit.action)
-            {
-                DoAction();
-                HighlightPlayer(true);
+                if (Input.GetMouseButtonDown(1) && grid.HasPath && grid.GetPath(selectedUnit).Count == 2)
+                {
+                    DoAction();
+                }
+
             }
         }
-    }
-
-    void OnGUI()
-    {
-        // Bail out immediately if not moused over:
-        if (!lookingat) return;
-        // Get the screen position of the NPC's origin:
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
-        // Define a 100x100 pixel rect going up and to the right:
-        Rect menuRect = new Rect(screenPos.x, screenPos.y - 100, 100, 100);
-        // Draw a label in the rect:
-        GUI.Label(menuRect, "Menu Goes Here");
-
-
-
-        /*HexCell cell =
-            grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
-
-        if (cell.ItemLevel != 0 && cell.ItemLevel != -1)
-        {
-            Rect menuRect = new Rect(cell.Position.x, cell.Position.y - 10, 10, 10);
-            GUI.Label(menuRect, "Menu Goes Here");
-        }*/
     }
 
 
@@ -112,7 +84,6 @@ public class HexGameUI : MonoBehaviour
             }
             else
             {
-                HighlightPlayer(true);
                 grid.ClearPath();
             }
 
@@ -147,11 +118,6 @@ public class HexGameUI : MonoBehaviour
         return false;
     }
 
-    void checkPopUp()
-    {
-
-    }
-
     void DoSelection()
     {
         grid.ClearPath();
@@ -182,53 +148,26 @@ public class HexGameUI : MonoBehaviour
     {
         if (selectedUnit.Speed > 0)
         {
-            //Pobieranie sciezki:
-            var fixedPath = grid.GetFixedPath(selectedUnit);
-
-            //Domyslne poruszanie sie
-            if (fixedPath.Count > 1)
+            var path = grid.GetFixedPath(selectedUnit);
+            if (path.Count > 1)
             {
-                wait = fixedPath.Count / 2;
-                selectedUnit.Travel(fixedPath);
+                selectedUnit.Travel(path);
                 grid.ClearPath();
-
-                /*
-                //Sprawdzanie interakcji
-                if (selectedUnit.action)
-                {
-                    //zatrzymalismy sie przed polem z interakcja i sprawdzamy czy mamy dosc ruchu by ja wykonac
-                    if (selectedUnit.Speed >= selectedUnit.GetMoveCost(selectedUnit.Location, selectedUnit.action))
-                    {
-                        //Utworz sciezke do tego miejsca
-                        grid.FindPath(selectedUnit.Location, selectedUnit.action, selectedUnit);
-
-                        //pzrejdz tam i wykonaj interakcje
-                        selectedUnit.Travel(grid.GetPath(selectedUnit));
-                    }
-                    else
-                    {
-                        Debug.Log("Not enough SPEED to do interaction");
-                    }
-
-                    selectedUnit.action = null;
-                }*/
             }
-            else Debug.Log("Not enough SPEED");
-  
+            else Debug.Log("Not enough points");
+
         }
         else
         {
             Debug.Log("Sorry, that's unreachable");
         }
-
-        HighlightPlayer(true);
     }
 
     public void EndTurn()//exitState()
     {
         //zablokuj sciezkowanie i pionka
         grid.ClearPath();
-        SetSelectedUnit(null);
+        selectedUnit = null;
 
         //zakoncz ture/zmien gracza
         GameManager.instance.NextPlayer();
@@ -236,34 +175,32 @@ public class HexGameUI : MonoBehaviour
 
     IEnumerator Action(List<HexCell> path)
     {
-        yield return new WaitForSeconds(wait);
-        //GameManager.instance.LogAnsWindow.SendLog("Czy chcesz wykonac akcje?"); //TODO: Rodzaje akcji do wyswietlenia w komunikacie
-        //while (GameManager.instance.LogAnsWindow.answer == -1) yield return null;
-        //if (GameManager.instance.LogAnsWindow.answer == 1)
-        //{
-        //na koniec ruchu zostanie zrobiona inba
-        selectedUnit.Travel(path);
-        yield return new WaitForSeconds(1);
-        selectedUnit.action = false;
-        HighlightPlayer(true);
-        wait = 0;
 
-        //}
-
+        GameManager.instance.LogAnsWindow.SendLog("Czy chcesz wykonac akcje?"); //TODO: Rodzaje akcji do wyswietlenia w komunikacie
+        while (GameManager.instance.LogAnsWindow.answer == -1) yield return null;
+        if (GameManager.instance.LogAnsWindow.answer == 1)
+        {
+            //na koniec ruchu zostanie zrobiona inba
+            selectedUnit.Travel(path);
+        }
     }
 
     void DoAction()
     {
+        List<HexCell> path = new List<HexCell>();
+        path = grid.GetPath(selectedUnit);
+        grid.ClearPath();
         //czy tam jest ACTION ITEM
         if (currentCell.ItemLevel != 0)
         {
             Debug.Log("TU JEST ACTION ITEM");
-            grid.FindPath(selectedUnit.Location, currentCell, selectedUnit);
-            var path = grid.GetPath(selectedUnit);
 
             //Jezeli jest blisko
             if (path.Count == 2)
             {
+                //Znajdz sciezke do itema
+                Debug.Log("JEST BLISKO");
+
                 //Czy moge zrobic action?
                 if (selectedUnit.Speed >= selectedUnit.GetMoveCost(selectedUnit.Location, currentCell))
                 {
