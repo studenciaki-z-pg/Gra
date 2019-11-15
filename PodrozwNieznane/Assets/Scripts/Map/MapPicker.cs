@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class MapPicker : MonoBehaviour
 {
+    [SerializeField] Text UpperText;
 
     private MapType localMapChoice = MapType.CLASSIC;
 
@@ -19,6 +20,8 @@ public class MapPicker : MonoBehaviour
     public void ShowPicker(MapType initValue)
     {
         gameObject.SetActive(true);
+
+        UpperText.text = "Gratulacje! Zdobywasz poziom!\nZnalazłeś portal do nowej lokacji.\nWybierz spośród poniższych:";
 
         //Set checkmark on the initial value:
         string ToggleObjectName = "Map" + ((int)initValue + 1).ToString();
