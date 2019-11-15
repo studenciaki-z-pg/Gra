@@ -11,7 +11,7 @@ public class HexGameUI : MonoBehaviour
 {
     public HexGrid grid;
 
-    public bool lookingat = false;
+   
     public float wait = 0;
 
 
@@ -31,10 +31,6 @@ public class HexGameUI : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 DoSelection();
-                if (!currentCell.Unit)
-                {
-                    OnGUI();
-                }
             }
             else if (selectedUnit)
             {
@@ -49,7 +45,9 @@ public class HexGameUI : MonoBehaviour
                     SetSelectedUnit(null);
                 }
 
-                if (GameManager.instance.LogAnsWindow.isActiveAndEnabled == false && GameManager.instance.LogWindow.isActiveAndEnabled == false && !selectedUnit.travelling)
+                if (GameManager.instance.LogAnsWindow.isActiveAndEnabled == false
+                    && GameManager.instance.LogWindow.isActiveAndEnabled == false
+                    && !selectedUnit.travelling)
                 {
                     DoPathfinding();
                 }
@@ -57,33 +55,9 @@ public class HexGameUI : MonoBehaviour
         }
     }
 
-    void OnGUI()
+    public void HighlightPlayer(bool state)
     {
-        // Bail out immediately if not moused over:
-        if (!lookingat) return;
-        // Get the screen position of the NPC's origin:
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
-        // Define a 100x100 pixel rect going up and to the right:
-        Rect menuRect = new Rect(screenPos.x, screenPos.y - 100, 100, 100);
-        // Draw a label in the rect:
-        GUI.Label(menuRect, "Menu Goes Here");
-
-
-
-        /*HexCell cell =
-            grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
-
-        if (cell.ItemLevel != 0 && cell.ItemLevel != -1)
-        {
-            Rect menuRect = new Rect(cell.Position.x, cell.Position.y - 10, 10, 10);
-            GUI.Label(menuRect, "Menu Goes Here");
-        }*/
-    }
-
-
-    void HighlightPlayer(bool state)
-    {
-        if (state)
+        if (state && !selectedUnit.travelling)
         {
             if (GameManager.instance.IsActiveUnit(selectedUnit))
             {
@@ -94,7 +68,7 @@ public class HexGameUI : MonoBehaviour
                 }
             }
         }
-        else if (GameManager.instance.IsActiveUnit(selectedUnit))
+        else if (GameManager.instance.IsActiveUnit(selectedUnit) && selectedUnit.travelling)
         {
             selectedUnit.Location.DisableHighlight();
         }
@@ -148,11 +122,6 @@ public class HexGameUI : MonoBehaviour
         }
 
         return false;
-    }
-
-    void checkPopUp()
-    {
-
     }
 
     void DoSelection()
@@ -229,7 +198,6 @@ public class HexGameUI : MonoBehaviour
 
     void DoAction(HexCell dest)
     {
-        Debug.Log("ACTIOOOOOOOOOON");
         StartCoroutine(Action(dest));
     }
 
