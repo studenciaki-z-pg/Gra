@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class HexGameUI : MonoBehaviour
@@ -29,18 +32,30 @@ public class HexGameUI : MonoBehaviour
                 //highlight players unit
                 HighlightPlayer(true);
 
+                //klikasz prawym i odpalasz chodzenie, ktore zatrzyma sie przed ewentualnym action itemem
                 if (Input.GetMouseButtonDown(1))
                 {
                     DoMove();
-                    
+                }
+                //klikasz lewym by wyjsc z pokazywania sciezki
+                else if (Input.GetMouseButtonDown(0))
+                {
+                    selectedUnit = null;
                 }
                 else
                 {
                     DoPathfinding();
                 }
+
+                if (Input.GetMouseButtonDown(1) && grid.HasPath && grid.GetPath(selectedUnit).Count == 2)
+                {
+                    DoAction();
+                }
+
             }
         }
     }
+
 
     void HighlightPlayer(bool state)
     {
@@ -131,28 +146,21 @@ public class HexGameUI : MonoBehaviour
 
     void DoMove()
     {
-        
-        if (grid.HasPath && selectedUnit.Speed > 0 )
+        if (selectedUnit.Speed > 0)
         {
             var path = grid.GetFixedPath(selectedUnit);
             if (path.Count > 1)
             {
-                //selectedUnit.Location = currentCell;
-                /*for (var i = 0; i < path.Count - 1; i++ )
-                {
-                    selectedUnit.Speed -= selectedUnit.GetMoveCost(path[i], path[i+1]);
-                    //Debug.Log($"speed = {selectedUnit.Speed}");
-                }*/
                 selectedUnit.Travel(path);
                 grid.ClearPath();
             }
-            else Debug.Log("Too far");
+            else Debug.Log("Not enough points");
 
         }
         else
         {
             Debug.Log("Sorry, that's unreachable");
-        }        
+        }
     }
 
     public void EndTurn()//exitState()
@@ -164,4 +172,44 @@ public class HexGameUI : MonoBehaviour
         //zakoncz ture/zmien gracza
         GameManager.instance.NextPlayer();
     }
+
+    IEnumerator Action(List<HexCell> path)
+    {
+
+        GameManager.instance.LogAnsWindow.SendLog("Czy chcesz wykonac akcje?"); //TODO: Rodzaje akcji do wyswietlenia w komunikacie
+        while (GameManager.instance.LogAnsWindow.answer == -1) yield return null;
+        if (GameManager.instance.LogAnsWindow.answer == 1)
+        {
+            //na koniec ruchu zostanie zrobiona inba
+            selectedUnit.Travel(path);
+        }
+    }
+
+    void DoAction()
+    {
+        List<HexCell> path = new List<HexCell>();
+        path = grid.GetPath(selectedUnit);
+        grid.ClearPath();
+        //czy tam jest ACTION ITEM
+        if (currentCell.ItemLevel != 0)
+        {
+            Debug.Log("TU JEST ACTION ITEM");
+
+            //Jezeli jest blisko
+            if (path.Count == 2)
+            {
+                //Znajdz sciezke do itema
+                Debug.Log("JEST BLISKO");
+
+                //Czy moge zrobic action?
+                if (selectedUnit.Speed >= selectedUnit.GetMoveCost(selectedUnit.Location, currentCell))
+                {
+                    Debug.Log("ACTIOOOOOOOOOON");
+                    StartCoroutine(Action(path));
+                }
+            }
+        }
+    }
+
+    
 }

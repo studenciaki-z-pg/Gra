@@ -14,8 +14,6 @@ using Random = UnityEngine.Random;
 //TODO: Ujednolicenie grafiki ekwipunku (UI/Camera)
 //TODO: Sprawdzenie warunkow zwyciestwa/porazki
 //TODO: Prawdopodobieństwo wylosowania obiektu zależnie od rodzaju mapy
-//TODO: Wygenerować .exe
-//TODO: Dodać okienko zamiast logów
 
 public class GameManager : MonoBehaviour
 {
@@ -24,6 +22,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] HexMapCamera hexMapCamera;
     [SerializeField] MapPicker mapPicker;
     [SerializeField] LogWindow logWindow;
+    [SerializeField] LogAnsWindow logAnsWindow;
 
 
     //referencje
@@ -32,6 +31,7 @@ public class GameManager : MonoBehaviour
     public EquippableItem[] ListOfItems;
     public static GameManager instance;
     public LogWindow LogWindow;
+    public LogAnsWindow LogAnsWindow;
 
     //zmienne
     private int Size;
@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
         //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
         //Inicjalizacja mapy
         LogWindow = logWindow;
+        LogAnsWindow = logAnsWindow;
         MapType initType = (MapType)Random.Range(0, Enum.GetValues(typeof(MapType)).Length);
         hexGrid.mapGenerator.SetLandscape(initType);
         hexGrid.CreateMap();
