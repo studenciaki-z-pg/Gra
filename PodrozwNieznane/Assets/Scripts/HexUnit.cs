@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.XR.WSA.Persistence;
 using Debug = UnityEngine.Debug;
 
 public class HexUnit : MonoBehaviour
@@ -18,11 +20,13 @@ public class HexUnit : MonoBehaviour
     public static HexUnit unitPrefab;
 
     public static int initSpeed = 7;
-    public bool travelling = false;
 
     #region Properties
 
     public int Speed { get; set; } = initSpeed;
+
+    public bool Travelling { get; set; } = false;
+
 
     public HexCell Location
     {
@@ -89,7 +93,7 @@ public class HexUnit : MonoBehaviour
 
     IEnumerator TravelPath()
     {
-        this.travelling = true;
+        this.Travelling = true;
         Vector3 a, b, c = pathToTravel[0].Position;
         if(pathToTravel.Count>1) yield return LookAt(pathToTravel[1].Position);
         else yield return LookAt(pathToTravel[0].Position);
@@ -147,7 +151,7 @@ public class HexUnit : MonoBehaviour
         ListPool<HexCell>.Add(pathToTravel);
         pathToTravel = null;
 
-        this.travelling = false;
+        this.Travelling = false;
         InteractWithSurroundings(location);
         
     }

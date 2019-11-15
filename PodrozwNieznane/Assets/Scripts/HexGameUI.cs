@@ -12,7 +12,6 @@ public class HexGameUI : MonoBehaviour
     public HexGrid grid;
 
    
-    public float wait = 0;
 
 
     HexCell currentCell;
@@ -47,7 +46,7 @@ public class HexGameUI : MonoBehaviour
 
                 if (GameManager.instance.LogAnsWindow.isActiveAndEnabled == false
                     && GameManager.instance.LogWindow.isActiveAndEnabled == false
-                    && !selectedUnit.travelling)
+                    && !selectedUnit.Travelling)
                 {
                     DoPathfinding();
                 }
@@ -57,7 +56,7 @@ public class HexGameUI : MonoBehaviour
 
     public void HighlightPlayer(bool state)
     {
-        if (state && !selectedUnit.travelling)
+        if (state && !selectedUnit.Travelling)
         {
             if (GameManager.instance.IsActiveUnit(selectedUnit))
             {
@@ -68,7 +67,7 @@ public class HexGameUI : MonoBehaviour
                 }
             }
         }
-        else if (GameManager.instance.IsActiveUnit(selectedUnit) && selectedUnit.travelling)
+        else if (GameManager.instance.IsActiveUnit(selectedUnit) && selectedUnit.Travelling)
         {
             selectedUnit.Location.DisableHighlight();
         }
@@ -178,7 +177,6 @@ public class HexGameUI : MonoBehaviour
                 }
 
                 //Domyslne poruszanie sie bez action itema
-                wait = path.Count;
                 selectedUnit.Travel(path);
 
             }
@@ -206,19 +204,18 @@ public class HexGameUI : MonoBehaviour
 
 
         //czekaj az pionek sie skonczy ruszac
-        yield return new WaitForSeconds(wait);
+        yield return new WaitUntil(() => selectedUnit.Travelling == false);
 
         //przygotuj sciezke
         grid.FindPath(selectedUnit.Location, dest, selectedUnit);
         selectedUnit.Travel(grid.GetPath(selectedUnit));
-        
+
         //czekaj az sie ruszy
-        yield return new WaitForSeconds(1);
+        //yield return new WaitUntil(() => selectedUnit.Travelling == false);
 
 
         grid.ClearPath();
         HighlightPlayer(true);
-        wait = 0;
     }
 
     public void EndTurn()//exitState()
