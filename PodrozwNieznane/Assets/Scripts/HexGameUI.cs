@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,7 +12,7 @@ public class HexGameUI : MonoBehaviour
     public HexGrid grid;
 
     public bool lookingat = false;
-    public int wait = 0;
+    public float wait = 0;
 
 
     HexCell currentCell;
@@ -47,16 +49,10 @@ public class HexGameUI : MonoBehaviour
                     SetSelectedUnit(null);
                 }
 
-                if (GameManager.instance.LogAnsWindow.isActiveAndEnabled == false && GameManager.instance.LogWindow.isActiveAndEnabled == false)
+                if (GameManager.instance.LogAnsWindow.isActiveAndEnabled == false && GameManager.instance.LogWindow.isActiveAndEnabled == false && !selectedUnit.travelling)
                 {
                     DoPathfinding();
                 }
-            }
-
-            if (selectedUnit && selectedUnit.action)
-            {
-                DoAction();
-                HighlightPlayer(true);
             }
         }
     }
@@ -91,12 +87,14 @@ public class HexGameUI : MonoBehaviour
         {
             if (GameManager.instance.IsActiveUnit(selectedUnit))
             {
-                selectedUnit.Location.EnableHighlight(Color.blue);
+                if (GameManager.instance.LogAnsWindow.isActiveAndEnabled == false &&
+                    GameManager.instance.LogWindow.isActiveAndEnabled == false)
+                {
+                    selectedUnit.Location.EnableHighlight(Color.blue);
+                }
             }
-
-            return;
         }
-        if (GameManager.instance.IsActiveUnit(selectedUnit))
+        else if (GameManager.instance.IsActiveUnit(selectedUnit))
         {
             selectedUnit.Location.DisableHighlight();
         }
@@ -137,13 +135,18 @@ public class HexGameUI : MonoBehaviour
     }
     bool UpdateCurrentCell()
     {
-        HexCell cell =
-            grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
-        if (cell != currentCell)
+        if (grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition)))
         {
-            currentCell = cell;
-            return true;
+            HexCell cell =
+                grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
+            if (cell != currentCell)
+            {
+                currentCell = cell;
+                return true;
+            }
+            return false;
         }
+
         return false;
     }
 
@@ -183,45 +186,71 @@ public class HexGameUI : MonoBehaviour
         if (selectedUnit.Speed > 0)
         {
             //Pobieranie sciezki:
-            var fixedPath = grid.GetFixedPath(selectedUnit);
+            var path = grid.GetFixedPath(selectedUnit);
+            HexCell last = null;
 
-            //Domyslne poruszanie sie
-            if (fixedPath.Count > 1)
+            if (path.Count > 1)
             {
-                wait = fixedPath.Count / 2;
-                selectedUnit.Travel(fixedPath);
-                grid.ClearPath();
-
-                /*
-                //Sprawdzanie interakcji
-                if (selectedUnit.action)
+                //Chcesz isc do action itema
+                if (path[path.Count - 1].ItemLevel != 0)
                 {
-                    //zatrzymalismy sie przed polem z interakcja i sprawdzamy czy mamy dosc ruchu by ja wykonac
-                    if (selectedUnit.Speed >= selectedUnit.GetMoveCost(selectedUnit.Location, selectedUnit.action))
+                    //szczegolny przypadek gdy odleglosc do action itema wynosi 1
+                    if (path.Count == 2)
                     {
-                        //Utworz sciezke do tego miejsca
-                        grid.FindPath(selectedUnit.Location, selectedUnit.action, selectedUnit);
-
-                        //pzrejdz tam i wykonaj interakcje
-                        selectedUnit.Travel(grid.GetPath(selectedUnit));
-                    }
-                    else
-                    {
-                        Debug.Log("Not enough SPEED to do interaction");
+                        DoAction(path[1]);
+                        grid.ClearPath();
+                        HighlightPlayer(true);
+                        return;
                     }
 
-                    selectedUnit.action = null;
-                }*/
+                    //norm przypadek z action itemem
+                    last = path[path.Count - 1];
+                    path.Remove(last);
+                }
+
+                //Domyslne poruszanie sie bez action itema
+                wait = path.Count;
+                selectedUnit.Travel(path);
+
             }
-            else Debug.Log("Not enough SPEED");
-  
+            else Debug.Log("Path too short");
+
+            //Ruch konczy sie na action itemie jezeli choc jeden byl w sciezce
+            if(last)DoAction(last);
         }
         else
         {
-            Debug.Log("Sorry, that's unreachable");
+            Debug.Log("Not enough SPEED");
         }
 
+        grid.ClearPath();
         HighlightPlayer(true);
+    }
+
+    void DoAction(HexCell dest)
+    {
+        Debug.Log("ACTIOOOOOOOOOON");
+        StartCoroutine(Action(dest));
+    }
+
+    IEnumerator Action(HexCell dest)
+    {
+
+
+        //czekaj az pionek sie skonczy ruszac
+        yield return new WaitForSeconds(wait);
+
+        //przygotuj sciezke
+        grid.FindPath(selectedUnit.Location, dest, selectedUnit);
+        selectedUnit.Travel(grid.GetPath(selectedUnit));
+        
+        //czekaj az sie ruszy
+        yield return new WaitForSeconds(1);
+
+
+        grid.ClearPath();
+        HighlightPlayer(true);
+        wait = 0;
     }
 
     public void EndTurn()//exitState()
@@ -234,45 +263,4 @@ public class HexGameUI : MonoBehaviour
         GameManager.instance.NextPlayer();
     }
 
-    IEnumerator Action(List<HexCell> path)
-    {
-        yield return new WaitForSeconds(wait);
-        //GameManager.instance.LogAnsWindow.SendLog("Czy chcesz wykonac akcje?"); //TODO: Rodzaje akcji do wyswietlenia w komunikacie
-        //while (GameManager.instance.LogAnsWindow.answer == -1) yield return null;
-        //if (GameManager.instance.LogAnsWindow.answer == 1)
-        //{
-        //na koniec ruchu zostanie zrobiona inba
-        selectedUnit.Travel(path);
-        yield return new WaitForSeconds(1);
-        selectedUnit.action = false;
-        HighlightPlayer(true);
-        wait = 0;
-
-        //}
-
-    }
-
-    void DoAction()
-    {
-        //czy tam jest ACTION ITEM
-        if (currentCell.ItemLevel != 0)
-        {
-            Debug.Log("TU JEST ACTION ITEM");
-            grid.FindPath(selectedUnit.Location, currentCell, selectedUnit);
-            var path = grid.GetPath(selectedUnit);
-
-            //Jezeli jest blisko
-            if (path.Count == 2)
-            {
-                //Czy moge zrobic action?
-                if (selectedUnit.Speed >= selectedUnit.GetMoveCost(selectedUnit.Location, currentCell))
-                {
-                    Debug.Log("ACTIOOOOOOOOOON");
-                    StartCoroutine(Action(path));
-                }
-            }
-        }
-    }
-
-    
 }

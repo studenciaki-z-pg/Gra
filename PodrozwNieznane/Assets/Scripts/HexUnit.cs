@@ -11,14 +11,14 @@ public class HexUnit : MonoBehaviour
     List<HexCell> pathToTravel;
 
     const float travelSpeed = 3f;
-    const float rotationSpeed = 160f;
+    const float rotationSpeed = 240f;
     const int visionRange = 3;
 
     public HexGrid Grid { get; set; }
     public static HexUnit unitPrefab;
 
-    public bool action = false;
     public static int initSpeed = 7;
+    public bool travelling = false;
 
     #region Properties
 
@@ -89,6 +89,7 @@ public class HexUnit : MonoBehaviour
 
     IEnumerator TravelPath()
     {
+        this.travelling = true;
         Vector3 a, b, c = pathToTravel[0].Position;
         if(pathToTravel.Count>1) yield return LookAt(pathToTravel[1].Position);
         else yield return LookAt(pathToTravel[0].Position);
@@ -146,7 +147,9 @@ public class HexUnit : MonoBehaviour
         ListPool<HexCell>.Add(pathToTravel);
         pathToTravel = null;
 
+        this.travelling = false;
         InteractWithSurroundings(location);
+        
     }
 
     IEnumerator LookAt(Vector3 point)

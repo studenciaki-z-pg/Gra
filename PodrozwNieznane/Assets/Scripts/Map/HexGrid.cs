@@ -350,9 +350,8 @@ public class HexGrid : MonoBehaviour
                 return path;
             }
 
-            if (path[i + 1].ItemLevel != 0)
+            if (path[i].ItemLevel != 0)
             {
-                unit.action = true;
                 path.RemoveRange(i+1, path.Count - i-1);
                 return path;
             }
