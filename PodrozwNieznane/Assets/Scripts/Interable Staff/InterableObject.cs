@@ -21,6 +21,8 @@ public class InterableObject : MonoBehaviour
         return 1;
     }
 
-    
+    void OnGUI()
+    {
 
+    }
 }
