@@ -20,7 +20,4 @@ public class InterableObject : MonoBehaviour
         GameManager.instance.LogWindow.SendLog("Your princess is in another monster dungeon.");
         return 1;
     }
-
-    
-
 }

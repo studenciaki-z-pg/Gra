@@ -1,9 +1,17 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class HexGameUI : MonoBehaviour
 {
     public HexGrid grid;
+
+   
 
 
     HexCell currentCell;
@@ -15,7 +23,6 @@ public class HexGameUI : MonoBehaviour
         selectedUnit = unit;
     }
 
-
     void Update()
     {
         if (!EventSystem.current.IsPointerOverGameObject())
@@ -26,15 +33,20 @@ public class HexGameUI : MonoBehaviour
             }
             else if (selectedUnit)
             {
-                //highlight players unit
-                HighlightPlayer(true);
-
+                //klikasz prawym i odpalasz chodzenie, ktore zatrzyma sie przed ewentualnym action itemem
                 if (Input.GetMouseButtonDown(1))
                 {
                     DoMove();
-                    
                 }
-                else
+                //klikasz lewym by wyjsc z pokazywania sciezki
+                else if (Input.GetMouseButtonDown(0))
+                {
+                    SetSelectedUnit(null);
+                }
+
+                if (GameManager.instance.LogAnsWindow.isActiveAndEnabled == false
+                    && GameManager.instance.LogWindow.isActiveAndEnabled == false
+                    && !selectedUnit.Travelling)
                 {
                     DoPathfinding();
                 }
@@ -44,16 +56,18 @@ public class HexGameUI : MonoBehaviour
 
     public void HighlightPlayer(bool state)
     {
-        if (state)
+        if (state && !selectedUnit.Travelling)
         {
             if (GameManager.instance.IsActiveUnit(selectedUnit))
             {
-                selectedUnit.Location.EnableHighlight(Color.blue);
+                if (GameManager.instance.LogAnsWindow.isActiveAndEnabled == false &&
+                    GameManager.instance.LogWindow.isActiveAndEnabled == false)
+                {
+                    selectedUnit.Location.EnableHighlight(Color.blue);
+                }
             }
-
-            return;
         }
-        if (GameManager.instance.IsActiveUnit(selectedUnit))
+        else if (GameManager.instance.IsActiveUnit(selectedUnit) && selectedUnit.Travelling)
         {
             selectedUnit.Location.DisableHighlight();
         }
@@ -69,6 +83,7 @@ public class HexGameUI : MonoBehaviour
             }
             else
             {
+                HighlightPlayer(true);
                 grid.ClearPath();
             }
 
@@ -93,13 +108,18 @@ public class HexGameUI : MonoBehaviour
     }
     bool UpdateCurrentCell()
     {
-        HexCell cell =
-            grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
-        if (cell != currentCell)
+        if (grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition)))
         {
-            currentCell = cell;
-            return true;
+            HexCell cell =
+                grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
+            if (cell != currentCell)
+            {
+                currentCell = cell;
+                return true;
+            }
+            return false;
         }
+
         return false;
     }
 
@@ -131,37 +151,81 @@ public class HexGameUI : MonoBehaviour
 
     void DoMove()
     {
-        
-        if (grid.HasPath && selectedUnit.Speed > 0 )
+        if (selectedUnit.Speed > 0)
         {
+            //Pobieranie sciezki:
             var path = grid.GetFixedPath(selectedUnit);
+            HexCell last = null;
+
             if (path.Count > 1)
             {
-                //selectedUnit.Location = currentCell;
-                /*for (var i = 0; i < path.Count - 1; i++ )
+                //Chcesz isc do action itema
+                if (path[path.Count - 1].ItemLevel != 0)
                 {
-                    selectedUnit.Speed -= selectedUnit.GetMoveCost(path[i], path[i+1]);
-                    //Debug.Log($"speed = {selectedUnit.Speed}");
-                }*/
-                selectedUnit.Travel(path);
-                grid.ClearPath();
-            }
-            else Debug.Log("Too far");
+                    //szczegolny przypadek gdy odleglosc do action itema wynosi 1
+                    if (path.Count == 2)
+                    {
+                        DoAction(path[1]);
+                        grid.ClearPath();
+                        HighlightPlayer(true);
+                        return;
+                    }
 
+                    //norm przypadek z action itemem
+                    last = path[path.Count - 1];
+                    path.Remove(last);
+                }
+
+                //Domyslne poruszanie sie bez action itema
+                selectedUnit.Travel(path);
+
+            }
+            else Debug.Log("Path too short");
+
+            //Ruch konczy sie na action itemie jezeli choc jeden byl w sciezce
+            if(last)DoAction(last);
         }
         else
         {
-            Debug.Log("Sorry, that's unreachable");
-        }        
+            Debug.Log("Not enough SPEED");
+        }
+
+        grid.ClearPath();
+        HighlightPlayer(true);
+    }
+
+    void DoAction(HexCell dest)
+    {
+        StartCoroutine(Action(dest));
+    }
+
+    IEnumerator Action(HexCell dest)
+    {
+
+
+        //czekaj az pionek sie skonczy ruszac
+        yield return new WaitUntil(() => selectedUnit.Travelling == false);
+
+        //przygotuj sciezke
+        grid.FindPath(selectedUnit.Location, dest, selectedUnit);
+        selectedUnit.Travel(grid.GetPath(selectedUnit));
+
+        //czekaj az sie ruszy
+        //yield return new WaitUntil(() => selectedUnit.Travelling == false);
+
+
+        grid.ClearPath();
+        HighlightPlayer(true);
     }
 
     public void EndTurn()//exitState()
     {
         //zablokuj sciezkowanie i pionka
         grid.ClearPath();
-        selectedUnit = null;
+        SetSelectedUnit(null);
 
         //zakoncz ture/zmien gracza
         GameManager.instance.NextPlayer();
     }
+
 }

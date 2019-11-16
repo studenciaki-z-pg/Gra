@@ -308,6 +308,22 @@ public class HexGrid : MonoBehaviour
         ShowPath(unit?.Speed ?? HexUnit.initSpeed);//movement points
     }
 
+    public List<HexCell> GetPath(HexUnit unit)
+    {
+        if (!currentPathExists)
+        {
+            return null;
+        }
+        List<HexCell> path = ListPool<HexCell>.Get();
+        for (HexCell c = currentPathTo; c != currentPathFrom; c = c.PathFrom)
+        {
+            path.Add(c);
+        }
+        path.Add(currentPathFrom);
+        path.Reverse();
+        return path;
+    }
+
     public List<HexCell> GetFixedPath(HexUnit unit)
     {
         if (!currentPathExists)
@@ -328,33 +344,17 @@ public class HexGrid : MonoBehaviour
         for (int i=0;i<path.Count-1;i++)
         {
             moveCost += unit.GetMoveCost(path[i], path[i + 1]);
-
-            /*//specjalna sytuacja(wchdozenie na zbocze gdy ma sie 2p ruchu)
-            if (((movementPoints - moveCost) == -1 && unit.GetMoveCost(path[i], path[i + 1]) == 3))
-            {
-                Debug.Log("cliffing: " + moveCost);
-                i++;
-                path.RemoveRange(i, path.Count - i);
-                return path;
-            }*/
-
-            //standardowa sytuacja
             if ((movementPoints - moveCost) < 0)
             {
                 path.RemoveRange(i, path.Count - i);
                 return path;
             }
 
-            //Chcemy dosjc do Endpointa/interaktywnego obiektu i mamy dosc ruchu, to zatrzymujemy sie przed nim
-            if (unit.GetInteractionCost(path[i+1]) == 1)
+            if (path[i].ItemLevel != 0)
             {
-                path.RemoveRange(i, path.Count - i);
+                path.RemoveRange(i+1, path.Count - i-1);
                 return path;
             }
-
-
-
-
         }
         return path;
     }
@@ -367,8 +367,11 @@ public class HexGrid : MonoBehaviour
             HexCell current = currentPathTo;
             while (current != currentPathFrom)
             {
-                current.SetLabel(((current.Distance-1)/(speed)).ToString());
-                current.EnableHighlight(Color.white);
+                if (((current.Distance - 1) / speed) == 0)
+                {
+                    current.SetLabel((speed - current.Distance).ToString());
+                    current.EnableHighlight(Color.white);
+                }
                 current = current.PathFrom;
             }
         }

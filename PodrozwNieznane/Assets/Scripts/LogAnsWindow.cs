@@ -1,36 +1,50 @@
-﻿using System.Text;
-using Unity.UNetWeaver;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LogWindow : MonoBehaviour
+public class LogAnsWindow : MonoBehaviour
 {
     [SerializeField] Text LogText;
 
     private StringBuilder stringBuilder = new StringBuilder();
+    public int answer = -1;
 
     private void OnValidate()
     {
         gameObject.SetActive(false);
     }
 
-    public void HideLog()
+    void HideLog()
     {
         gameObject.SetActive(false);
         GameManager.instance.hexGameUI.HighlightPlayer(true);
-        
     }
 
-    public void ShowLog()
+    void ShowLog()
     {
-        GameManager.instance.hexGrid.ClearPath();
         GameManager.instance.hexGameUI.HighlightPlayer(false);
+        GameManager.instance.hexGrid.ClearPath();
         gameObject.SetActive(true);
     }
 
     public void SendLog(string s)
     {
         LogText.text = s;
+        answer = -1;
         ShowLog();
+    }
+
+    public void YesAnswer()
+    {
+        answer = 1;
+        HideLog();
+    }
+
+    public void NoAnswer()
+    {
+        answer = 0;
+        HideLog();
     }
 }

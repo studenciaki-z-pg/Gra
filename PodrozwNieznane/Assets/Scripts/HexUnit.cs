@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.XR.WSA.Persistence;
 using Debug = UnityEngine.Debug;
 
 public class HexUnit : MonoBehaviour
@@ -11,7 +13,7 @@ public class HexUnit : MonoBehaviour
     List<HexCell> pathToTravel;
 
     const float travelSpeed = 3f;
-    const float rotationSpeed = 160f;
+    const float rotationSpeed = 240f;
     const int visionRange = 3;
 
     public HexGrid Grid { get; set; }
@@ -22,6 +24,9 @@ public class HexUnit : MonoBehaviour
     #region Properties
 
     public int Speed { get; set; } = initSpeed;
+
+    public bool Travelling { get; set; } = false;
+
 
     public HexCell Location
     {
@@ -85,8 +90,10 @@ public class HexUnit : MonoBehaviour
         }
     }
 
+
     IEnumerator TravelPath()
     {
+        this.Travelling = true;
         Vector3 a, b, c = pathToTravel[0].Position;
         if(pathToTravel.Count>1) yield return LookAt(pathToTravel[1].Position);
         else yield return LookAt(pathToTravel[0].Position);
@@ -101,24 +108,6 @@ public class HexUnit : MonoBehaviour
         for (int i = 1; i < pathToTravel.Count; i++)
         {
             currentTravelLocation = pathToTravel[i];
-            bool yes = false;
-
-            //psuje wszystko
-            if (GetInteractionCost(pathToTravel[i]) == 1)
-            {
-                Debug.Log($"AKCJA");
-                //Okienko z zapytaniem czy na pewno chcesz to zrobic
-                //gdy zakończy się ruch do pola(pionek idzie dluzej niz gra liczy pola)
-                //patrz nizej
-
-                yes = true;
-               
-                /*  jezeli interakcja sie powiodla to nic z ruchem sie nie dzieje
-                 *  TODO: Niepowodzenie(przegrany test):
-                 *      i++ (ustawienie koncowej lokacji jako 'i' by zakonczyc sciezke)
-                 *      Speed -= cost - cena interakcji
-                 */
-            }
 
             a = c;
             b = pathToTravel[i - 1].Position;
@@ -138,10 +127,9 @@ public class HexUnit : MonoBehaviour
             //Some glorious movement magic
             Speed -= GetMoveCost(pathToTravel[i - 1], pathToTravel[i]);
 
-            if (yes)InteractWithSurroundings(currentTravelLocation);
-
         }
         currentTravelLocation = null;
+
 
         //increase visibility at unit's final position:
         a = c;
@@ -163,7 +151,9 @@ public class HexUnit : MonoBehaviour
         ListPool<HexCell>.Add(pathToTravel);
         pathToTravel = null;
 
-        //InteractWithSurroundings(location);
+        this.Travelling = false;
+        InteractWithSurroundings(location);
+        
     }
 
     IEnumerator LookAt(Vector3 point)
@@ -220,20 +210,14 @@ public class HexUnit : MonoBehaviour
     {
         HexEdgeType edgeType = fromCell.GetEdgeType(toCell);
         if (edgeType == HexEdgeType.Cliff) return -1;
-        if (edgeType == HexEdgeType.Slope) return 3 + GetInteractionCost(toCell);
-        return 1 + GetInteractionCost(toCell);
-    }
-
-    public int GetInteractionCost(HexCell cell)
-    {
-        if (cell.ItemLevel != 0) return 1;
-        return 0;
+        if (edgeType == HexEdgeType.Slope) return 3 ;
+        return 1;
     }
 
     /// <summary>
     /// Called when HexUnit reaches its destination HexCell, and while travelling
     /// </summary>
-    void InteractWithSurroundings(HexCell surroundings)
+    public void InteractWithSurroundings(HexCell surroundings)
     {
         //Debug.Log($"{surroundings.coordinates.X}-{surroundings.coordinates.Y}-{surroundings.coordinates.Z}");
         if (surroundings.ItemLevel != 0)

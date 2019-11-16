@@ -26,17 +26,17 @@ public class BonusPlace : InterableObject
             case 2:
                 for (int i = 0; i < value; i++)
                     GameManager.instance.players[active].Character.AddIntelligencePoint();
-                GameManager.instance.LogWindow.SendLog("Znajdujesz kapliczkę zręczności.\nTwoja zręczność zwiększa się o: " + value);
+                GameManager.instance.LogWindow.SendLog("Znajdujesz kapliczkę inteligencji.\nTwoja inteligencja zwiększa się o: " + value);
                 break;
             case 3:
                 for (int i = 0; i < value; i++)
                     GameManager.instance.players[active].Character.AddStrengthPoint();
-                GameManager.instance.LogWindow.SendLog("Znajdujesz kapliczkę zręczności.\nTwoja zręczność zwiększa się o: " + value);
+                GameManager.instance.LogWindow.SendLog("Znajdujesz kapliczkę siły.\nTwoja siła zwiększa się o: " + value);
                 break;
             case 4:
                 for (int i = 0; i < value; i++)
                     GameManager.instance.players[active].Character.AddVitalityPoint();
-                GameManager.instance.LogWindow.SendLog("Znajdujesz kapliczkę zręczności.\nTwoja zręczność zwiększa się o: " + value);
+                GameManager.instance.LogWindow.SendLog("Znajdujesz kapliczkę szybkości.\nTwoja szybkość zwiększa się o: " + value);
                 break;
         }
         return 0;
