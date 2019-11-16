@@ -15,8 +15,7 @@ public class Character : MonoBehaviour
 
     [SerializeField] Sprite activeSprite;
     [SerializeField] Sprite inactiveSprite;
-
-    private int Player = -1;
+    
     private int PlayerLevel = 1;
     private int AvailableSkillPoints = 5;
     private int AssignedSkillPoints = 0;
@@ -92,17 +91,18 @@ public class Character : MonoBehaviour
         equipmentPanel.OnItemRightClickedEvent += UnequipFromEquipment;
     }
 
-    public void TurnVisible(int player)
+    public void TurnVisible()
     {
         if(gameObject.active)
         {
             gameObject.SetActive(false);
+            GameManager.instance.hexGameUI.HighlightPlayer(true);
+            GameManager.instance.hexGameUI.gameObject.SetActive(true);
         } else
         {
-            if(Player != player)
-            {
-                Player = player;
-            }
+            GameManager.instance.hexGrid.ClearPath();
+            GameManager.instance.hexGameUI.HighlightPlayer(false);
+            GameManager.instance.hexGameUI.gameObject.SetActive(false);
             gameObject.SetActive(true);
         }
     }
