@@ -80,7 +80,7 @@ public struct MapAttributes
     }
     public static MapAttributes GetCanyon()
     {
-        return new MapAttributes(0.5f, 0.5f, 0f, 20, 30, 64, 1, -2, 6, 8, 1, 15, new int[6] { 0, 0, 0, 1, 2, 0 }, 7, 6, int.MaxValue);
+        return new MapAttributes(0.5f, 0.5f, 0f, 20, 30, 64, 1, -2, 6, 8, 1, 25, new int[6] { 0, 0, 0, 1, 2, 0 }, 7, 6, int.MaxValue);
     }
 
 
