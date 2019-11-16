@@ -196,26 +196,7 @@ public class HexGameUI : MonoBehaviour
 
     void DoAction(HexCell dest)
     {
-        StartCoroutine(Action(dest));
-    }
-
-    IEnumerator Action(HexCell dest)
-    {
-
-
-        //czekaj az pionek sie skonczy ruszac
-        yield return new WaitUntil(() => selectedUnit.Travelling == false);
-
-        //przygotuj sciezke
-        grid.FindPath(selectedUnit.Location, dest, selectedUnit);
-        selectedUnit.Travel(grid.GetPath(selectedUnit));
-
-        //czekaj az sie ruszy
-        //yield return new WaitUntil(() => selectedUnit.Travelling == false);
-
-
-        grid.ClearPath();
-        HighlightPlayer(true);
+        StartCoroutine(selectedUnit.Action(dest));
     }
 
     public void EndTurn()//exitState()
@@ -226,6 +207,11 @@ public class HexGameUI : MonoBehaviour
 
         //zakoncz ture/zmien gracza
         GameManager.instance.NextPlayer();
+    }
+
+    void DoRetreat()
+    {
+
     }
 
 }

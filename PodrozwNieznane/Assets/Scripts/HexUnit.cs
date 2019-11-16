@@ -20,6 +20,7 @@ public class HexUnit : MonoBehaviour
     public static HexUnit unitPrefab;
 
     public static int initSpeed = 7;
+    public bool state = false;
 
     #region Properties
 
@@ -152,8 +153,6 @@ public class HexUnit : MonoBehaviour
         pathToTravel = null;
 
         this.Travelling = false;
-        InteractWithSurroundings(location);
-        
     }
 
     IEnumerator LookAt(Vector3 point)
@@ -214,27 +213,65 @@ public class HexUnit : MonoBehaviour
         return 1;
     }
 
+    public IEnumerator Action(HexCell dest)
+    {
+        //czekaj az pionek sie skonczy ruszac
+        yield return new WaitUntil(() => Travelling == false);
+
+        //przygotuj sciezke
+        var pastLocation = Location;
+        Grid.FindPath(Location, dest, this);
+        Travel(Grid.GetPath(this));
+        
+
+        //czekaj az sie ruszy
+        yield return new WaitUntil(() => Travelling == false);
+        Grid.ClearPath();
+
+        //Interakcja
+        InteractWithSurroundings(dest);
+        if (state)
+        {
+            Grid.ClearPath();
+            GameManager.instance.hexGameUI.HighlightPlayer(true);
+        }
+        else
+        {
+            Grid.ClearPath();
+            //Odwrot
+            Grid.FindPath(Location, pastLocation, this);
+            Travel(Grid.GetPath(this));
+        }
+
+        yield return new WaitUntil(() => Travelling == false);
+
+        Grid.ClearPath();
+        GameManager.instance.hexGameUI.HighlightPlayer(true);
+
+    }
+
     /// <summary>
     /// Called when HexUnit reaches its destination HexCell, and while travelling
     /// </summary>
-    public void InteractWithSurroundings(HexCell surroundings)
+    void InteractWithSurroundings(HexCell surroundings)
     {
-        //Debug.Log($"{surroundings.coordinates.X}-{surroundings.coordinates.Y}-{surroundings.coordinates.Z}");
-        if (surroundings.ItemLevel != 0)
+        if (surroundings.ItemLevel == -1)
         {
-            if (surroundings.ItemLevel == -1)
-            {
-                GameManager.instance.OnFinish(this);
-            }
-            else
-            {
-                if(surroundings.interableObject.FinallySomeoneFoundMe()==0)
-                    surroundings.ItemLevel = 0;
-            }
+            GameManager.instance.OnFinish(this);
+        }
+
+        //Udalo sie wykonac akcje
+        else if (surroundings.interableObject.FinallySomeoneFoundMe() == 0)
+        {
+            surroundings.ItemLevel = 0;
+            state = true;
+        }
+
+        //Nie udalo sie wykonac akcji
+        else if (surroundings.interableObject.FinallySomeoneFoundMe() == 1)
+        {
+            state = false;
         }
     }
-
-
-
 }
 
