@@ -128,36 +128,15 @@ public class HexMapFeatureGenerator: MonoBehaviour
                 cell = largestFlatGround[Random.Range(0, largestFlatGround.Count)];
             }
             while (!(cell.Explorable && cell.Walkable) || itemsLocations.Contains(cell) || playersLocations.Contains(cell));
+            
+            RandInteableCell(cell);
 
-            switch (Random.Range(1, 6))
-            {
-                case 1:
-                    cell.ItemLevel = 1;
-                    cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
-                    break;
-                case 2:
-                    cell.ItemLevel = 2;
-                    cell.interableObject = Instantiate<IntelligenceTest>(cell.IntelligenceTestPrefab);
-                    break;
-                case 3:
-                    cell.ItemLevel = 3;
-                    cell.interableObject = Instantiate<StrengthTest>(cell.StrengthTestPrefab);
-                    break;
-                case 4:
-                    cell.ItemLevel = 4;
-                    cell.interableObject = Instantiate<AgilityTest>(cell.AgilityTestPrefab);
-                    break;
-                case 5:
-                default:
-                    cell.ItemLevel = 5;
-                    cell.interableObject = Instantiate<BonusPlace>(cell.BonusPlacePrefab); //wydarzenie
-                    break;
-            }
             cell.interableObject.transform.SetParent(grid.transform);
             grid.AddItem(cell.interableObject);
 
             itemsLocations.Add(cell);
         }
+
     }
 
 
@@ -220,7 +199,171 @@ public class HexMapFeatureGenerator: MonoBehaviour
             }
         }
     }
-
-
-
+    #region InterableSwitch
+    void RandInteableCell(HexCell cell)
+    {
+        int mapType = (int)generator.GetLandscapeType();
+        int rand = Random.Range(1, 101);
+        switch (mapType)
+        {
+            case 1: //las - równo
+                switch (rand)
+                {
+                case int n when (n <= 20):
+                    cell.ItemLevel = 1;
+                    cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
+                    break;
+                case int n when (n <= 40):
+                    cell.ItemLevel = 2;
+                    cell.interableObject = Instantiate<IntelligenceTest>(cell.IntelligenceTestPrefab);
+                    break;
+                case int n when (n <= 60):
+                    cell.ItemLevel = 3;
+                    cell.interableObject = Instantiate<StrengthTest>(cell.StrengthTestPrefab);
+                    break;
+                case int n when (n <= 80):
+                    cell.ItemLevel = 4;
+                    cell.interableObject = Instantiate<AgilityTest>(cell.AgilityTestPrefab);
+                    break;
+                case int n when (n <= 100):
+                default:
+                    cell.ItemLevel = 5;
+                    cell.interableObject = Instantiate<BonusPlace>(cell.BonusPlacePrefab); //wydarzenie
+                    break;
+                }
+                break;
+            case 2: //mokradła - wojownicy
+                switch (rand)
+                {
+                    case int n when (n <= 15):
+                        cell.ItemLevel = 1;
+                        cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
+                        break;
+                    case int n when (n <= 30):
+                        cell.ItemLevel = 2;
+                        cell.interableObject = Instantiate<IntelligenceTest>(cell.IntelligenceTestPrefab);
+                        break;
+                    case int n when (n <= 70):
+                        cell.ItemLevel = 3;
+                        cell.interableObject = Instantiate<StrengthTest>(cell.StrengthTestPrefab);
+                        break;
+                    case int n when (n <= 85):
+                        cell.ItemLevel = 4;
+                        cell.interableObject = Instantiate<AgilityTest>(cell.AgilityTestPrefab);
+                        break;
+                    case int n when (n <= 100):
+                    default:
+                        cell.ItemLevel = 5;
+                        cell.interableObject = Instantiate<BonusPlace>(cell.BonusPlacePrefab); //wydarzenie
+                        break;
+                }
+                break;
+            case 3: //archipelag - skarby
+                switch (rand)
+                {
+                    case int n when (n <= 40):
+                        cell.ItemLevel = 1;
+                        cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
+                        break;
+                    case int n when (n <= 55):
+                        cell.ItemLevel = 2;
+                        cell.interableObject = Instantiate<IntelligenceTest>(cell.IntelligenceTestPrefab);
+                        break;
+                    case int n when (n <= 70):
+                        cell.ItemLevel = 3;
+                        cell.interableObject = Instantiate<StrengthTest>(cell.StrengthTestPrefab);
+                        break;
+                    case int n when (n <= 85):
+                        cell.ItemLevel = 4;
+                        cell.interableObject = Instantiate<AgilityTest>(cell.AgilityTestPrefab);
+                        break;
+                    case int n when (n <= 100):
+                    default:
+                        cell.ItemLevel = 5;
+                        cell.interableObject = Instantiate<BonusPlace>(cell.BonusPlacePrefab); //wydarzenie
+                        break;
+                }
+                break;
+            case 4: //góry -  magowie
+                switch (rand)
+                {
+                    case int n when (n <= 15):
+                        cell.ItemLevel = 1;
+                        cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
+                        break;
+                    case int n when (n <= 55):
+                        cell.ItemLevel = 2;
+                        cell.interableObject = Instantiate<IntelligenceTest>(cell.IntelligenceTestPrefab);
+                        break;
+                    case int n when (n <= 70):
+                        cell.ItemLevel = 3;
+                        cell.interableObject = Instantiate<StrengthTest>(cell.StrengthTestPrefab);
+                        break;
+                    case int n when (n <= 85):
+                        cell.ItemLevel = 4;
+                        cell.interableObject = Instantiate<AgilityTest>(cell.AgilityTestPrefab);
+                        break;
+                    case int n when (n <= 100):
+                    default:
+                        cell.ItemLevel = 5;
+                        cell.interableObject = Instantiate<BonusPlace>(cell.BonusPlacePrefab); //wydarzenie
+                        break;
+                }
+                break;
+            case 5: //pustynia - zbóje
+                switch (rand)
+                {
+                    case int n when (n <= 15):
+                        cell.ItemLevel = 1;
+                        cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
+                        break;
+                    case int n when (n <= 30):
+                        cell.ItemLevel = 2;
+                        cell.interableObject = Instantiate<IntelligenceTest>(cell.IntelligenceTestPrefab);
+                        break;
+                    case int n when (n <= 45):
+                        cell.ItemLevel = 3;
+                        cell.interableObject = Instantiate<StrengthTest>(cell.StrengthTestPrefab);
+                        break;
+                    case int n when (n <= 85):
+                        cell.ItemLevel = 4;
+                        cell.interableObject = Instantiate<AgilityTest>(cell.AgilityTestPrefab);
+                        break;
+                    case int n when (n <= 100):
+                    default:
+                        cell.ItemLevel = 5;
+                        cell.interableObject = Instantiate<BonusPlace>(cell.BonusPlacePrefab); //wydarzenie
+                        break;
+                }
+                break;
+            case 6: //kanion - kapliczki
+            default:
+                switch (rand)
+                {
+                    case int n when (n <= 15):
+                        cell.ItemLevel = 1;
+                        cell.interableObject = Instantiate<ItemChest>(cell.ItemChestPrefab);
+                        break;
+                    case int n when (n <= 30):
+                        cell.ItemLevel = 2;
+                        cell.interableObject = Instantiate<IntelligenceTest>(cell.IntelligenceTestPrefab);
+                        break;
+                    case int n when (n <= 45):
+                        cell.ItemLevel = 3;
+                        cell.interableObject = Instantiate<StrengthTest>(cell.StrengthTestPrefab);
+                        break;
+                    case int n when (n <= 60):
+                        cell.ItemLevel = 4;
+                        cell.interableObject = Instantiate<AgilityTest>(cell.AgilityTestPrefab);
+                        break;
+                    case int n when (n <= 100):
+                    default:
+                        cell.ItemLevel = 5;
+                        cell.interableObject = Instantiate<BonusPlace>(cell.BonusPlacePrefab); //wydarzenie
+                        break;
+                }
+                break;
+        }
+    }
+    #endregion
 }

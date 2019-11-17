@@ -10,8 +10,6 @@ using Color = UnityEngine.Color;
 using Random = UnityEngine.Random;
 
 //TODO: Dodać menu
-//TODO: Wyswietlenie komunikatu o turze na ekranie (UI/Camera)
-//TODO: Ujednolicenie grafiki ekwipunku (UI/Camera)
 //TODO: Sprawdzenie warunkow zwyciestwa/porazki
 //TODO: Prawdopodobieństwo wylosowania obiektu zależnie od rodzaju mapy
 
