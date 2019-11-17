@@ -58,7 +58,7 @@ MonoBehaviour:
   - {fileID: 0}
   interableObjectPrefab: {fileID: 7602797575816217281, guid: 7af8116e14845a54891e49a1d2665b1d,
     type: 3}
-  ItemChestPrefab: {fileID: 8151206206328104961, guid: a0e8f076c34fc7642a286dde8d835a0e,
+  ItemChestPrefab: {fileID: -8683511236253810373, guid: 2af44755ae8d7e24aa84b77ace44fd61,
     type: 3}
   StrengthTestPrefab: {fileID: 1776500580014779135, guid: f8d6fb97f96d31f4ebfaa23efe53350f,
     type: 3}
@@ -68,3 +68,4 @@ MonoBehaviour:
     type: 3}
   BonusPlacePrefab: {fileID: -2823326516885476854, guid: 4728bcff8ef2f6a4fa324dab486f02f9,
     type: 3}
+  visibility: 0

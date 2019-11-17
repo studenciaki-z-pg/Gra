@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4593708324605098876}
   - component: {fileID: 2751002737872007456}
   m_Layer: 0
-  m_Name: IntelligenceTest
+  m_Name: IntelligenceTest 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 2399825560679541490}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -998.6081, y: 0.00039196014, z: -1000.1766}
-  m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
+  m_LocalScale: {x: 1.7, y: 1.7, z: 1.7}
   m_Children:
   - {fileID: 4688060295322812056}
   m_Father: {fileID: 0}
