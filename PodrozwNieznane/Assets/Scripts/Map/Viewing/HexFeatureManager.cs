@@ -8,8 +8,8 @@ using UnityEngine;
 /// </summary>
 public class HexFeatureManager : MonoBehaviour
 {
-    public HexFeatureCollection[] itemCollections, plantCollections, chestCollections, strengthCollections, intelligenceCollections, agilityCollections;
-    public Transform portalPiecePrefab, additionalPrefab; //w miarę możliwości zmienić nazwę prefaba na bardziaj obrazową niż 'additional'
+    public HexFeatureCollection[] itemChestCollections, plantCollections, strengthCollections, intelligenceCollections, agilityCollections;
+    public Transform portalPiecePrefab, bonusPrefab;
     Transform container;
 
 
@@ -47,7 +47,7 @@ public class HexFeatureManager : MonoBehaviour
         switch (cell.ItemLevel)
         {
             case 1:
-                HexFeatureCollection chestCollection = chestCollections[0];
+                HexFeatureCollection chestCollection = itemChestCollections[0];
                 Instantiating(chestCollection.Pick(hash.a), position, 360f * hash.e);
                 break;
             case 2:
@@ -63,8 +63,7 @@ public class HexFeatureManager : MonoBehaviour
                 Instantiating(agilityCollection.Pick(hash.a), position, 360f * hash.e);
                 break;
             case 5:
-                HexFeatureCollection collection = itemCollections[0];
-                Instantiating(collection.Pick(hash.a), position, 360f * hash.e);
+                Instantiating(bonusPrefab, position, 360f * hash.e);
                 break;
             case -1:
                 //middle of portal

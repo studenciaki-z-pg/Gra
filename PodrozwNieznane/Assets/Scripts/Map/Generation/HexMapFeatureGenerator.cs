@@ -94,7 +94,7 @@ public class HexMapFeatureGenerator: MonoBehaviour
 
     void DistributePlayers()
     {
-        for (int i = 0; i < playersAmount; i++)
+        while (playersLocations.Count < playersAmount)
         {
             HexCell homeCell;
             do
@@ -103,8 +103,17 @@ public class HexMapFeatureGenerator: MonoBehaviour
             }
             while (!(homeCell.Explorable && homeCell.Walkable) || itemsLocations.Contains(homeCell) || playersLocations.Contains(homeCell));
 
-            playersLocations.Add(homeCell);
+            HexCell prev = playersLocations.ElementAtOrDefault(0);
+            if (prev != null)
+            {
+                if (homeCell.coordinates.DistanceTo(prev.coordinates) < 7)
+                    continue;
+            }
 
+            playersLocations.Add(homeCell);
+        }
+        foreach (HexCell homeCell in playersLocations)
+        {
             grid.AddUnit(Instantiate(HexUnit.unitPrefab), homeCell, Random.Range(0f, 360f));
         }
     }
