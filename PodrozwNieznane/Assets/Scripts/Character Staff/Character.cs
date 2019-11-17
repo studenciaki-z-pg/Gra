@@ -15,8 +15,7 @@ public class Character : MonoBehaviour
 
     [SerializeField] Sprite activeSprite;
     [SerializeField] Sprite inactiveSprite;
-
-    private int Player = -1;
+    
     private int PlayerLevel = 1;
     private int AvailableSkillPoints = 5;
     private int AssignedSkillPoints = 0;
@@ -32,7 +31,8 @@ public class Character : MonoBehaviour
             foreach(Button b in statButtons)
             {
                 b.enabled = false;
-                b.image.sprite = inactiveSprite;
+                b.gameObject.SetActive(false);
+                //b.image.sprite = inactiveSprite;
             }
         foreach (StatPanel panel in statPanel)
         {
@@ -66,7 +66,8 @@ public class Character : MonoBehaviour
         AvailableSkillPoints += 5;
         foreach (Button b in statButtons)
         {
-            b.image.sprite = activeSprite;
+            //b.image.sprite = activeSprite;
+            b.gameObject.SetActive(true);
             b.enabled = true;
         }
         foreach (StatPanel panel in statPanel)
@@ -92,17 +93,18 @@ public class Character : MonoBehaviour
         equipmentPanel.OnItemRightClickedEvent += UnequipFromEquipment;
     }
 
-    public void TurnVisible(int player)
+    public void TurnVisible()
     {
         if(gameObject.active)
         {
             gameObject.SetActive(false);
+            GameManager.instance.hexGameUI.HighlightPlayer(true);
+            GameManager.instance.hexGameUI.gameObject.SetActive(true);
         } else
         {
-            if(Player != player)
-            {
-                Player = player;
-            }
+            GameManager.instance.hexGrid.ClearPath();
+            GameManager.instance.hexGameUI.HighlightPlayer(false);
+            GameManager.instance.hexGameUI.gameObject.SetActive(false);
             gameObject.SetActive(true);
         }
     }
@@ -177,7 +179,8 @@ public class Character : MonoBehaviour
             if(AvailableSkillPoints == 0)
                 foreach (Button b in statButtons)
                 {
-                    b.image.sprite = inactiveSprite;
+                    //b.image.sprite = inactiveSprite;
+                    b.gameObject.SetActive(false);
                     b.enabled = false;
                 }
         }
@@ -194,7 +197,8 @@ public class Character : MonoBehaviour
             if (AvailableSkillPoints == 0)
                 foreach (Button b in statButtons)
                 {
-                    b.image.sprite = inactiveSprite;
+                    //b.image.sprite = inactiveSprite;
+                    b.gameObject.SetActive(false);
                     b.enabled = false;
                 }
         }
@@ -211,7 +215,8 @@ public class Character : MonoBehaviour
             if (AvailableSkillPoints == 0)
                 foreach (Button b in statButtons)
                 {
-                    b.image.sprite = inactiveSprite;
+                    //b.image.sprite = inactiveSprite;
+                    b.gameObject.SetActive(false);
                     b.enabled = false;
                 }
         }
@@ -228,7 +233,8 @@ public class Character : MonoBehaviour
             if (AvailableSkillPoints == 0)
                 foreach (Button b in statButtons)
                 {
-                    b.image.sprite = inactiveSprite;
+                    //b.image.sprite = inactiveSprite;
+                    b.gameObject.SetActive(false);
                     b.enabled = false;
                 }
         }

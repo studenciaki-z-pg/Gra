@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] MapPicker mapPicker;
     [SerializeField] LogWindow logWindow;
     [SerializeField] LogAnsWindow logAnsWindow;
-
+    [SerializeField] GameObject[] EndOfTurnButton;
 
     //referencje
     public HexGrid hexGrid;
@@ -117,6 +117,13 @@ public class GameManager : MonoBehaviour
 
         ActivateBackground();
         //Zaczyna ten, ktory nie dotarl do teleportu, czyli nastepny gracz po prostu
+        foreach (GameObject b in EndOfTurnButton)
+        {
+            if (b.active)
+                b.SetActive(false);
+            else
+                b.SetActive(true);
+        }
         NextPlayer();
     }
 

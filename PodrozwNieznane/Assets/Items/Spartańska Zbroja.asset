@@ -10,20 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2f5a3fa141dcee4481cfa62d5023de4, type: 3}
-  m_Name: "Wspania\u0142y miecz si\u0142y"
+  m_Name: "Sparta\u0144ska Zbroja"
   m_EditorClassIdentifier: 
-  ItemName: "Wspania\u0142y miecz si\u0142y"
-  Icon: {fileID: 21300000, guid: 37d751aef9717cd4db252cec8a73f77d, type: 3}
-  StrengthBonus: 5
+  ItemName: "Sparta\u0144ska zbroja"
+  Icon: {fileID: 21300000, guid: bb3b03ee1e13be6459328e3b349fc1c8, type: 3}
+  StrengthBonus: 12
   IntelligenceBonus: 0
-  AgilityBonus: 0
+  AgilityBonus: 7
   VitalityBonus: 0
-  DexterityBonus: 0
-  LuckBonus: 0
   StrengthPercentBonus: 0
   IntelligencePercentBonus: 0
   AgilityPercentBonus: 0
   VitalityPercentBonus: 0
-  DexterityPercentBonus: 0
-  LuckPercentBonus: 0
-  equipmentType: 4
+  equipmentType: 1
