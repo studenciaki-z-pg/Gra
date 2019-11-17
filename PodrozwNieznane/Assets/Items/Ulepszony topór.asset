@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2f5a3fa141dcee4481cfa62d5023de4, type: 3}
-  m_Name: "Ma\u0142a tarcza"
+  m_Name: "Ulepszony top\xF3r"
   m_EditorClassIdentifier: 
-  ItemName: "Ma\u0142a tarcza"
-  Icon: {fileID: 21300000, guid: f486df4b02c6ba24db861e2c27b7b4a9, type: 3}
-  StrengthBonus: 3
+  ItemName: "Ulepszony top\xF3r"
+  Icon: {fileID: 21300000, guid: eae9f04ea3c86b345be05354bfd8d66b, type: 3}
+  StrengthBonus: 7
   IntelligenceBonus: 0
   AgilityBonus: 0
-  VitalityBonus: 1
+  VitalityBonus: 0
   StrengthPercentBonus: 0
   IntelligencePercentBonus: 0
   AgilityPercentBonus: 0

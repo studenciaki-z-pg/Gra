@@ -31,7 +31,8 @@ public class Character : MonoBehaviour
             foreach(Button b in statButtons)
             {
                 b.enabled = false;
-                b.image.sprite = inactiveSprite;
+                b.gameObject.SetActive(false);
+                //b.image.sprite = inactiveSprite;
             }
         foreach (StatPanel panel in statPanel)
         {
@@ -65,7 +66,8 @@ public class Character : MonoBehaviour
         AvailableSkillPoints += 5;
         foreach (Button b in statButtons)
         {
-            b.image.sprite = activeSprite;
+            //b.image.sprite = activeSprite;
+            b.gameObject.SetActive(true);
             b.enabled = true;
         }
         foreach (StatPanel panel in statPanel)
@@ -177,7 +179,8 @@ public class Character : MonoBehaviour
             if(AvailableSkillPoints == 0)
                 foreach (Button b in statButtons)
                 {
-                    b.image.sprite = inactiveSprite;
+                    //b.image.sprite = inactiveSprite;
+                    b.gameObject.SetActive(false);
                     b.enabled = false;
                 }
         }
@@ -194,7 +197,8 @@ public class Character : MonoBehaviour
             if (AvailableSkillPoints == 0)
                 foreach (Button b in statButtons)
                 {
-                    b.image.sprite = inactiveSprite;
+                    //b.image.sprite = inactiveSprite;
+                    b.gameObject.SetActive(false);
                     b.enabled = false;
                 }
         }
@@ -211,7 +215,8 @@ public class Character : MonoBehaviour
             if (AvailableSkillPoints == 0)
                 foreach (Button b in statButtons)
                 {
-                    b.image.sprite = inactiveSprite;
+                    //b.image.sprite = inactiveSprite;
+                    b.gameObject.SetActive(false);
                     b.enabled = false;
                 }
         }
@@ -228,7 +233,8 @@ public class Character : MonoBehaviour
             if (AvailableSkillPoints == 0)
                 foreach (Button b in statButtons)
                 {
-                    b.image.sprite = inactiveSprite;
+                    //b.image.sprite = inactiveSprite;
+                    b.gameObject.SetActive(false);
                     b.enabled = false;
                 }
         }

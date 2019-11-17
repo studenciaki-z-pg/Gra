@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2f5a3fa141dcee4481cfa62d5023de4, type: 3}
-  m_Name: "Ma\u0142a tarcza"
+  m_Name: "Ksi\u0119ga zakl\u0119\u0107"
   m_EditorClassIdentifier: 
-  ItemName: "Ma\u0142a tarcza"
-  Icon: {fileID: 21300000, guid: f486df4b02c6ba24db861e2c27b7b4a9, type: 3}
-  StrengthBonus: 3
+  ItemName: "Ksi\u0119ga zakl\u0119\u0107"
+  Icon: {fileID: 21300000, guid: 12ef4aa7c15c83841bb1ee1ffcfdc86f, type: 3}
+  StrengthBonus: 0
   IntelligenceBonus: 0
-  AgilityBonus: 0
-  VitalityBonus: 1
+  AgilityBonus: 7
+  VitalityBonus: 0
   StrengthPercentBonus: 0
   IntelligencePercentBonus: 0
   AgilityPercentBonus: 0
   VitalityPercentBonus: 0
-  equipmentType: 4
+  equipmentType: 3
