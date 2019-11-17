@@ -265,11 +265,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a81daee6c1e1b2d48849fd82797da75d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemCollections:
+  itemChestCollections:
   - prefabs:
-    - {fileID: 2377094277492345404, guid: da808d975a8aa7340b4ffddb069e84f7, type: 3}
-    - {fileID: 2377094277492345404, guid: d97069633924a4a478916df7bddabb70, type: 3}
     - {fileID: 2377094277492345404, guid: 2af44755ae8d7e24aa84b77ace44fd61, type: 3}
+    - {fileID: 2377094277492345404, guid: d97069633924a4a478916df7bddabb70, type: 3}
+    - {fileID: 2377094277492345404, guid: da808d975a8aa7340b4ffddb069e84f7, type: 3}
   plantCollections:
   - prefabs:
     - {fileID: 2377094277492345404, guid: fca2bb4064e0c47438c9dbb42b00ba68, type: 3}
@@ -279,11 +279,6 @@ MonoBehaviour:
     - {fileID: 2377094277492345404, guid: fca2bb4064e0c47438c9dbb42b00ba68, type: 3}
   - prefabs:
     - {fileID: 2377094277492345404, guid: 97ec2540588ea5f4a93246c8b4681e38, type: 3}
-  chestCollections:
-  - prefabs:
-    - {fileID: 5512469639097963406, guid: a0e8f076c34fc7642a286dde8d835a0e, type: 3}
-    - {fileID: 5512469639097963406, guid: 1215c0f3e0f3bb74a832c34ca9479e82, type: 3}
-    - {fileID: 5512469639097963406, guid: c953beabcf6613f44b5ba36a873ea6ca, type: 3}
   strengthCollections:
   - prefabs:
     - {fileID: 8720667173826274451, guid: f8d6fb97f96d31f4ebfaa23efe53350f, type: 3}
@@ -301,5 +296,5 @@ MonoBehaviour:
     - {fileID: 2346310885136631203, guid: c8d1314a0ff867a47a9b6f14a08c6920, type: 3}
   portalPiecePrefab: {fileID: 8720667173826274451, guid: 2d5a89b05c21c8c499c22d58c592d556,
     type: 3}
-  additionalPrefab: {fileID: 8720667173826274451, guid: 4728bcff8ef2f6a4fa324dab486f02f9,
+  bonusPrefab: {fileID: 8720667173826274451, guid: 4728bcff8ef2f6a4fa324dab486f02f9,
     type: 3}

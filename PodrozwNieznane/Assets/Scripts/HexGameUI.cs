@@ -31,6 +31,10 @@ public class HexGameUI : MonoBehaviour
             {
                 DoSelection();
             }
+            else if (Input.GetKeyDown(KeyCode.R))
+            {
+                GameManager.instance.NextRound();
+            }
             else if (selectedUnit)
             {
                 //klikasz prawym i odpalasz chodzenie, ktore zatrzyma sie przed ewentualnym action itemem
