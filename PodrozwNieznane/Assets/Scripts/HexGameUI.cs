@@ -114,6 +114,11 @@ public class HexGameUI : MonoBehaviour
         SceneManager.LoadScene(level);
     }
 
+    public void ExitGame()
+    {
+        GameManager.instance.ExitGame();
+    }
+
     public void HighlightPlayer(bool state)
     {
         if (state && !selectedUnit.Travelling)
@@ -272,11 +277,6 @@ public class HexGameUI : MonoBehaviour
 
         //zakoncz ture/zmien gracza
         GameManager.instance.NextPlayer();
-    }
-
-    void DoRetreat()
-    {
-
     }
 
 }

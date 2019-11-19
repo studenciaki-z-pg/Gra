@@ -149,4 +149,9 @@ public class GameManager : MonoBehaviour
         hexGameUI.HighlightPlayer(true);
     }
 
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
 }
