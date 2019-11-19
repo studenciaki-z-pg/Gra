@@ -6516,8 +6516,8 @@ MonoBehaviour:
   cellCountZ: 0
   units: []
   mapGenerator: {fileID: 926277084}
-  chunkCountX: 4
-  chunkCountZ: 3
+  chunkCountX: 6
+  chunkCountZ: 4
   cellPrefab: {fileID: 1049234045972414564, guid: de264ea709014dc4897be248db7a8c73,
     type: 3}
   cellLabelPrefab: {fileID: 4139043807271847114, guid: ce0515e6a052a424592ce6b7f03bdc45,

@@ -60,7 +60,7 @@ public class HexGameUI : MonoBehaviour
 
     public void HighlightPlayer(bool state)
     {
-        if (state && !selectedUnit.Travelling)
+        if (state && selectedUnit!=null && !selectedUnit.Travelling)
         {
             if (GameManager.instance.IsActiveUnit(selectedUnit))
             {
@@ -161,7 +161,7 @@ public class HexGameUI : MonoBehaviour
             var path = grid.GetFixedPath(selectedUnit);
             HexCell last = null;
 
-            if (path.Count > 1)
+            if (path != null && path.Count > 1)
             {
                 //Chcesz isc do action itema
                 if (path[path.Count - 1].ItemLevel != 0)

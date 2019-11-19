@@ -64,11 +64,11 @@ public struct MapAttributes
 
     public static MapAttributes GetSwampy()
     {
-        return new MapAttributes(0f, 0f, 0f, 20, 20, 50, 1, -2, 8, 0, 0, 0, new int[6] { 0, 0, 0, 0, 0, 3 }, 1, 3, int.MaxValue);
+        return new MapAttributes(0.05f, 0f, 0f, 20, 20, 50, 1, -2, 8, 0, 0, 0, new int[6] { 0, 0, 0, 0, 0, 3 }, 1, 3, int.MaxValue);
     }
     public static MapAttributes GetIsland()
     {
-        return new MapAttributes(0f, 0f, 0f, 20, 20, 25, 1, -2, 8, 3, 3, 0, new int[6] { 0, 0, 0, 1, 2, 0 }, 6, 4, int.MaxValue);
+        return new MapAttributes(0f, 0f, 0f, 19, 19, 25, 1, -2, 8, 3, 3, 0, new int[6] { 0, 0, 0, 1, 2, 0 }, 6, 4, int.MaxValue);
     }
     public static MapAttributes GetMountain()
     {
@@ -80,7 +80,7 @@ public struct MapAttributes
     }
     public static MapAttributes GetCanyon()
     {
-        return new MapAttributes(0.5f, 0.5f, 0f, 20, 30, 64, 1, -2, 6, 8, 1, 25, new int[6] { 0, 0, 0, 1, 2, 0 }, 7, 6, int.MaxValue);
+        return new MapAttributes(0.5f, 0.5f, 0f, 20, 30, 64, 1, -2, 6, 10, 3, 25, new int[6] { 0, 0, 0, 1, 2, 0 }, 7, 6, int.MaxValue);
     }
 
 
