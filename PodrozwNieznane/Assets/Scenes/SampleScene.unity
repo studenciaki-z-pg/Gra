@@ -444,7 +444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 1842395564}
   nameText: {fileID: 1978582273}
   valueText: {fileID: 975203029}
 --- !u!1 &64072703
@@ -2961,7 +2961,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 1842395564}
   nameText: {fileID: 1572478263}
   valueText: {fileID: 1245896690}
 --- !u!1 &253327563
@@ -2992,7 +2992,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 253327563}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 518482177}
@@ -3360,7 +3360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 1842395564}
   nameText: {fileID: 604516260}
   valueText: {fileID: 337998872}
 --- !u!1 &283808386
@@ -5311,7 +5311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 1842395564}
   nameText: {fileID: 147819815}
   valueText: {fileID: 1920167321}
 --- !u!1 &518482176
@@ -12143,7 +12143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 1842395564}
   nameText: {fileID: 128108571}
   valueText: {fileID: 875002927}
 --- !u!1 &1147371659
@@ -13301,7 +13301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 1842395564}
   nameText: {fileID: 268584135}
   valueText: {fileID: 1219528468}
 --- !u!1 &1303245138
@@ -15141,7 +15141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 1842395564}
   nameText: {fileID: 1447584176}
   valueText: {fileID: 1479353433}
 --- !u!1 &1471736605
@@ -18030,7 +18030,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3e38c4a26f32a4fa36121d64d5a3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statTooltip: {fileID: 0}
+  statTooltip: {fileID: 1842395564}
   nameText: {fileID: 834467130}
   valueText: {fileID: 1455516242}
 --- !u!1 &1833581536
