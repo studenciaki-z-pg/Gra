@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
         //Inicjalizacja mapy
         LogWindow = logWindow;
         LogAnsWindow = logAnsWindow;
-        MapType initType = (MapType)Random.Range(0, Enum.GetValues(typeof(MapType)).Length);
+        MapType initType = MapType.CLASSIC; //(MapType)Random.Range(0, Enum.GetValues(typeof(MapType)).Length);
         hexGrid.mapGenerator.SetLandscape(initType);
         hexGrid.CreateMap();
 

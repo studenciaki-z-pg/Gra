@@ -27,6 +27,8 @@ public class MapPicker : MonoBehaviour
         string ToggleObjectName = "Map" + ((int)initValue + 1).ToString();
         Toggle ToggleObject = GameObject.Find(ToggleObjectName).GetComponent<Toggle>();
         ToggleObject.isOn = true;
+
+        MapChoose(initValue);
     }
 
     public void HidePicker()
