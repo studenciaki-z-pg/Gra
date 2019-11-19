@@ -76,7 +76,7 @@ public struct MapAttributes
     }
     public static MapAttributes GetPlains()
     {
-        return new MapAttributes(0.25f, 0.25f, 0f, 20, 30, 95, 4, -2, 6, 0, 0, 75, new int[6] { 0, 2, 1, 2, 3, 0 }, 0, 5, 1);
+        return new MapAttributes(0.25f, 0.25f, 0f, 20, 30, 95, 4, -2, 6, 0, 0, 75, new int[6] { 0, 2, 1, 2, 3, 0 }, 0, 5, 4);
     }
     public static MapAttributes GetCanyon()
     {
