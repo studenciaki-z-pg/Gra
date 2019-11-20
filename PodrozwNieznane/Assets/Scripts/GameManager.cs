@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -33,6 +34,7 @@ public class GameManager : MonoBehaviour
 
     //zmienne
     public int activePlayer;
+    public int winningLevel { get; set; } = 10;
     public Player[] players = new Player[2];
 
 
@@ -53,15 +55,13 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        //Koniec gry :/
-        if (players[activePlayer].Character.getLevel() == 2)
-            StartCoroutine(hexGameUI.showFinished());
     }
 
     private void Start()
     {
         //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
         //Inicjalizacja mapy
+        SetOptions();
         LogWindow = logWindow;
         LogAnsWindow = logAnsWindow;
         MapType initType = MapType.CLASSIC; //(MapType)Random.Range(0, Enum.GetValues(typeof(MapType)).Length);
@@ -114,6 +114,13 @@ public class GameManager : MonoBehaviour
         hexGameUI.SetSelectedUnit(players[activePlayer].HexUnit);
     }
 
+    public void LevelUp()
+    {
+        //Koniec gry :/
+        if (players[activePlayer].Character.getLevel() >= winningLevel)
+            StartCoroutine(hexGameUI.showFinished());
+    }
+
     public void NextRound()
     {
         hexGrid.mapGenerator.SetLandscape(mapPicker.MapChoice);
@@ -154,6 +161,13 @@ public class GameManager : MonoBehaviour
     {
         hexGameUI.gameObject.SetActive(true);
         hexGameUI.HighlightPlayer(true);
+    }
+
+    private void SetOptions()
+    {
+        //players[0].Character.SetCharacterName(OptionSetup.firstName);
+        //players[1].Character.SetCharacterName(OptionSetup.secondName);
+        //winningLevel = OptionSetup.maxLevel;
     }
 
 }
