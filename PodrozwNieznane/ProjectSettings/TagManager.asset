@@ -4,7 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - FigthCamera
+  - ShowOnPause
+  - Instruction
+  - ShowOnFinish
   layers:
   - Default
   - TransparentFX

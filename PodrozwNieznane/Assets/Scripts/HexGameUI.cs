@@ -6,21 +6,25 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class HexGameUI : MonoBehaviour
 {
     public HexGrid grid;
 
-   
 
-
+    private GameObject[] pauseObjects, finishObjects;
     HexCell currentCell;
     HexUnit selectedUnit;
 
-
-    public void SetSelectedUnit(HexUnit unit)
+    void Start()
     {
-        selectedUnit = unit;
+        Time.timeScale = 1;
+        pauseObjects = GameObject.FindGameObjectsWithTag("ShowOnPause");
+        finishObjects = GameObject.FindGameObjectsWithTag("ShowOnFinish");
+        hidePaused();
+        hideFinished();
     }
 
     void Update()
@@ -56,7 +60,14 @@ public class HexGameUI : MonoBehaviour
                 }
             }
         }
+
+        //uses the Esc button to pause and unpause the game
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            pauseControl();
+        }
     }
+
 
     public void HighlightPlayer(bool state)
     {
@@ -153,6 +164,11 @@ public class HexGameUI : MonoBehaviour
         }
     }
 
+    public void SetSelectedUnit(HexUnit unit)
+    {
+        selectedUnit = unit;
+    }
+
     void DoMove()
     {
         if (selectedUnit.Speed > 0)
@@ -213,9 +229,73 @@ public class HexGameUI : MonoBehaviour
         GameManager.instance.NextPlayer();
     }
 
-    void DoRetreat()
-    {
+    #region Menu
 
+    //controls the pausing of the scene
+    public void pauseControl()
+    {
+        if (Time.timeScale == 1)
+        {
+            Time.timeScale = 0;
+            showPaused();
+        }
+        else if (Time.timeScale == 0)
+        {
+            Time.timeScale = 1;
+            hidePaused();
+        }
     }
+
+    //hides objects with ShowOnPause tag
+    public void hidePaused()
+    {
+        foreach (GameObject g in pauseObjects)
+        {
+            g.SetActive(false);
+        }
+    }
+
+    //shows objects with ShowOnPause tag
+    public void showPaused()
+    {
+        foreach (GameObject g in pauseObjects)
+        {
+            g.SetActive(true);
+        }
+    }
+
+    //shows objects with ShowOnFinish tag
+    public IEnumerator showFinished()
+    {
+        yield return new WaitForSeconds(3);
+
+
+        foreach (GameObject g in finishObjects)
+        {
+            g.SetActive(true);
+        }
+    }
+
+    //hides objects with ShowOnFinish tag
+    public void hideFinished()
+    {
+        foreach (GameObject g in finishObjects)
+        {
+            g.SetActive(false);
+        }
+    }
+
+    //loads inputted level
+    public void LoadLevel(string level)
+    {
+        SceneManager.LoadScene(level);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    #endregion
 
 }
