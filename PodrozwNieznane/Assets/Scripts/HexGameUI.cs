@@ -14,7 +14,7 @@ public class HexGameUI : MonoBehaviour
     public HexGrid grid;
 
 
-    private GameObject[] pauseObjects, finishObjects;
+    private GameObject[] pauseObjects, finishObjects, menuObjects;
     HexCell currentCell;
     HexUnit selectedUnit;
 

@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using Unity.UNetWeaver;
+using UnityEngine;
 using UnityEngine.Experimental.XR;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using Assets.Scripts;
 
 public class MainMenuUI : MonoBehaviour
 {
@@ -12,7 +14,6 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private Text Controls;
     [SerializeField] GameObject options;
 
-    private GameObject[] instructions;
 
     void Start()
     {
@@ -21,6 +22,9 @@ public class MainMenuUI : MonoBehaviour
         Controls.enabled = false;
         Interface.enabled = false;
         ShowOptions(false);
+
+        //options
+
     }
 
     #region Menu
@@ -28,8 +32,7 @@ public class MainMenuUI : MonoBehaviour
     //loads inputted level
     public void LoadLevel(string level)
     {
-       // GameManager.instance.SetOptions();
-        SceneManager.LoadScene(level);
+        SceneManager.LoadScene(level);       
     }
 
     public void ExitGame()
@@ -44,6 +47,12 @@ public class MainMenuUI : MonoBehaviour
     public void ShowOptions(bool state)
     {
         options.SetActive(state);
+    }
+
+    public void ShowMenu()
+    {
+        instruction.SetActive(false);
+        options.SetActive(false);
     }
 
     #endregion
@@ -71,6 +80,25 @@ public class MainMenuUI : MonoBehaviour
 
     #endregion
 
+    #region options
 
 
+    public void SetName1(InputField text)
+    {
+        OptionSetup.firstName = text.text;
+    }
+
+
+    public void SetName2(InputField text)
+    {
+        OptionSetup.secondName = text.text;
+    }
+
+
+    public void SetLevelCap(InputField text)
+    {
+        OptionSetup.maxLevel = int.Parse(text.text);
+    }
+
+    #endregion
 }

@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Drawing;
+﻿using Assets.Scripts;
 using UnityEngine;
-using UnityEngine.Experimental.PlayerLoop;
-using UnityEngine.UI;
 using Color = UnityEngine.Color;
-using Random = UnityEngine.Random;
 
 //TODO: Dodać menu
 //TODO: Sprawdzenie warunkow zwyciestwa/porazki
@@ -23,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] LogAnsWindow logAnsWindow;
     [SerializeField] GameObject[] EndOfTurnButton;
 
+
     //referencje
     public HexGrid hexGrid;
     public HexGameUI hexGameUI;
@@ -30,6 +24,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public LogWindow LogWindow;
     public LogAnsWindow LogAnsWindow;
+
 
     //zmienne
     public int activePlayer;
@@ -51,12 +46,10 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
     }
-
     private void Start()
     {
         //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
         //Inicjalizacja mapy
-        //SetOptions();
         LogWindow = logWindow;
         LogAnsWindow = logAnsWindow;
         MapType initType = MapType.CLASSIC; //(MapType)Random.Range(0, Enum.GetValues(typeof(MapType)).Length);
@@ -75,6 +68,7 @@ public class GameManager : MonoBehaviour
 
         //Pionek - ustawienia -> Ustawia sie przy kazdorazowym przejsciu mapy, stad oddzielna funkcja
         InitializePlayerUnit();
+        SetOptions();
 
         //Rozpoczecie gry
         activePlayer = 0;
@@ -158,11 +152,11 @@ public class GameManager : MonoBehaviour
         hexGameUI.HighlightPlayer(true);
     }
 
-    private void SetOptions(string firstName, string secondName, int maxLevel)
+    public void SetOptions()
     {
-        players[0].Character.SetCharacterName(firstName);
-        players[1].Character.SetCharacterName(secondName);
-        winningLevel = maxLevel;
+        players[0].Character.SetCharacterName(OptionSetup.firstName);
+        players[1].Character.SetCharacterName(OptionSetup.secondName);
+        winningLevel = OptionSetup.maxLevel;
     }
 
 }
