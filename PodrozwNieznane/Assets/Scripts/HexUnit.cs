@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
-using UnityEngine.XR.WSA.Persistence;
-using Debug = UnityEngine.Debug;
 
 public class HexUnit : MonoBehaviour
 {
