@@ -1,5 +1,4 @@
-﻿using Assets.Scripts;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -53,15 +52,11 @@ public class GameManager : MonoBehaviour
         instance = this;
     }
 
-    private void Update()
-    {
-    }
-
     private void Start()
     {
         //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
         //Inicjalizacja mapy
-        SetOptions();
+        //SetOptions();
         LogWindow = logWindow;
         LogAnsWindow = logAnsWindow;
         MapType initType = MapType.CLASSIC; //(MapType)Random.Range(0, Enum.GetValues(typeof(MapType)).Length);
@@ -163,11 +158,11 @@ public class GameManager : MonoBehaviour
         hexGameUI.HighlightPlayer(true);
     }
 
-    private void SetOptions()
+    private void SetOptions(string firstName, string secondName, int maxLevel)
     {
-        //players[0].Character.SetCharacterName(OptionSetup.firstName);
-        //players[1].Character.SetCharacterName(OptionSetup.secondName);
-        //winningLevel = OptionSetup.maxLevel;
+        players[0].Character.SetCharacterName(firstName);
+        players[1].Character.SetCharacterName(secondName);
+        winningLevel = maxLevel;
     }
 
 }

@@ -1,22 +1,25 @@
-﻿using Assets.Scripts;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Experimental.XR;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class MainMenuUI : MonoBehaviour
 {
-    [SerializeField] Input firstName;
-    [SerializeField] Input secondName;
-    [SerializeField] Input maxLevel;
-
     [SerializeField] GameObject instruction;
+    [SerializeField] private Text HowToPlay;
+    [SerializeField] private Text Interface;
+    [SerializeField] private Text Controls;
     [SerializeField] GameObject options;
 
-    private GameObject menu;
+    private GameObject[] instructions;
 
     void Start()
     {
         //Main menu
         ShowInstruction(false);
+        Controls.enabled = false;
+        Interface.enabled = false;
         ShowOptions(false);
     }
 
@@ -25,7 +28,7 @@ public class MainMenuUI : MonoBehaviour
     //loads inputted level
     public void LoadLevel(string level)
     {
-        SetOptions();
+       // GameManager.instance.SetOptions();
         SceneManager.LoadScene(level);
     }
 
@@ -38,19 +41,36 @@ public class MainMenuUI : MonoBehaviour
     {
         instruction.SetActive(state);
     }
-
     public void ShowOptions(bool state)
     {
         options.SetActive(state);
     }
 
-    public void SetOptions()
+    #endregion
+
+    #region instruction
+
+    public void ShowHowToPlay()
     {
-        OptionSetup.firstName = "Pierwszy gracz";//firstName.ToString();
-        OptionSetup.secondName = "Drugi gracz";//secondName;
-        OptionSetup.maxLevel = 10;//maxLevel;
+        Controls.enabled = false;
+        Interface.enabled = false;
+        HowToPlay.enabled = true;
+    }
+    public void ShowInterface()
+    {
+        Controls.enabled = false;
+        Interface.enabled = true;
+        HowToPlay.enabled = false;
+    }
+    public void ShowControls()
+    {
+        Controls.enabled = true;
+        Interface.enabled = false;
+        HowToPlay.enabled = false;
     }
 
     #endregion
+
+
 
 }
