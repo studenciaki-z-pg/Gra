@@ -7,14 +7,14 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class HexGameUI : MonoBehaviour
 {
     public HexGrid grid;
 
 
-
-    GameObject[] pauseObjects;
+    private GameObject[] pauseObjects, finishObjects;
     HexCell currentCell;
     HexUnit selectedUnit;
 
@@ -22,7 +22,9 @@ public class HexGameUI : MonoBehaviour
     {
         Time.timeScale = 1;
         pauseObjects = GameObject.FindGameObjectsWithTag("ShowOnPause");
+        finishObjects = GameObject.FindGameObjectsWithTag("ShowOnFinish");
         hidePaused();
+        hideFinished();
     }
 
     void Update()
@@ -62,62 +64,10 @@ public class HexGameUI : MonoBehaviour
         //uses the Esc button to pause and unpause the game
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (Time.timeScale == 1)
-            {
-                Time.timeScale = 0;
-                showPaused();
-            }
-            else if (Time.timeScale == 0)
-            {
-                Time.timeScale = 1;
-                hidePaused();
-            }
+            pauseControl();
         }
     }
 
-    //controls the pausing of the scene
-    public void pauseControl()
-    {
-        if (Time.timeScale == 1)
-        {
-            Time.timeScale = 0;
-            showPaused();
-        }
-        else if (Time.timeScale == 0)
-        {
-            Time.timeScale = 1;
-            hidePaused();
-        }
-    }
-
-    //hides objects with ShowOnPause tag
-    public void hidePaused()
-    {
-        foreach (GameObject g in pauseObjects)
-        {
-            g.SetActive(false);
-        }
-    }
-
-    //shows objects with ShowOnPause tag
-    public void showPaused()
-    {
-        foreach (GameObject g in pauseObjects)
-        {
-            g.SetActive(true);
-        }
-    }
-
-    //loads inputted level
-    public void LoadLevel(string level)
-    {
-        SceneManager.LoadScene(level);
-    }
-
-    public void ExitGame()
-    {
-        GameManager.instance.ExitGame();
-    }
 
     public void HighlightPlayer(bool state)
     {
@@ -278,5 +228,74 @@ public class HexGameUI : MonoBehaviour
         //zakoncz ture/zmien gracza
         GameManager.instance.NextPlayer();
     }
+
+    #region Menu
+
+    //controls the pausing of the scene
+    public void pauseControl()
+    {
+        if (Time.timeScale == 1)
+        {
+            Time.timeScale = 0;
+            showPaused();
+        }
+        else if (Time.timeScale == 0)
+        {
+            Time.timeScale = 1;
+            hidePaused();
+        }
+    }
+
+    //hides objects with ShowOnPause tag
+    public void hidePaused()
+    {
+        foreach (GameObject g in pauseObjects)
+        {
+            g.SetActive(false);
+        }
+    }
+
+    //shows objects with ShowOnPause tag
+    public void showPaused()
+    {
+        foreach (GameObject g in pauseObjects)
+        {
+            g.SetActive(true);
+        }
+    }
+
+    //shows objects with ShowOnFinish tag
+    public IEnumerator showFinished()
+    {
+        yield return new WaitForSeconds(3);
+
+
+        foreach (GameObject g in finishObjects)
+        {
+            g.SetActive(true);
+        }
+    }
+
+    //hides objects with ShowOnFinish tag
+    public void hideFinished()
+    {
+        foreach (GameObject g in finishObjects)
+        {
+            g.SetActive(false);
+        }
+    }
+
+    //loads inputted level
+    public void LoadLevel(string level)
+    {
+        SceneManager.LoadScene(level);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    #endregion
 
 }

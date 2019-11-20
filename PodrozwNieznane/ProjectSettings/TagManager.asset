@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - ShowOnPause
+  - Instruction
+  - ShowOnFinish
   layers:
   - Default
   - TransparentFX

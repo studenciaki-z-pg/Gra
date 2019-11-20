@@ -51,6 +51,13 @@ public class GameManager : MonoBehaviour
         instance = this;
     }
 
+    private void Update()
+    {
+        //Koniec gry :/
+        if (players[activePlayer].Character.getLevel() == 2)
+            StartCoroutine(hexGameUI.showFinished());
+    }
+
     private void Start()
     {
         //-> utworzenie mapy(pierwszej) -> mozna dodac by jej nie wyswietlac zanim nie skonczy sie menu!
@@ -147,11 +154,6 @@ public class GameManager : MonoBehaviour
     {
         hexGameUI.gameObject.SetActive(true);
         hexGameUI.HighlightPlayer(true);
-    }
-
-    public void ExitGame()
-    {
-        Application.Quit();
     }
 
 }
