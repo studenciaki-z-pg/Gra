@@ -3,6 +3,9 @@ using UnityEngine;
 using Color = UnityEngine.Color;
 
 //TODO: Prawdopodobieństwo wylosowania obiektu zależnie od rodzaju mapy
+//TODO: Tło w menu
+//TODO: Tekst na zakończenie rozgrywki + podsumowanie w oknie
+//TODO: Pauza pomiędzy graczami by dać czas na zmianę gracza!!!!!!!!
 
 public class GameManager : MonoBehaviour
 {
