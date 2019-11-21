@@ -31,6 +31,8 @@ public class HexGrid : MonoBehaviour
 
     public HexUnit unitPrefab;
 
+    public bool canShowPath = true;
+
 
 
     void Awake()
@@ -362,21 +364,26 @@ public class HexGrid : MonoBehaviour
     //Using saved path we can visualize it
     void ShowPath(int speed)
     {
-        if (currentPathExists)
+        if (canShowPath)
         {
-            HexCell current = currentPathTo;
-            while (current != currentPathFrom)
+            if (currentPathExists)
             {
-                if (((current.Distance - 1) / speed) == 0)
+
+                HexCell current = currentPathTo;
+                while (current != currentPathFrom)
                 {
-                    current.SetLabel((speed - current.Distance).ToString());
-                    current.EnableHighlight(Color.white);
+                    if (((current.Distance - 1) / speed) == 0)
+                    {
+                        current.SetLabel((speed - current.Distance).ToString());
+                        current.EnableHighlight(Color.white);
+                    }
+                    current = current.PathFrom;
                 }
-                current = current.PathFrom;
             }
+            currentPathFrom.EnableHighlight(Color.blue);
+            currentPathTo.EnableHighlight(Color.red);
         }
-        currentPathFrom.EnableHighlight(Color.blue);
-        currentPathTo.EnableHighlight(Color.red);
+        
     }
 
     //cleaning visualisation of a path

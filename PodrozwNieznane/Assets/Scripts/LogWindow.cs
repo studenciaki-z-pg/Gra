@@ -16,14 +16,13 @@ public class LogWindow : MonoBehaviour
     public void HideLog()
     {
         gameObject.SetActive(false);
-        GameManager.instance.hexGameUI.HighlightPlayer(true);
-        
+        GameManager.instance.hexGrid.canShowPath = true;
+
     }
 
     public void ShowLog()
     {
-        GameManager.instance.hexGrid.ClearPath();
-        GameManager.instance.hexGameUI.HighlightPlayer(false);
+        GameManager.instance.hexGrid.canShowPath = false;
         gameObject.SetActive(true);
     }
 

@@ -211,6 +211,8 @@ public class HexUnit : MonoBehaviour
 
     public IEnumerator Action(HexCell dest)
     {
+        state = false;
+
         //czekaj az pionek sie skonczy ruszac
         yield return new WaitUntil(() => Travelling == false);
 
@@ -218,7 +220,7 @@ public class HexUnit : MonoBehaviour
         var pastLocation = Location;
         Grid.FindPath(Location, dest, this);
         Travel(Grid.GetPath(this));
-        
+
 
         //czekaj az sie ruszy
         yield return new WaitUntil(() => Travelling == false);
@@ -226,6 +228,8 @@ public class HexUnit : MonoBehaviour
 
         //Interakcja
         InteractWithSurroundings(dest);
+        yield return new WaitUntil(() => GameManager.instance.LogWindow.isActiveAndEnabled);
+
         if (state)
         {
             Grid.ClearPath();
@@ -236,6 +240,7 @@ public class HexUnit : MonoBehaviour
             Grid.ClearPath();
             //Odwrot
             Grid.FindPath(Location, pastLocation, this);
+            yield return new WaitUntil(() => Travelling == false);
             Travel(Grid.GetPath(this));
         }
 

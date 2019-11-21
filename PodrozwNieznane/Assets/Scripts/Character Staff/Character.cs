@@ -96,16 +96,15 @@ public class Character : MonoBehaviour
 
     public void TurnVisible()
     {
+        //czy otwarte eq? tak, to zamknij, nie to otworz
         if(gameObject.active)
         {
             gameObject.SetActive(false);
-            GameManager.instance.hexGameUI.HighlightPlayer(true);
-            GameManager.instance.hexGameUI.gameObject.SetActive(true);
+            GameManager.instance.hexGrid.canShowPath = true;
         } else
         {
             GameManager.instance.hexGrid.ClearPath();
-            GameManager.instance.hexGameUI.HighlightPlayer(false);
-            GameManager.instance.hexGameUI.gameObject.SetActive(false);
+            GameManager.instance.hexGrid.canShowPath = false;
             gameObject.SetActive(true);
         }
     }

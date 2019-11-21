@@ -54,6 +54,7 @@ public class HexGameUI : MonoBehaviour
 
                 if (GameManager.instance.LogAnsWindow.isActiveAndEnabled == false
                     && GameManager.instance.LogWindow.isActiveAndEnabled == false
+                    && !GameManager.instance.players[GameManager.instance.activePlayer].Character.isActiveAndEnabled
                     && !selectedUnit.Travelling)
                 {
                     DoPathfinding();
@@ -76,13 +77,16 @@ public class HexGameUI : MonoBehaviour
             if (GameManager.instance.IsActiveUnit(selectedUnit))
             {
                 if (GameManager.instance.LogAnsWindow.isActiveAndEnabled == false &&
-                    GameManager.instance.LogWindow.isActiveAndEnabled == false)
+                    GameManager.instance.LogWindow.isActiveAndEnabled == false &&
+                    !GameManager.instance.players[GameManager.instance.activePlayer].Character.isActiveAndEnabled)
                 {
                     selectedUnit.Location.EnableHighlight(Color.blue);
                 }
             }
         }
-        else if (GameManager.instance.IsActiveUnit(selectedUnit) && selectedUnit.Travelling)
+        else if (GameManager.instance.IsActiveUnit(selectedUnit)
+                 && selectedUnit.Travelling
+                 && GameManager.instance.players[GameManager.instance.activePlayer].Character.isActiveAndEnabled)
         {
             selectedUnit.Location.DisableHighlight();
         }
@@ -267,7 +271,7 @@ public class HexGameUI : MonoBehaviour
     //shows objects with ShowOnFinish tag
     public IEnumerator showFinished()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitUntil(() => selectedUnit.Travelling == false);
 
 
         foreach (GameObject g in finishObjects)

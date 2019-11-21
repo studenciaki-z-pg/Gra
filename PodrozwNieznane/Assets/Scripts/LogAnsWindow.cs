@@ -19,13 +19,12 @@ public class LogAnsWindow : MonoBehaviour
     void HideLog()
     {
         gameObject.SetActive(false);
-        GameManager.instance.hexGameUI.HighlightPlayer(true);
+        GameManager.instance.hexGrid.canShowPath = true;
     }
 
     void ShowLog()
     {
-        GameManager.instance.hexGameUI.HighlightPlayer(false);
-        GameManager.instance.hexGrid.ClearPath();
+        GameManager.instance.hexGrid.canShowPath = false;
         gameObject.SetActive(true);
     }
 
