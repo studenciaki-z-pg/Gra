@@ -28,4 +28,3 @@ Daniel Milanowski - Właściciel produktu, Programista
 Kamila Kaliszewicz - Programistka, Tester  
 Grzegorz Strelczuk - Scrum master, Programista 
 Jakub Miller - Opiekun projektu  
-*Ze względu na mały zespół, nie ma wyszczególnionych ról w projekcie.
