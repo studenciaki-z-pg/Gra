@@ -52,10 +52,7 @@ public class HexGameUI : MonoBehaviour
                     SetSelectedUnit(null);
                 }
 
-                if (GameManager.instance.LogAnsWindow.isActiveAndEnabled == false
-                    && GameManager.instance.LogWindow.isActiveAndEnabled == false
-                    && !GameManager.instance.players[GameManager.instance.activePlayer].Character.isActiveAndEnabled
-                    && !selectedUnit.Travelling)
+                if (!GameManager.instance.Travelling && !GameManager.instance.Interacting)
                 {
                     DoPathfinding();
                 }
@@ -69,27 +66,31 @@ public class HexGameUI : MonoBehaviour
         }
     }
 
-
-    public void HighlightPlayer(bool state)
+    //managing highlight on cell with unit
+    void HighlightPlayer(bool state)
     {
-        if (state && selectedUnit!=null && !selectedUnit.Travelling)
+        //enable cyan highlight
+        if (state)
         {
-            if (GameManager.instance.IsActiveUnit(selectedUnit))
-            {
-                if (GameManager.instance.LogAnsWindow.isActiveAndEnabled == false &&
-                    GameManager.instance.LogWindow.isActiveAndEnabled == false &&
-                    !GameManager.instance.players[GameManager.instance.activePlayer].Character.isActiveAndEnabled)
-                {
-                    selectedUnit.Location.EnableHighlight(Color.blue);
-                }
-            }
+            GameManager.instance.players[GameManager.instance.activePlayer].HexUnit.Location.EnableHighlight(Color.cyan);
         }
-        else if (GameManager.instance.IsActiveUnit(selectedUnit)
-                 && selectedUnit.Travelling
-                 && GameManager.instance.players[GameManager.instance.activePlayer].Character.isActiveAndEnabled)
+        //disable highlight
+        GameManager.instance.players[GameManager.instance.activePlayer].HexUnit.Location.DisableHighlight();
+    }
+
+    //managing whole cell highlight
+    public void Highlighting(bool state)
+    {
+        //enable
+        if (state)
         {
-            selectedUnit.Location.DisableHighlight();
+            HighlightPlayer(true);
+
         }
+
+        //disable
+        GameManager.instance.hexGrid.ClearPath();
+        HighlightPlayer(false);
     }
     void DoPathfinding()
     {
@@ -271,7 +272,7 @@ public class HexGameUI : MonoBehaviour
     //shows objects with ShowOnFinish tag
     public IEnumerator showFinished()
     {
-        yield return new WaitUntil(() => selectedUnit.Travelling == false);
+        yield return new WaitUntil(() => !GameManager.instance.Travelling && !GameManager.instance.Interacting);
 
 
         foreach (GameObject g in finishObjects)

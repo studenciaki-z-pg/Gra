@@ -100,11 +100,13 @@ public class Character : MonoBehaviour
         if(gameObject.active)
         {
             gameObject.SetActive(false);
-            GameManager.instance.hexGrid.canShowPath = true;
+            GameManager.instance.hexGameUI.Highlighting(true);
+            GameManager.instance.Interacting = false;
+
         } else
         {
-            GameManager.instance.hexGrid.ClearPath();
-            GameManager.instance.hexGrid.canShowPath = false;
+            GameManager.instance.Interacting = true;
+            GameManager.instance.hexGameUI.Highlighting(false);
             gameObject.SetActive(true);
         }
     }

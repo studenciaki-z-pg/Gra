@@ -22,8 +22,6 @@ public class HexUnit : MonoBehaviour
 
     public int Speed { get; set; } = initSpeed;
 
-    public bool Travelling { get; set; } = false;
-
 
     public HexCell Location
     {
@@ -90,7 +88,7 @@ public class HexUnit : MonoBehaviour
 
     IEnumerator TravelPath()
     {
-        this.Travelling = true;
+        GameManager.instance.Travelling = true;
         Vector3 a, b, c = pathToTravel[0].Position;
         if(pathToTravel.Count>1) yield return LookAt(pathToTravel[1].Position);
         else yield return LookAt(pathToTravel[0].Position);
@@ -148,7 +146,7 @@ public class HexUnit : MonoBehaviour
         ListPool<HexCell>.Add(pathToTravel);
         pathToTravel = null;
 
-        this.Travelling = false;
+        GameManager.instance.Travelling = false;
     }
 
     IEnumerator LookAt(Vector3 point)
@@ -214,7 +212,7 @@ public class HexUnit : MonoBehaviour
         state = false;
 
         //czekaj az pionek sie skonczy ruszac
-        yield return new WaitUntil(() => Travelling == false);
+        yield return new WaitUntil(() => GameManager.instance.Travelling == false);
 
         //przygotuj sciezke
         var pastLocation = Location;
@@ -223,32 +221,22 @@ public class HexUnit : MonoBehaviour
 
 
         //czekaj az sie ruszy
-        yield return new WaitUntil(() => Travelling == false);
+        yield return new WaitUntil(() => GameManager.instance.Travelling == false);
         Grid.ClearPath();
 
         //Interakcja
         InteractWithSurroundings(dest);
         yield return new WaitUntil(() => GameManager.instance.LogWindow.isActiveAndEnabled);
 
-        if (state)
+        if (!state)
         {
-            Grid.ClearPath();
-            GameManager.instance.hexGameUI.HighlightPlayer(true);
-        }
-        else
-        {
-            Grid.ClearPath();
             //Odwrot
             Grid.FindPath(Location, pastLocation, this);
-            yield return new WaitUntil(() => Travelling == false);
             Travel(Grid.GetPath(this));
         }
 
-        yield return new WaitUntil(() => Travelling == false);
-
-        Grid.ClearPath();
-        GameManager.instance.hexGameUI.HighlightPlayer(true);
-
+        yield return new WaitUntil(() => GameManager.instance.Travelling == false);
+        GameManager.instance.hexGameUI.Highlighting(true);
     }
 
     /// <summary>

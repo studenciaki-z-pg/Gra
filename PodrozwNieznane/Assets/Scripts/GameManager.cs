@@ -2,8 +2,6 @@
 using UnityEngine;
 using Color = UnityEngine.Color;
 
-//TODO: Dodać menu
-//TODO: Sprawdzenie warunkow zwyciestwa/porazki
 //TODO: Prawdopodobieństwo wylosowania obiektu zależnie od rodzaju mapy
 
 public class GameManager : MonoBehaviour
@@ -30,6 +28,9 @@ public class GameManager : MonoBehaviour
     public int activePlayer;
     public int winningLevel { get; set; } = 10;
     public Player[] players = new Player[2];
+
+    public bool Travelling = false;
+    public bool Interacting = false;
 
 
 
@@ -72,7 +73,7 @@ public class GameManager : MonoBehaviour
 
         //Rozpoczecie gry
         activePlayer = 0;
-        players[activePlayer].HexUnit.Location.EnableHighlight(Color.cyan);
+        hexGameUI.Highlighting(true);
         hexMapCamera.SetCameraPosition(players[activePlayer].HexUnit.Location.Position.x, players[activePlayer].HexUnit.Location.Position.z, players[activePlayer].HexUnit.Location.Position);
 
     }
@@ -116,7 +117,7 @@ public class GameManager : MonoBehaviour
         hexGrid.CreateMap();
         InitializePlayerUnit();
 
-        ActivateBackground();
+        hexGameUI.Highlighting(true);
         //Zaczyna ten, ktory nie dotarl do teleportu, czyli nastepny gracz po prostu
         foreach (GameObject b in EndOfTurnButton)
         {
@@ -137,19 +138,7 @@ public class GameManager : MonoBehaviour
     {
         players[activePlayer].Character.LevelUp();
         mapPicker.ShowPicker(hexGrid.mapGenerator.GetLandscapeType()); //NextRound() is caled inside MapPicker
-        DeactivateBackground();
-    }
-
-    public void DeactivateBackground()
-    {
-        hexGrid.ClearPath();
-        hexGameUI.HighlightPlayer(false);
-        hexGameUI.gameObject.SetActive(false);
-    }
-    public void ActivateBackground()
-    {
-        hexGameUI.gameObject.SetActive(true);
-        hexGameUI.HighlightPlayer(true);
+        hexGameUI.Highlighting(false);
     }
 
     public void SetOptions()
