@@ -26,5 +26,5 @@ Dokumentacja będzie znajdowała się na GoogleDrive [Folder](https://drive.goog
 ## Role w projekcie:
 Daniel Milanowski - Właściciel produktu, Programista  
 Kamila Kaliszewicz - Programistka, Tester  
-Grzegorz Strelczuk - Scrum master, Programista 
+Grzegorz Strelczuk - Scrum master, Programista  
 Jakub Miller - Opiekun projektu  
