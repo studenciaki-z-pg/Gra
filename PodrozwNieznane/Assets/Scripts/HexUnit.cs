@@ -233,6 +233,7 @@ public class HexUnit : MonoBehaviour
             //Odwrot
             Grid.FindPath(Location, pastLocation, this);
             Travel(Grid.GetPath(this));
+            GameManager.instance.hexGameUI.Highlighting(false); //albo to, albo opóźniamy wyskakiwanie okienka
         }
 
         yield return new WaitUntil(() => GameManager.instance.Travelling == false);

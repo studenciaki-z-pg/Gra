@@ -19,6 +19,7 @@ public class MapPicker : MonoBehaviour
 
     public void ShowPicker(MapType initValue)
     {
+        GameManager.instance.hexGameUI.gameObject.SetActive(false);
         gameObject.SetActive(true);
 
         UpperText.text = "Gratulacje! Zdobywasz poziom!\nZnalazłeś portal do nowej lokacji.\nWybierz spośród poniższych:";
@@ -33,6 +34,7 @@ public class MapPicker : MonoBehaviour
 
     public void HidePicker()
     {
+        GameManager.instance.hexGameUI.gameObject.SetActive(true);
         gameObject.SetActive(false);
     }
 
