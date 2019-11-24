@@ -73,6 +73,7 @@ public class HexGameUI : MonoBehaviour
         if (state)
         {
             GameManager.instance.players[GameManager.instance.activePlayer].HexUnit.Location.EnableHighlight(Color.cyan);
+            return;
         }
         //else?
 
@@ -87,6 +88,7 @@ public class HexGameUI : MonoBehaviour
         if (state)
         {
             HighlightPlayer(true);
+            return;
 
         }
 
