@@ -16,7 +16,7 @@ public class ItemChest : InterableObject
     public int FinallySomeoneFoundMe()
     {
         item = RandomItemFromList();
-        GameManager.instance.LogWindow.SendLog("Znajdujesz nowy przedmiot!\n"+ item.name +"\nNiech ci dobrze służy");
+        GameManager.instance.LogWindow.SendLog("Znajdujesz nowy przedmiot!\n>>"+ item.name +"<<\nNiech ci dobrze służy.");
         GameManager.instance.players[GameManager.instance.activePlayer].Character.GetInventory().AddItem(item);
         return 0;
     }

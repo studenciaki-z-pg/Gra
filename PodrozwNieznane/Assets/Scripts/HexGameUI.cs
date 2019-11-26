@@ -35,10 +35,6 @@ public class HexGameUI : MonoBehaviour
             {
                 DoSelection();
             }
-            else if (Input.GetKeyDown(KeyCode.R))
-            {
-                GameManager.instance.NextRound();
-            }
             else if (selectedUnit)
             {
                 //klikasz prawym i odpalasz chodzenie, ktore zatrzyma sie przed ewentualnym action itemem
@@ -75,8 +71,6 @@ public class HexGameUI : MonoBehaviour
             GameManager.instance.players[GameManager.instance.activePlayer].HexUnit.Location.EnableHighlight(Color.cyan);
             return;
         }
-        //else?
-
         //disable highlight
         GameManager.instance.players[GameManager.instance.activePlayer].HexUnit.Location.DisableHighlight();
     }
@@ -176,6 +170,7 @@ public class HexGameUI : MonoBehaviour
     public void SetSelectedUnit(HexUnit unit)
     {
         selectedUnit = unit;
+        HighlightPlayer(selectedUnit);
     }
 
     void DoMove()
