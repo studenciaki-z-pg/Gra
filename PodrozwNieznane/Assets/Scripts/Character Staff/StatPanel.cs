@@ -8,6 +8,7 @@ public class StatPanel : MonoBehaviour
     [SerializeField] Text Level;
     [SerializeField] StatDisplay[] statDisplays;
     [SerializeField] string[] statNames;
+    [SerializeField] Text AvailableSkillpoints = null;
 
     private CharacterStats[] stats;
 
@@ -58,6 +59,21 @@ public class StatPanel : MonoBehaviour
         for (int i = 0; i < statNames.Length; i++)
         {
             statDisplays[i].Name = statNames[i];
+        }
+    }
+
+    public void UpdateAvailableSkillpointsInfo(int availablePoints)
+    {
+        if (AvailableSkillpoints is null)
+            return;
+
+        if (availablePoints == 0)
+        {
+            AvailableSkillpoints.text = "";
+        }
+        else
+        {
+            AvailableSkillpoints.text = $"Niewykorzystanych punktów:\n({availablePoints})";
         }
     }
 

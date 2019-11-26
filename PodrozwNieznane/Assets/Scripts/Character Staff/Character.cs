@@ -27,7 +27,7 @@ public class Character : MonoBehaviour
             statPanel[i].SetStats(Strength, Intelligence, Agility, Vitality);
             statPanel[i].UpdateStatValues();
         }
-        if(AvailableSkillPoints < 1)
+        if (AvailableSkillPoints < 1)
             foreach(Button b in statButtons)
             {
                 b.enabled = false;
@@ -37,6 +37,7 @@ public class Character : MonoBehaviour
         foreach (StatPanel panel in statPanel)
         {
             panel.SetCharacterLevel(PlayerLevel);
+            panel.UpdateAvailableSkillpointsInfo(AvailableSkillPoints);
         }
         gameObject.SetActive(false);
 
@@ -45,6 +46,8 @@ public class Character : MonoBehaviour
     public void BonusSkillPoints(int value)
     {
         AvailableSkillPoints += value;
+        foreach (StatPanel panel in statPanel)
+            panel.UpdateAvailableSkillpointsInfo(AvailableSkillPoints);
     }
 
     public void SetCharacterName(string newName)
@@ -74,6 +77,7 @@ public class Character : MonoBehaviour
         foreach (StatPanel panel in statPanel)
         {
             panel.SetCharacterLevel(PlayerLevel);
+            panel.UpdateAvailableSkillpointsInfo(AvailableSkillPoints);
         }
     }
 
@@ -177,6 +181,7 @@ public class Character : MonoBehaviour
             for (int i = 0; i < statPanel.Length; i++)
             {
                 statPanel[i].UpdateStatValues();
+                statPanel[i].UpdateAvailableSkillpointsInfo(AvailableSkillPoints);
             }
             if(AvailableSkillPoints == 0)
                 foreach (Button b in statButtons)
@@ -195,7 +200,10 @@ public class Character : MonoBehaviour
             AssignedSkillPoints++;
             Intelligence.BaseValue++;
             for (int i = 0; i < statPanel.Length; i++)
+            {
                 statPanel[i].UpdateStatValues();
+                statPanel[i].UpdateAvailableSkillpointsInfo(AvailableSkillPoints);
+            }
             if (AvailableSkillPoints == 0)
                 foreach (Button b in statButtons)
                 {
@@ -213,7 +221,10 @@ public class Character : MonoBehaviour
             AssignedSkillPoints++;
             Agility.BaseValue++;
             for (int i = 0; i < statPanel.Length; i++)
+            {
                 statPanel[i].UpdateStatValues();
+                statPanel[i].UpdateAvailableSkillpointsInfo(AvailableSkillPoints);
+            }
             if (AvailableSkillPoints == 0)
                 foreach (Button b in statButtons)
                 {
@@ -231,7 +242,10 @@ public class Character : MonoBehaviour
             AssignedSkillPoints++;
             Vitality.BaseValue++;
             for (int i = 0; i < statPanel.Length; i++)
+            {
                 statPanel[i].UpdateStatValues();
+                statPanel[i].UpdateAvailableSkillpointsInfo(AvailableSkillPoints);
+            }
             if (AvailableSkillPoints == 0)
                 foreach (Button b in statButtons)
                 {

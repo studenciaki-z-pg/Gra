@@ -265,6 +265,7 @@ MonoBehaviour:
   - Inteligencja
   - "Zr\u0119czno\u015B\u0107"
   - "Szybko\u015B\u0107"
+  AvailableSkillpoints: {fileID: 0}
 --- !u!1 &45451515
 GameObject:
   m_ObjectHideFlags: 0
@@ -4751,6 +4752,8 @@ MonoBehaviour:
   LogWindow: {fileID: 1091114621}
   LogAnsWindow: {fileID: 922845822}
   activePlayer: 0
+  Travelling: 0
+  Interacting: 0
 --- !u!4 &388191443
 Transform:
   m_ObjectHideFlags: 0
@@ -5730,6 +5733,85 @@ Transform:
   m_Father: {fileID: 112596017}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &533972767
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 533972768}
+  - component: {fileID: 533972770}
+  - component: {fileID: 533972769}
+  m_Layer: 5
+  m_Name: Available skillpoints info#1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &533972768
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533972767}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1131129108}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -250}
+  m_SizeDelta: {x: 250, y: 50}
+  m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &533972769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533972767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 20
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 1
+    m_MaxSize: 150
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: "Niewykorzystanych punkt\xF3w:\n(5)"
+--- !u!222 &533972770
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 533972767}
+  m_CullTransparentMesh: 0
 --- !u!1 &540526604
 GameObject:
   m_ObjectHideFlags: 0
@@ -9757,6 +9839,85 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 892177380}
   m_CullTransparentMesh: 0
+--- !u!1 &902817299
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 902817300}
+  - component: {fileID: 902817302}
+  - component: {fileID: 902817301}
+  m_Layer: 5
+  m_Name: Available skillpoints info#2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &902817300
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 902817299}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.00003689255}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1756190039}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -250}
+  m_SizeDelta: {x: 250, y: 50}
+  m_Pivot: {x: 0.5, y: 1}
+--- !u!114 &902817301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 902817299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 20
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 1
+    m_MaxSize: 150
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: "Niewykorzystanych punkt\xF3w:\n(5)"
+--- !u!222 &902817302
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 902817299}
+  m_CullTransparentMesh: 0
 --- !u!1 &905104976
 GameObject:
   m_ObjectHideFlags: 0
@@ -12568,6 +12729,7 @@ RectTransform:
   - {fileID: 1799610956}
   - {fileID: 1102458484}
   - {fileID: 199781342}
+  - {fileID: 533972768}
   m_Father: {fileID: 1084947900}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12600,6 +12762,7 @@ MonoBehaviour:
   - Inteligencja
   - "Zr\u0119czno\u015B\u0107"
   - "Szybko\u015B\u0107"
+  AvailableSkillpoints: {fileID: 533972769}
 --- !u!1 &1131251829
 GameObject:
   m_ObjectHideFlags: 0
@@ -16026,6 +16189,7 @@ MonoBehaviour:
   - Inteligencja
   - "Zr\u0119czno\u015B\u0107"
   - "Szybko\u015B\u0107"
+  AvailableSkillpoints: {fileID: 0}
 --- !u!1 &1448458102
 GameObject:
   m_ObjectHideFlags: 0
@@ -19627,6 +19791,7 @@ RectTransform:
   - {fileID: 1969795416}
   - {fileID: 1140263300}
   - {fileID: 956304100}
+  - {fileID: 902817300}
   m_Father: {fileID: 1344540143}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -19659,6 +19824,7 @@ MonoBehaviour:
   - Inteligencja
   - "Zr\u0119czno\u015B\u0107"
   - "Szybko\u015B\u0107"
+  AvailableSkillpoints: {fileID: 902817301}
 --- !u!1 &1756557451
 GameObject:
   m_ObjectHideFlags: 0
