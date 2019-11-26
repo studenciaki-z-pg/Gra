@@ -237,6 +237,7 @@ public class HexUnit : MonoBehaviour
         }
 
         yield return new WaitUntil(() => GameManager.instance.Travelling == false);
+        yield return new WaitUntil(() => !GameManager.instance.LogWindow.isActiveAndEnabled);
         GameManager.instance.hexGameUI.Highlighting(true);
     }
 

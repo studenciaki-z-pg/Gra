@@ -75,8 +75,6 @@ public class HexGameUI : MonoBehaviour
             GameManager.instance.players[GameManager.instance.activePlayer].HexUnit.Location.EnableHighlight(Color.cyan);
             return;
         }
-        //else?
-
         //disable highlight
         GameManager.instance.players[GameManager.instance.activePlayer].HexUnit.Location.DisableHighlight();
     }
@@ -176,6 +174,7 @@ public class HexGameUI : MonoBehaviour
     public void SetSelectedUnit(HexUnit unit)
     {
         selectedUnit = unit;
+        HighlightPlayer(selectedUnit);
     }
 
     void DoMove()
