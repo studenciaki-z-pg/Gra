@@ -363,7 +363,7 @@ public class HexGrid : MonoBehaviour
     //Using saved path we can visualize it
     void ShowPath(int speed)
     {
-        if (currentPathExists)
+        if (currentPathExists && speed > 0)
         {
 
             HexCell current = currentPathTo;

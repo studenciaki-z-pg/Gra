@@ -65,8 +65,8 @@ public class Character : MonoBehaviour
 
     public void LevelUp()
     {
-        GameManager.instance.LevelUp();
         PlayerLevel++;
+        GameManager.instance.LevelUp();
         AvailableSkillPoints += 5;
         foreach (Button b in statButtons)
         {
