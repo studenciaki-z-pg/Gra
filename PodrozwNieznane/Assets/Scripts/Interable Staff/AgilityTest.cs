@@ -35,7 +35,7 @@ public class AgilityTest : InterableObject
         }
         else
         {
-            GameManager.instance.LogWindow.SendLog("Niestety twoja zręczność jest zbyt niska by pokonać tego łotrzyka.\nWymagana zręczność: " + value);
+            GameManager.instance.LogWindow.SendLog("Niestety twoja zręczność jest zbyt niska.\nWymagana zręczność: " + value);
             return 1;
         }
     }

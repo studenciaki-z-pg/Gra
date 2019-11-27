@@ -8,6 +8,7 @@ TagManager:
   - Instruction
   - ShowOnFinish
   - Option
+  - ShowOnSwap
   layers:
   - Default
   - TransparentFX

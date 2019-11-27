@@ -1,9 +1,9 @@
-﻿using Assets.Scripts;
+﻿using System.Collections;
+using Assets.Scripts;
 using UnityEngine;
 using Color = UnityEngine.Color;
 
 //TODO: Prawdopodobieństwo wylosowania obiektu zależnie od rodzaju mapy
-//TODO: Tło w menu
 //TODO: Tekst na zakończenie rozgrywki + podsumowanie w oknie
 //TODO: Pauza pomiędzy graczami by dać czas na zmianę gracza!!!!!!!!
 
@@ -104,6 +104,7 @@ public class GameManager : MonoBehaviour
         players[activePlayer].HexUnit.Location.EnableHighlight(Color.cyan);
         players[activePlayer].HexUnit.Speed = players[activePlayer].Character.SpeedValue();
         hexMapCamera.SetCameraPosition(players[activePlayer].HexUnit.Location.Position.x, players[activePlayer].HexUnit.Location.Position.z, players[activePlayer].HexUnit.Location.Position);
+
         hexGameUI.SetSelectedUnit(players[activePlayer].HexUnit);
     }
 

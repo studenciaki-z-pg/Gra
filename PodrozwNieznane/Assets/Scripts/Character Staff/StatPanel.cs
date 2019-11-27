@@ -41,6 +41,7 @@ public class StatPanel : MonoBehaviour
         CharacterName.text = newName;
     }
 
+
     public void SetCharacterLevel(int newLevel)
     {
         Level.text = "Poziom: "+newLevel.ToString();

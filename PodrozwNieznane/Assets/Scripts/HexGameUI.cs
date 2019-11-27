@@ -14,7 +14,7 @@ public class HexGameUI : MonoBehaviour
     public HexGrid grid;
 
 
-    private GameObject[] pauseObjects, finishObjects, menuObjects;
+    private GameObject[] pauseObjects, finishObjects, menuObjects, swapObjects;
     HexCell currentCell;
     HexUnit selectedUnit;
 
@@ -23,8 +23,10 @@ public class HexGameUI : MonoBehaviour
         Time.timeScale = 1;
         pauseObjects = GameObject.FindGameObjectsWithTag("ShowOnPause");
         finishObjects = GameObject.FindGameObjectsWithTag("ShowOnFinish");
+        swapObjects = GameObject.FindGameObjectsWithTag("ShowOnSwap");
         hidePaused();
         hideFinished();
+        hideSwapped();
     }
 
     void Update()
@@ -229,6 +231,8 @@ public class HexGameUI : MonoBehaviour
         grid.ClearPath();
         SetSelectedUnit(null);
 
+        showSwapped();
+
         //zakoncz ture/zmien gracza
         GameManager.instance.NextPlayer();
     }
@@ -286,6 +290,24 @@ public class HexGameUI : MonoBehaviour
         foreach (GameObject g in finishObjects)
         {
             g.SetActive(false);
+        }
+    }
+
+    //hides objects with ShowOnSwap tag
+    public void hideSwapped()
+    {
+        foreach (GameObject g in swapObjects)
+        {
+            g.SetActive(false);
+        }
+    }
+
+    //shows objects with ShowOnSwap tag
+    public void showSwapped()
+    {
+        foreach (GameObject g in swapObjects)
+        {
+            g.SetActive(true);
         }
     }
 
