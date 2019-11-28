@@ -12,6 +12,7 @@ public class ItemTooltip : MonoBehaviour
 
     private void OnValidate()
     {
+        gameObject.SetActive(true);
         gameObject.SetActive(false);
     }
 

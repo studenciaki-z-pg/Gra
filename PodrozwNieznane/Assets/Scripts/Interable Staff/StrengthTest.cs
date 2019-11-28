@@ -6,8 +6,8 @@ public class StrengthTest : InterableObject
 {
     private void Start()
     {
-        System.Random r = new System.Random();
-        int[] players = new int[2];
+        int[] playersLevels = new int[2]; //ta nazwa tablicy dużo nie mówi
+        /*int[] players = new int[2];
         if (Object.ReferenceEquals(GameManager.instance.players[0].Character.getLevel(), null))
             players[0] = 1;
         else
@@ -15,10 +15,15 @@ public class StrengthTest : InterableObject
         if (Object.ReferenceEquals(GameManager.instance.players[1].Character.getLevel(), null))
             players[1] = 1;
         else
-            players[1] = GameManager.instance.players[1].Character.getLevel();
+            players[1] = GameManager.instance.players[1].Character.getLevel();*/
 
-        float average = (players[0] + players[1]) / 2;
-        value = r.Next((int)average * 5, (int)average * 10);
+        for (int i = 0; i < playersLevels.Length; i++)
+        {
+            playersLevels[i] = GameManager.instance.players[i].Character.getLevel();
+        }
+
+        float average = (playersLevels[0] + playersLevels[1]) / 2.0f;
+        value = Random.Range((int)average * 5, (int)average * 10);
 
     }
 
@@ -33,7 +38,7 @@ public class StrengthTest : InterableObject
             return 0;
         } else
         {
-            GameManager.instance.LogWindow.SendLog("Niestety twoja siła jest zbyt niska.\nWymagana siła: " + value);
+            GameManager.instance.LogWindow.SendLog("Niestety twoja siła jest zbyt niska.\nWymagana siła: " + value + 1);
             return 1;
         }
     }

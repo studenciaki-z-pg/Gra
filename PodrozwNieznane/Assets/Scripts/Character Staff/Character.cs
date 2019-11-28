@@ -12,6 +12,7 @@ public class Character : MonoBehaviour
     [SerializeField] EquimentPanel equipmentPanel;
     [SerializeField] StatPanel[] statPanel;
     [SerializeField] Button[] statButtons;
+    [SerializeField] int playerNumber;
 
     [SerializeField] Sprite activeSprite;
     [SerializeField] Sprite inactiveSprite;
@@ -22,10 +23,12 @@ public class Character : MonoBehaviour
 
     private void OnValidate()
     {
+        gameObject.SetActive(true);
         for (int i = 0; i < statPanel.Length; i++)
         {
             statPanel[i].SetStats(Strength, Intelligence, Agility, Vitality);
             statPanel[i].UpdateStatValues();
+            statPanel[i].UpdateStatNames();
         }
         if (AvailableSkillPoints < 1)
             foreach(Button b in statButtons)
@@ -39,6 +42,7 @@ public class Character : MonoBehaviour
             panel.SetCharacterLevel(PlayerLevel);
             panel.UpdateAvailableSkillpointsInfo(AvailableSkillPoints);
         }
+        Awake();
         gameObject.SetActive(false);
 
     }
@@ -100,18 +104,22 @@ public class Character : MonoBehaviour
 
     public void TurnVisible()
     {
-        //czy otwarte eq? tak, to zamknij, nie to otworz
-        if(gameObject.active)
+        if (GameManager.instance.activePlayer == playerNumber)
         {
-            gameObject.SetActive(false);
-            GameManager.instance.hexGameUI.Highlighting(true);
-            GameManager.instance.Interacting = false;
+            //czy otwarte eq? tak, to zamknij, nie to otworz
+            if (gameObject.active)
+            {
+                gameObject.SetActive(false);
+                GameManager.instance.hexGameUI.Highlighting(true);
+                GameManager.instance.Interacting = false;
 
-        } else
-        {
-            GameManager.instance.Interacting = true;
-            GameManager.instance.hexGameUI.Highlighting(false);
-            gameObject.SetActive(true);
+            }
+            else
+            {
+                GameManager.instance.Interacting = true;
+                GameManager.instance.hexGameUI.Highlighting(false);
+                gameObject.SetActive(true);
+            }
         }
     }
 
@@ -173,86 +181,98 @@ public class Character : MonoBehaviour
     }
     public void AddStrengthPoint()
     {
-        if (AvailableSkillPoints > 0)
+        if (GameManager.instance.activePlayer == playerNumber)
         {
-            AvailableSkillPoints--;
-            AssignedSkillPoints++;
-            Strength.BaseValue++;
-            for (int i = 0; i < statPanel.Length; i++)
+            if (AvailableSkillPoints > 0)
             {
-                statPanel[i].UpdateStatValues();
-                statPanel[i].UpdateAvailableSkillpointsInfo(AvailableSkillPoints);
-            }
-            if(AvailableSkillPoints == 0)
-                foreach (Button b in statButtons)
+                AvailableSkillPoints--;
+                AssignedSkillPoints++;
+                Strength.BaseValue++;
+                for (int i = 0; i < statPanel.Length; i++)
                 {
-                    //b.image.sprite = inactiveSprite;
-                    b.gameObject.SetActive(false);
-                    b.enabled = false;
+                    statPanel[i].UpdateStatValues();
+                    statPanel[i].UpdateAvailableSkillpointsInfo(AvailableSkillPoints);
                 }
+                if (AvailableSkillPoints == 0)
+                    foreach (Button b in statButtons)
+                    {
+                        //b.image.sprite = inactiveSprite;
+                        b.gameObject.SetActive(false);
+                        b.enabled = false;
+                    }
+            }
         }
     }
     public void AddIntelligencePoint()
-    {
-        if (AvailableSkillPoints > 0)
         {
-            AvailableSkillPoints--;
-            AssignedSkillPoints++;
-            Intelligence.BaseValue++;
-            for (int i = 0; i < statPanel.Length; i++)
+            if (GameManager.instance.activePlayer == playerNumber)
             {
-                statPanel[i].UpdateStatValues();
-                statPanel[i].UpdateAvailableSkillpointsInfo(AvailableSkillPoints);
-            }
-            if (AvailableSkillPoints == 0)
-                foreach (Button b in statButtons)
+            if (AvailableSkillPoints > 0)
+            {
+                AvailableSkillPoints--;
+                AssignedSkillPoints++;
+                Intelligence.BaseValue++;
+                for (int i = 0; i < statPanel.Length; i++)
                 {
-                    //b.image.sprite = inactiveSprite;
-                    b.gameObject.SetActive(false);
-                    b.enabled = false;
+                    statPanel[i].UpdateStatValues();
+                    statPanel[i].UpdateAvailableSkillpointsInfo(AvailableSkillPoints);
                 }
+                if (AvailableSkillPoints == 0)
+                    foreach (Button b in statButtons)
+                    {
+                        //b.image.sprite = inactiveSprite;
+                        b.gameObject.SetActive(false);
+                        b.enabled = false;
+                    }
+            }
         }
     }
     public void AddAgilityPoint()
     {
-        if (AvailableSkillPoints > 0)
+        if (GameManager.instance.activePlayer == playerNumber)
         {
-            AvailableSkillPoints--;
-            AssignedSkillPoints++;
-            Agility.BaseValue++;
-            for (int i = 0; i < statPanel.Length; i++)
+            if (AvailableSkillPoints > 0)
             {
-                statPanel[i].UpdateStatValues();
-                statPanel[i].UpdateAvailableSkillpointsInfo(AvailableSkillPoints);
-            }
-            if (AvailableSkillPoints == 0)
-                foreach (Button b in statButtons)
+                AvailableSkillPoints--;
+                AssignedSkillPoints++;
+                Agility.BaseValue++;
+                for (int i = 0; i < statPanel.Length; i++)
                 {
-                    //b.image.sprite = inactiveSprite;
-                    b.gameObject.SetActive(false);
-                    b.enabled = false;
+                    statPanel[i].UpdateStatValues();
+                    statPanel[i].UpdateAvailableSkillpointsInfo(AvailableSkillPoints);
                 }
+                if (AvailableSkillPoints == 0)
+                    foreach (Button b in statButtons)
+                    {
+                        //b.image.sprite = inactiveSprite;
+                        b.gameObject.SetActive(false);
+                        b.enabled = false;
+                    }
+            }
         }
     }
     public void AddVitalityPoint()
     {
-        if (AvailableSkillPoints > 0)
+        if (GameManager.instance.activePlayer == playerNumber)
         {
-            AvailableSkillPoints--;
-            AssignedSkillPoints++;
-            Vitality.BaseValue++;
-            for (int i = 0; i < statPanel.Length; i++)
+            if (AvailableSkillPoints > 0)
             {
-                statPanel[i].UpdateStatValues();
-                statPanel[i].UpdateAvailableSkillpointsInfo(AvailableSkillPoints);
-            }
-            if (AvailableSkillPoints == 0)
-                foreach (Button b in statButtons)
+                AvailableSkillPoints--;
+                AssignedSkillPoints++;
+                Vitality.BaseValue++;
+                for (int i = 0; i < statPanel.Length; i++)
                 {
-                    //b.image.sprite = inactiveSprite;
-                    b.gameObject.SetActive(false);
-                    b.enabled = false;
+                    statPanel[i].UpdateStatValues();
+                    statPanel[i].UpdateAvailableSkillpointsInfo(AvailableSkillPoints);
                 }
+                if (AvailableSkillPoints == 0)
+                    foreach (Button b in statButtons)
+                    {
+                        //b.image.sprite = inactiveSprite;
+                        b.gameObject.SetActive(false);
+                        b.enabled = false;
+                    }
+            }
         }
     }
 
