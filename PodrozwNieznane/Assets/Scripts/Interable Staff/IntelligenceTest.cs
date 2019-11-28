@@ -48,7 +48,7 @@ override
         }
         else
         {
-            GameManager.instance.LogWindow.SendLog("Niestety twoja inteligencja jest zbyt niska.\nWymagana inteligencja: " + value + 1);
+            GameManager.instance.LogWindow.SendLog("Niestety twoja inteligencja jest zbyt niska.\nWymagana inteligencja: " + (value + 1));
             return 1;
         }
     }

@@ -38,7 +38,7 @@ public class StrengthTest : InterableObject
             return 0;
         } else
         {
-            GameManager.instance.LogWindow.SendLog("Niestety twoja siła jest zbyt niska.\nWymagana siła: " + value + 1);
+            GameManager.instance.LogWindow.SendLog("Niestety twoja siła jest zbyt niska.\nWymagana siła: " + (value + 1));
             return 1;
         }
     }

@@ -41,7 +41,7 @@ public class AgilityTest : InterableObject
         }
         else
         {
-            GameManager.instance.LogWindow.SendLog("Niestety twoja zręczność jest zbyt niska.\nWymagana zręczność: " + value+1);
+            GameManager.instance.LogWindow.SendLog("Niestety twoja zręczność jest zbyt niska.\nWymagana zręczność: " + (value + 1));
             return 1;
         }
     }

@@ -123,6 +123,16 @@ public class Character : MonoBehaviour
         }
     }
 
+    public void TurnInvisible()
+    {
+        if (gameObject.active)
+        {
+            gameObject.SetActive(false);
+            GameManager.instance.hexGameUI.Highlighting(true);
+            GameManager.instance.Interacting = false;
+        }
+    }
+
     public int SpeedValue()
     {
         return 5 + (int)(this.Vitality.Value / 5);
