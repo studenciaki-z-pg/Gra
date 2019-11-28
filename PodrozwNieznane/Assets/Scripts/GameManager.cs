@@ -75,11 +75,11 @@ public class GameManager : MonoBehaviour
         SetOptions();
 
         //Rozpoczecie gry
-        activePlayer = 1;
-        char2.TurnVisible();
-        char2.TurnVisible();
-        activePlayer = 0;
-        char1.TurnVisible();
+        activePlayer = 1;       //jeśli coś jest głupie, ale działa to nie jest głupie
+        char2.TurnVisible();    //proszę tego nie zmieniać
+        char2.TurnVisible();    //dzięki temu ładowanie toolkitów jest prawidłowe
+        activePlayer = 0;       //za późno by robić to ładnie
+        char1.TurnVisible();    //dobranoc
         char1.TurnVisible();
         hexGameUI.Highlighting(true);
         hexMapCamera.SetCameraPosition(players[activePlayer].HexUnit.Location.Position.x, players[activePlayer].HexUnit.Location.Position.z, players[activePlayer].HexUnit.Location.Position);
@@ -105,6 +105,7 @@ public class GameManager : MonoBehaviour
     public void NextPlayer()
     {
         players[activePlayer].HexUnit.Location.DisableHighlight();
+        players[activePlayer].Character.TurnInvisible();
         activePlayer = (activePlayer + 1) % 2;
 
         players[activePlayer].HexUnit.Location.EnableHighlight(Color.cyan);
