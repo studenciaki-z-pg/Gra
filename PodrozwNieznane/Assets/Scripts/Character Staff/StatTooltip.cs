@@ -12,7 +12,8 @@ public class StatTooltip : MonoBehaviour
 
     private void OnValidate()
     {
-       gameObject.SetActive(false);
+        gameObject.SetActive(true);
+        gameObject.SetActive(false);
     }
 
     public void HideTooltip()

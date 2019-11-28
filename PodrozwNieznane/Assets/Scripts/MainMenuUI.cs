@@ -1,9 +1,6 @@
-﻿using Unity.UNetWeaver;
-using UnityEngine;
-using UnityEngine.Experimental.XR;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 using Assets.Scripts;
 
 public class MainMenuUI : MonoBehaviour

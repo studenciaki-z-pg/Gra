@@ -75,9 +75,15 @@ public class GameManager : MonoBehaviour
         SetOptions();
 
         //Rozpoczecie gry
+        activePlayer = 1;
+        char2.TurnVisible();
+        char2.TurnVisible();
         activePlayer = 0;
+        char1.TurnVisible();
+        char1.TurnVisible();
         hexGameUI.Highlighting(true);
         hexMapCamera.SetCameraPosition(players[activePlayer].HexUnit.Location.Position.x, players[activePlayer].HexUnit.Location.Position.z, players[activePlayer].HexUnit.Location.Position);
+
 
     }
 
