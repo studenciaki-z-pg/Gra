@@ -12,6 +12,26 @@ public enum EquipmentType
     Accessory2,
 }
 
+public static class Extension
+{
+    public static string GetEquipmentTypeName(this EquipmentType type)
+    {
+        //Tu jest trochę magii, bo zwykły ToString() bierze nazwę enuma, który nie może mieć spacji
+        //A chcemy mieć ładne spacje i nie chcemy psuć angielskich nazw enuma
+        switch (type)
+        {
+            case EquipmentType.Helmet: return "Hełm";
+            case EquipmentType.Chest: return "Duży przedmiot";
+            case EquipmentType.Boots: return "Buty";
+            case EquipmentType.Weapon1: return "Pirwsza Broń";
+            case EquipmentType.Weapon2: return "Druga Broń";
+            case EquipmentType.Accessory1: return "Akcesorium po prawej";
+            case EquipmentType.Accessory2: return "Akcesorium po lewej";
+        }
+        return string.Empty;
+    }
+}
+
 
 [CreateAssetMenu]
 public class EquippableItem : Item
