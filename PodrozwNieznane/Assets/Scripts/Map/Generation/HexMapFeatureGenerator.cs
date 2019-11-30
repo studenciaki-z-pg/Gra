@@ -206,7 +206,7 @@ public class HexMapFeatureGenerator: MonoBehaviour
         int rand = Random.Range(1, 101);
         switch (mapType)
         {
-            case 1: //las - równo
+            case (int)MapType.CLASSIC: //las - równo
                 switch (rand)
                 {
                 case int n when (n <= 20):
@@ -232,7 +232,7 @@ public class HexMapFeatureGenerator: MonoBehaviour
                     break;
                 }
                 break;
-            case 2: //mokradła - wojownicy
+            case (int)MapType.SWAMP: //mokradła - wojownicy
                 switch (rand)
                 {
                     case int n when (n <= 15):
@@ -258,7 +258,7 @@ public class HexMapFeatureGenerator: MonoBehaviour
                         break;
                 }
                 break;
-            case 3: //archipelag - skarby
+            case (int)MapType.SHOAL: //archipelag - skarby
                 switch (rand)
                 {
                     case int n when (n <= 40):
@@ -284,7 +284,7 @@ public class HexMapFeatureGenerator: MonoBehaviour
                         break;
                 }
                 break;
-            case 4: //góry -  magowie
+            case (int)MapType.MOUNTAIN: //góry -  magowie
                 switch (rand)
                 {
                     case int n when (n <= 15):
@@ -310,7 +310,7 @@ public class HexMapFeatureGenerator: MonoBehaviour
                         break;
                 }
                 break;
-            case 5: //pustynia - zbóje
+            case (int)MapType.PLAIN: //pustynia - zbóje
                 switch (rand)
                 {
                     case int n when (n <= 15):
@@ -336,7 +336,7 @@ public class HexMapFeatureGenerator: MonoBehaviour
                         break;
                 }
                 break;
-            case 6: //kanion - kapliczki
+            case (int)MapType.CANYON: //kanion - kapliczki
             default:
                 switch (rand)
                 {

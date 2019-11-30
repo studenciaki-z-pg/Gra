@@ -801,13 +801,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 617904655}
   m_TextComponent: {fileID: 2031156489}
   m_Placeholder: {fileID: 874934118}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 20
   m_OnEndEdit:
     m_PersistentCalls:

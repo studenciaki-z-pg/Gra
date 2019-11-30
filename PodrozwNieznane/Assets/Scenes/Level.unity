@@ -2240,7 +2240,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Item Name
+  m_Text: Nazwa przedmiotu
 --- !u!222 &172025569
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3262,7 +3262,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -200, y: 100}
+  m_AnchoredPosition: {x: -250, y: 100}
   m_SizeDelta: {x: 350, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &253327565
@@ -4118,7 +4118,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Item Name
+  m_Text: Nazwa przedmiotu
 --- !u!222 &313059051
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13562,9 +13562,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1.25
-  m_Text: 'Item Name
-
-    Item Name'
+  m_Text: Nazwa statystki
 --- !u!222 &1143207982
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -16530,9 +16528,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1.25
-  m_Text: 'Item Name
-
-    Item Name'
+  m_Text: Nazwa statystki
 --- !u!222 &1450752013
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17666,7 +17662,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Modifiers
+  m_Text: Modyfikatory
 --- !u!222 &1502473723
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -19571,7 +19567,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Modifiers
+  m_Text: Mofyfikatory
 --- !u!222 &1741151776
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20874,7 +20870,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 200, y: 100}
+  m_AnchoredPosition: {x: 250, y: 100}
   m_SizeDelta: {x: 350, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1842395564
