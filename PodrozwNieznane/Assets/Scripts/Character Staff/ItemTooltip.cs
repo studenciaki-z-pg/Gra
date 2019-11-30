@@ -19,7 +19,7 @@ public class ItemTooltip : MonoBehaviour
     public void ShowTooltip(EquippableItem item)
     {
         ItemNameText.text = item.ItemName;
-        ItemSlotText.text = item.equipmentType.ToString();
+        ItemSlotText.text = item.equipmentType.GetEquipmentTypeName();//.ToString();
 
         stringBuilder.Length = 0;
         AddStat(item.StrengthBonus, "Siła");
