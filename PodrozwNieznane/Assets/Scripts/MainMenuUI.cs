@@ -94,7 +94,14 @@ public class MainMenuUI : MonoBehaviour
 
     public void SetLevelCap(InputField text)
     {
-        OptionSetup.maxLevel = int.Parse(text.text);
+        try
+        {
+            OptionSetup.maxLevel = int.Parse(text.text);
+        }
+        catch (System.Exception ex)
+        {
+
+        }
     }
 
     #endregion

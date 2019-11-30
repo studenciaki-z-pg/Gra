@@ -22,10 +22,10 @@ public class ItemTooltip : MonoBehaviour
         ItemSlotText.text = item.equipmentType.ToString();
 
         stringBuilder.Length = 0;
-        AddStat(item.StrengthBonus, "Strength");
-        AddStat(item.IntelligenceBonus, "Intelligence");
-        AddStat(item.AgilityBonus, "Agility");
-        AddStat(item.VitalityBonus, "Vitality");
+        AddStat(item.StrengthBonus, "Siła");
+        AddStat(item.IntelligenceBonus, "Inteligencja");
+        AddStat(item.AgilityBonus, "Zręczność");
+        AddStat(item.VitalityBonus, "Szybkość");
 
         ItemStatText.text = stringBuilder.ToString();
 
